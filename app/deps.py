@@ -1,5 +1,5 @@
 from fastapi import Depends
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, sessionmaker
 
 from app.controllers.user import UserController
 from app.database.connection import engine
@@ -7,7 +7,8 @@ from app.repositories.user import UserRepository
 
 
 def get_session():
-    session = Session(bind=engine)
+    SessionLocal = sessionmaker(bind=engine)
+    session = SessionLocal()
 
     try:
         yield session

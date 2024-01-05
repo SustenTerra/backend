@@ -10,6 +10,7 @@ python = "^3.11"
 fastapi = {extras = ["all"], version = "^0.108.0"}
 sqlalchemy = "^2.0.25"
 python-dotenv = "^1.0.0"
+psycopg2-binary = "^2.9.9"
 
 
 [build-system]
