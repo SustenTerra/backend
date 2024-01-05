@@ -1,10 +1,12 @@
 from fastapi import APIRouter
 
+from app.schemas.users import UserCreate
+
 users = APIRouter()
 
 
 @users.post("/users", tags=["users"])
-def create_user():
+def create_user(body: UserCreate):
     pass
 
 
