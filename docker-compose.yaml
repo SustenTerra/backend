@@ -11,7 +11,7 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data  # Persist data in a volume
     ports:
-      - "5432:5432"  # Expose the database port for external access
+      - "5433:5432"  # Expose the database port for external access
 
 volumes:
   postgres-data:  # Define the named volume for data persistence
