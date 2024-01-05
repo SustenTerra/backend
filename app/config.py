@@ -7,8 +7,8 @@ load_dotenv()
 
 
 class Config(BaseModel):
-    DB_HOST: str = os.getenv("DB_HOST")
-    DB_PORT: str = os.getenv("DB_PORT")
-    DB_NAME: str = os.getenv("DB_NAME")
-    DB_USER: str = os.getenv("DB_USER")
-    DB_PASSWORD: str = os.getenv("DB_PASSWORD")
+    DB_HOST: str = os.getenv("DB_HOST", "localhost")
+    DB_PORT: str = os.getenv("DB_PORT", "5432")
+    DB_NAME: str = os.getenv("DB_NAME", "mydatabase")
+    DB_USER: str = os.getenv("DB_USER", "myuser")
+    DB_PASSWORD: str = os.getenv("DB_PASSWORD", "mypassword")
