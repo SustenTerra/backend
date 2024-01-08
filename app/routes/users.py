@@ -29,7 +29,7 @@ def list_users():
     pass
 
 
-@users.put("/users/{user_id}", tags=["users"])
+@users.patch("/users/{user_id}", tags=["users"])
 def update_user():
     pass
 
