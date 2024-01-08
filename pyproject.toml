@@ -11,6 +11,7 @@ fastapi = {extras = ["all"], version = "^0.108.0"}
 sqlalchemy = "^2.0.25"
 python-dotenv = "^1.0.0"
 psycopg2-binary = "^2.9.9"
+pre-commit = "^3.6.0"
 
 
 [build-system]
@@ -19,3 +20,26 @@ build-backend = "poetry.core.masonry.api"
 
 [virtualenvs]
 in-project = true
+
+[tool.black]
+line-length = 79
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[flake8]
+ignore = E203, E266, E501, W503, F403, F401
+max-line-length = 79
+max-complexity = 18
+select = B,C,E,F,W,T4,B9
