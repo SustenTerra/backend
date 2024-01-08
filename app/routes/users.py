@@ -1,14 +1,18 @@
 from fastapi import APIRouter, Depends
 
 from app.controllers.user import UserController
-from app.deps import get_user_controller, get_user_repository
-from app.repositories.user import UserRepository
+from app.deps import get_user_controller
 from app.schemas.users import UserCreate, UserView
 
 users = APIRouter()
 
 
-@users.post("/users", tags=["users"], response_model=UserView)
+@users.post(
+    "/users",
+    tags=["users"],
+    response_model=UserView,
+    description="Create a new user",
+)
 def create_user(
     body: UserCreate, controller: UserController = Depends(get_user_controller)
 ):
