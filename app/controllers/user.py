@@ -1,5 +1,6 @@
 from fastapi import HTTPException
 
+from app.exceptions.user import UserAlreadyRegisteredException
 from app.models.user import User
 from app.repositories.user import UserRepository
 from app.schemas.users import UserCreate
@@ -13,10 +14,7 @@ class UserController:
         found_user = self.repository.get_by_email(create.email)
 
         if found_user:
-            raise HTTPException(
-                status_code=400,
-                detail="Email already registered",
-            )
+            raise UserAlreadyRegisteredException(email=create.email)
 
         user = User(
             full_name=create.full_name,
