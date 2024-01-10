@@ -24,4 +24,4 @@ def get_user_repository(session: Session = Depends(get_session)):
 def get_user_controller(
     repository: UserRepository = Depends(get_user_repository),
 ):
-    return UserController(repository)
+    return UserController(User, repository)

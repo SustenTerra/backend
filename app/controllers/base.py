@@ -28,7 +28,7 @@ class BaseController(
         return self.repository.add(self.model_class(**schema.model_dump()))
 
     def update(self, id: int, schema: UpdateSchema) -> Optional[ModelClass]:
-        return self.repository.update(id, schema.model_dump())
+        return self.repository.update(id, schema.model_dump(exclude_none=True))
 
     def delete(self, id: int) -> None:
         self.repository.delete(id)
