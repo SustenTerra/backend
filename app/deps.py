@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from app.controllers.user import UserController
 from app.database.connection import engine
+from app.models.user import User
 from app.repositories.user import UserRepository
 
 
@@ -17,8 +18,10 @@ def get_session():
 
 
 def get_user_repository(session: Session = Depends(get_session)):
-    return UserRepository(session)
+    return UserRepository(User, session)
 
 
-def get_user_controller(repository: UserRepository = Depends(get_user_repository)):
+def get_user_controller(
+    repository: UserRepository = Depends(get_user_repository),
+):
     return UserController(repository)
