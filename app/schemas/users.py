@@ -13,10 +13,14 @@ class UserCreate(UserBase):
 
 
 class UserView(UserBase):
-    pass
+    id: int
 
 
 class UserUpdate(BaseModel):
     email: Optional[str] = Field(description="Email of the user", default=None)
-    full_name: Optional[str] = Field(description="Full name of the user", default=None)
-    password: Optional[str] = Field(description="Password of the user", default=None)
+    full_name: Optional[str] = Field(
+        description="Full name of the user", default=None
+    )
+    password: Optional[str] = Field(
+        description="Password of the user", default=None
+    )
