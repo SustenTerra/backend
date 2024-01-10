@@ -1,6 +1,5 @@
-from typing import Any, Generic, List, Optional, TypeVar
+from typing import Any, Generic, Optional, TypeVar
 
-from sqlalchemy import Column
 from sqlalchemy.orm import Query, Session
 from sqlalchemy.orm.decl_api import DeclarativeMeta
 
@@ -8,8 +7,6 @@ T = TypeVar("T", bound=DeclarativeMeta)
 
 
 class BaseRepository(Generic[T]):
-    filterable_fields: Optional[List[Column]]
-
     def __init__(
         self,
         model_class: T,
