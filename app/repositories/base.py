@@ -3,13 +3,13 @@ from typing import Any, Generic, Optional, TypeVar
 from sqlalchemy.orm import Query, Session
 from sqlalchemy.orm.decl_api import DeclarativeMeta
 
-T = TypeVar("T", bound=DeclarativeMeta)
+ModelClass = TypeVar("ModelClass", bound=DeclarativeMeta)
 
 
-class BaseRepository(Generic[T]):
+class BaseRepository(Generic[ModelClass]):
     def __init__(
         self,
-        model_class: T,
+        model_class: ModelClass,
         session: Session,
     ):
         self.model_class = model_class
@@ -22,18 +22,18 @@ class BaseRepository(Generic[T]):
     def get(self) -> Query:
         return self.default_query
 
-    def get_all(self) -> list[T]:
+    def get_all(self) -> list[ModelClass]:
         return self.default_query.all()
 
-    def get_by_id(self, id: int) -> Optional[T]:
+    def get_by_id(self, id: int) -> Optional[ModelClass]:
         return self.default_query.get(id)
 
-    def add(self, model: T) -> T:
+    def add(self, model: ModelClass) -> ModelClass:
         self.session.add(model)
         self.session.commit()
         return model
 
-    def update(self, id: int, values: dict[str, Any]) -> Optional[T]:
+    def update(self, id: int, values: dict[str, Any]) -> Optional[ModelClass]:
         self.default_query.filter_by(id=id).update(values)  # type: ignore
         self.session.commit()
         return self.get_by_id(id)
