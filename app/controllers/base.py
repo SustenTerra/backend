@@ -25,10 +25,14 @@ class BaseController(
         return self.repository.get_by_id(id)
 
     def create(self, schema: CreateSchema) -> ModelClass:
-        return self.repository.add(self.model_class(**schema.model_dump()))
+        return self.repository.add(
+            self.model_class(**schema.model_dump(exclude_unset=True))
+        )
 
     def update(self, id: int, schema: UpdateSchema) -> Optional[ModelClass]:
-        return self.repository.update(id, schema.model_dump(exclude_none=True))
+        return self.repository.update(
+            id, schema.model_dump(exclude_none=True, exclude_unset=True)
+        )
 
     def delete(self, id: int) -> None:
         self.repository.delete(id)
