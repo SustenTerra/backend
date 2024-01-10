@@ -40,3 +40,4 @@ class BaseRepository(Generic[ModelClass]):
 
     def delete(self, id: int) -> None:
         self.default_query.filter_by(id=id).delete()
+        self.session.commit()
