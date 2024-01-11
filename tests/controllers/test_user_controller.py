@@ -12,11 +12,11 @@ class TestUserController:
         self.repository = UserRepository(User, db_session)
         self.controller = UserController(User, self.repository)
 
-    def test_create_user(self, setup):
+    def test_create_user(self, setup, faker):
         create = UserCreate(
-            email="test@email.com",
-            full_name="Test User",
-            password="password",
+            email=faker.email(),
+            full_name=faker.name(),
+            password=faker.password(),
         )
 
         user = self.controller.create(create)

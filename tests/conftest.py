@@ -37,3 +37,8 @@ def db_session(db_session_factory):
 
     session_.rollback()
     session_.close()
+
+
+@pytest.fixture(scope="session", autouse=True)
+def faker_session_locale():
+    return ["pt_BR", "en_US"]
