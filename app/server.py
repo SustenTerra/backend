@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from sqlalchemy.orm import declarative_base
 
 from app.database.connection import engine
 from app.models.base import Base

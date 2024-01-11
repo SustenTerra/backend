@@ -26,7 +26,7 @@ class BaseRepository(Generic[ModelClass]):
         return self.default_query.all()
 
     def get_by_id(self, id: int) -> Optional[ModelClass]:
-        return self.default_query.get(id)
+        return self.default_query.filter_by(id=id).first()
 
     def add(self, model: ModelClass) -> ModelClass:
         self.session.add(model)
