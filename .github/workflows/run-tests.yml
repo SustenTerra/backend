@@ -1,0 +1,43 @@
+name: Run application tests
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check_pinned_actions:
+    name: Check for SHA pinned Actions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ensure SHA pinned actions
+        uses: zgosalvez/github-actions-ensure-sha-pinned-actions@a397475397837fb57396bd18f09d991625e604fe # pin@v1.2.0
+
+  run-tests:
+    name: Run application tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # pin@v3
+
+      - name: Install and configure Poetry
+        run: pipx install poetry
+
+      - name: Install Python
+        id: install-python
+        uses: actions/setup-python@65d7f2d534ac1bc67fcd62888c5f4f3d2cb2b236 # pin@v4
+        with:
+          cache: "poetry"
+          python-version-file: ".python-version"
+
+      - name: Check cache hit
+        run: echo '${{ steps.install-python.outputs.cache-hit }}' # true if cache-hit occured on the primary key
+
+      - name: Install dependencies
+        run: |
+          poetry env use '${{ steps.install-python.outputs.python-path }}'
+          poetry install --no-interaction --no-root
+
+      - name: Run tests
+        run: |
+          set -o pipefail
+          poetry run python -m pytest tests
