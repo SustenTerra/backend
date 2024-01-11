@@ -40,4 +40,4 @@ jobs:
       - name: Run tests
         run: |
           set -o pipefail
-          poetry run pytest -x --junitxml=pytest.xml --cov-report=term-missing:skip-covered --cov=app | tee pytest-coverage.txt
+          poetry run pytest tests
