@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from app.controllers.user import UserController
 from app.database.connection import engine
-from app.models.user import User
+from app.models import User
 from app.repositories.user import UserRepository
 
 

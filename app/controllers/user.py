@@ -1,6 +1,6 @@
 from app.controllers.base import BaseController
 from app.exceptions.user import UserAlreadyRegisteredException
-from app.models.user import User
+from app.models import User
 from app.repositories.user import UserRepository
 from app.schemas.users import UserCreate, UserUpdate
 
