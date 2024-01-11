@@ -2,7 +2,7 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-from app.models.base import Base
+from app.models import Base
 
 
 def pytest_addoption(parser):

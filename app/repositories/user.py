@@ -1,6 +1,6 @@
 from typing import Optional
 
-from app.models.user import User
+from app.models import User
 from app.repositories.base import BaseRepository
 
 

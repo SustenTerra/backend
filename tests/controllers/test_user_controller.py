@@ -1,7 +1,7 @@
 import pytest
 
 from app.controllers.user import UserController
-from app.models.user import User
+from app.models import User
 from app.repositories.user import UserRepository
 from app.schemas.users import UserCreate, UserUpdate
 
