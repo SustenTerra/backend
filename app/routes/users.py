@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 
 from app.controllers.user import UserController
 from app.deps import get_user_controller
-from app.schemas.users import UserCreate, UserView
+from app.schemas.users import UserCreate, UserUpdate, UserView
 
 users = APIRouter()
 
@@ -19,25 +19,29 @@ def create_user(
     return controller.create(body)
 
 
-@users.get("/users/{user_id}", tags=["users"])
-def get_user(user_id: str):
-    return {
-        "user_id": user_id,
-        "name": "John Doe",
-        "age": 25,
-    }
+@users.get("/users/{user_id}", tags=["users"], response_model=UserView)
+def get_user(
+    user_id: int, controller: UserController = Depends(get_user_controller)
+):
+    return controller.get_by_id(user_id)
 
 
-@users.get("/users", tags=["users"])
-def list_users():
-    pass
+@users.get("/users", tags=["users"], response_model=list[UserView])
+def list_users(controller: UserController = Depends(get_user_controller)):
+    return controller.get_all()
 
 
-@users.patch("/users/{user_id}", tags=["users"])
-def update_user():
-    pass
+@users.patch("/users/{user_id}", tags=["users"], response_model=UserView)
+def update_user(
+    user_id: int,
+    body: UserUpdate,
+    controller: UserController = Depends(get_user_controller),
+):
+    return controller.update(user_id, body)
 
 
 @users.delete("/users/{user_id}", tags=["users"])
-def delete_user():
-    pass
+def delete_user(
+    user_id: int, controller: UserController = Depends(get_user_controller)
+):
+    return controller.delete(user_id)
