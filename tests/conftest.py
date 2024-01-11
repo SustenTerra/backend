@@ -9,7 +9,7 @@ def pytest_addoption(parser):
     parser.addoption("--dburl", action="store", default="sqlite:///:memory:")
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def db_engine(request):
     """yields a SQLAlchemy engine which is suppressed after the test session"""
     db_url = request.config.getoption("--dburl")
@@ -22,7 +22,7 @@ def db_engine(request):
     engine_.dispose()
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def db_session_factory(db_engine):
     """returns a SQLAlchemy scoped session factory"""
     return scoped_session(sessionmaker(bind=db_engine))
