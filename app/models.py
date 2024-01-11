@@ -23,6 +23,9 @@ class User(Base):
     updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     posts: Mapped[List["Post"]] = relationship(back_populates="user")
+    favorited_posts: Mapped[List["FavoritedPost"]] = relationship(
+        "Favorite", back_populates="user"
+    )
 
 
 class Post(Base):
@@ -33,8 +36,22 @@ class Post(Base):
     image_url: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str] = mapped_column(nullable=False)
     price: Mapped[int] = mapped_column(nullable=False)
+    views: Mapped[int] = mapped_column(default=0)
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     user: Mapped["User"] = relationship(back_populates="posts")
+
+
+class FavoritedPost(Base):
+    __tablename__ = "favorites"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    post_id: Mapped[int] = mapped_column(ForeignKey("posts.id"))
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+
+    user: Mapped["User"] = relationship("User", back_populates="favorites")
+    post: Mapped["Post"] = relationship("Post", back_populates="favorites")
