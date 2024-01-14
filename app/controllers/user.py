@@ -3,6 +3,7 @@ from app.exceptions.user import UserAlreadyRegisteredException
 from app.models import User
 from app.repositories.user import UserRepository
 from app.schemas.users import UserCreate, UserUpdate
+from app.hashing import Hasher
 
 
 class UserController(
@@ -13,5 +14,7 @@ class UserController(
 
         if found_user:
             raise UserAlreadyRegisteredException(email=create.email)
+        
+        create.password = Hasher.get_password_hash(create.password)
 
         return super().create(create)
