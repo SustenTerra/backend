@@ -50,6 +50,7 @@ class TestUserController:
         update = UserUpdate(
             email=faker.email(),
             full_name=faker.name(),
+            phone=faker.phone_number(),
             password=faker.password(),
         )
 

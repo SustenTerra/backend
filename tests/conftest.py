@@ -14,7 +14,7 @@ def pytest_addoption(parser):
 def db_engine(request):
     """yields a SQLAlchemy engine which is suppressed after the test session"""
     db_url = request.config.getoption("--dburl")
-    engine_ = create_engine(db_url, echo=True)
+    engine_ = create_engine(db_url, echo=False)
 
     Base.metadata.create_all(engine_)
 
