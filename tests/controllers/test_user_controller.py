@@ -39,14 +39,14 @@ class TestUserController:
         assert found_user.email == self.created_user.email
         assert found_user.full_name == self.created_user.full_name
 
-    def test_get_all_users(self, setup, make_user):
+    def test_get_all_users(self, setup):
         found_users = self.controller.get_all()
         assert len(found_users) == 1
         assert found_users[0].id == self.created_user.id
         assert found_users[0].email == self.created_user.email
         assert found_users[0].full_name == self.created_user.full_name
 
-    def test_update_user(self, setup, make_user, faker):
+    def test_update_user(self, setup, faker):
         update = UserUpdate(
             email=faker.email(),
             full_name=faker.name(),
@@ -66,7 +66,7 @@ class TestUserController:
         assert found_user.email == update.email
         assert found_user.full_name == update.full_name
 
-    def test_delete_user(self, setup, make_user):
+    def test_delete_user(self, setup):
         self.controller.delete(self.created_user.id)
 
         found_user = self.repository.get_by_id(self.created_user.id)
