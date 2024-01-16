@@ -10,7 +10,7 @@ def make_user(faker):
             email=faker.email(),
             full_name=faker.name(),
             password=faker.password(),
-            phone=faker.phone_number(),
+            phone="83940028922",
         )
 
         return User(**{**defaults, **kwargs})

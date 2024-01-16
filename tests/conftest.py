@@ -42,4 +42,4 @@ def db_session(db_session_factory):
 
 @pytest.fixture(scope="session", autouse=True)
 def faker_session_locale():
-    return ["pt_BR", "en_US"]
+    return ["pt_BR"]

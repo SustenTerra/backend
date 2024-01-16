@@ -20,7 +20,7 @@ class TestUserController:
             email=faker.email(),
             full_name=faker.name(),
             password=faker.password(),
-            phone=faker.phone_number(),
+            phone="83940028922",
         )
 
         user = self.controller.create(create)
@@ -50,7 +50,7 @@ class TestUserController:
         update = UserUpdate(
             email=faker.email(),
             full_name=faker.name(),
-            phone=faker.phone_number(),
+            phone="83940028923",
             password=faker.password(),
         )
 
