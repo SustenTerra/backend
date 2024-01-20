@@ -3,7 +3,8 @@ import pytest
 from app.controllers.user import UserController
 from app.models import User
 from app.repositories.user import UserRepository
-from app.schemas.users import UserCreate, UserUpdate
+from app.schemas.users import UserCreate, UserUpdate, UserUpdatePassword
+from app.hashing import Hasher
 
 
 class TestUserController:
@@ -51,7 +52,6 @@ class TestUserController:
             email=faker.email(),
             full_name=faker.name(),
             phone="83940028923",
-            password=faker.password(),
         )
 
         updated_user = self.controller.update(self.created_user.id, update)
@@ -59,12 +59,39 @@ class TestUserController:
         assert updated_user.id == self.created_user.id
         assert updated_user.email == update.email
         assert updated_user.full_name == update.full_name
+        assert updated_user.phone == update.phone
 
         found_user = self.repository.get_by_id(self.created_user.id)
         assert found_user is not None
         assert found_user.id == self.created_user.id
         assert found_user.email == update.email
         assert found_user.full_name == update.full_name
+        assert found_user.phone == update.phone
+
+
+    def test_update_user_password(self, setup, faker, make_user):
+        old_password = faker.password()
+        user: User = make_user(password=Hasher.get_password_hash(old_password))
+        self.repository.add(user)
+        
+        new_password = faker.password()
+
+        update = UserUpdatePassword(
+            current_password=old_password,
+            password=new_password
+        )
+
+        updated_user = self.controller.update_password(user.id, update)
+        assert updated_user is not None
+        assert updated_user.id == user.id
+        
+        found_user = self.repository.get_by_id(user.id)
+        assert found_user is not None
+        assert found_user.id == user.id
+        assert found_user.email == user.email
+        assert found_user.full_name == user.full_name
+        assert found_user.phone == user.phone
+        assert Hasher.verify_password(new_password, found_user.password)
 
     def test_delete_user(self, setup):
         self.controller.delete(self.created_user.id)

@@ -53,11 +53,27 @@ class UserUpdate(BaseModel):
     full_name: Optional[str] = Field(
         description="Full name of the user", default=None
     )
-    password: Optional[str] = Field(
-        description="Password of the user", default=None
-    )
     phone: Optional[str] = Field(
         description="Phone number of the user",
         default=None,
         pattern=r"^[0-9]{9,15}$",
+    )
+
+class UserUpdatePassword(BaseModel):
+    current_password: str = Field(
+        min_length=8,
+        json_schema_extra={
+            "title": "Current Password",
+            "description": "Current Password of the user",
+            "examples": ["John@123"],
+        },
+    )
+    new_password: str = Field(
+        min_length=8,
+        alias="password",
+        json_schema_extra={
+            "title": "New Password",
+            "description": "New Password of the user",
+            "examples": ["John@321"],
+        },
     )
