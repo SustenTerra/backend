@@ -7,3 +7,10 @@ class UserAlreadyRegisteredException(HTTPException):
             status_code=400,
             detail=f"Email {email} already registered",
         )
+
+class UserPasswordDoNotMatchException(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=400,
+            detail=f"Given current password do not match actual user password",
+        )

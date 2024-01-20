@@ -31,7 +31,11 @@ class BaseController(
 
     def update(self, id: int, schema: UpdateSchema) -> Optional[ModelClass]:
         return self.repository.update(
-            id, schema.model_dump(exclude_none=True, exclude_unset=True)
+            id, schema.model_dump(
+                exclude_none=True,
+                exclude_unset=True,
+                exclude={'current_password'},
+                by_alias=True)
         )
 
     def delete(self, id: int) -> None:

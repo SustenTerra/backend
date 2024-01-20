@@ -51,7 +51,6 @@ class TestUserController:
             email=faker.email(),
             full_name=faker.name(),
             phone="83940028923",
-            password=faker.password(),
         )
 
         updated_user = self.controller.update(self.created_user.id, update)

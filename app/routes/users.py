@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 
 from app.controllers.user import UserController
 from app.deps import get_user_controller
-from app.schemas.users import UserCreate, UserUpdate, UserView
+from app.schemas.users import UserCreate, UserUpdate, UserUpdatePassword, UserView
 
 users = APIRouter()
 
@@ -39,6 +39,13 @@ def update_user(
 ):
     return controller.update(user_id, body)
 
+@users.patch("/users/{user_id}/update_password", tags=["users"], response_model=UserView)
+def update_user_password(
+    user_id: int,
+    body: UserUpdatePassword,
+    controller: UserController = Depends(get_user_controller),
+):
+    return controller.update_password(user_id, body)
 
 @users.delete("/users/{user_id}", tags=["users"])
 def delete_user(
