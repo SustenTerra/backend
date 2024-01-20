@@ -1,11 +1,9 @@
 import pytest
 
 from app.controllers.session import SessionController
-from app.controllers.user import UserController
 from app.hashing import Hasher
 from app.models import User
 from app.repositories.user import UserRepository
-from app.schemas.users import UserCreate, UserUpdate, UserUpdatePassword
 
 
 class TestSessionController:
