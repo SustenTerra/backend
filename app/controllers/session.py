@@ -1,8 +1,5 @@
-from sqlalchemy.orm import Session
-
 from app.exceptions.user import UserPasswordDoNotMatchException
 from app.hashing import Hasher
-from app.models import User
 from app.repositories.user import UserRepository
 
 
