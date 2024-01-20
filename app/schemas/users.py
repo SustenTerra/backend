@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 
 class UserBase(BaseModel):
     email: str = Field(
-        pattern=r"/^[a-z0-9_.\-]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)*$/i",
+        pattern=r"[A-z0-9_.\-]+@[A-z0-9]+\.[A-z]+(\.[A-z]+)*",
         json_schema_extra={
             "title": "Email",
             "description": "Email of the user",
@@ -48,7 +48,7 @@ class UserUpdate(BaseModel):
     email: Optional[str] = Field(
         description="Email of the user",
         default=None,
-        pattern=r"/^[a-z0-9_.\-]+@[a-z0-9]+\.[a-z]+(\.[a-z]+)*$/i",
+        pattern=r"[A-z0-9_.\-]+@[A-z0-9]+\.[A-z]+(\.[A-z]+)*",
     )
     full_name: Optional[str] = Field(
         description="Full name of the user", default=None
