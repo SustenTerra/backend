@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from app.models import Base
+from tests.factories import *  # noqa: F401, F403
 
 
 def pytest_addoption(parser):
@@ -13,7 +14,7 @@ def pytest_addoption(parser):
 def db_engine(request):
     """yields a SQLAlchemy engine which is suppressed after the test session"""
     db_url = request.config.getoption("--dburl")
-    engine_ = create_engine(db_url, echo=True)
+    engine_ = create_engine(db_url, echo=False)
 
     Base.metadata.create_all(engine_)
 
@@ -41,4 +42,4 @@ def db_session(db_session_factory):
 
 @pytest.fixture(scope="session", autouse=True)
 def faker_session_locale():
-    return ["pt_BR", "en_US"]
+    return ["pt_BR"]
