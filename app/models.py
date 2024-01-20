@@ -1,7 +1,8 @@
+import enum
 from datetime import datetime
 from typing import List
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import Enum, ForeignKey
 from sqlalchemy.orm import (
     Mapped,
     declarative_base,
@@ -69,3 +70,80 @@ class Category(Base):
     updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     posts: Mapped[List["Post"]] = relationship(back_populates="category")
+
+
+class Course(Base):
+    __tablename__ = "courses"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(nullable=False)
+    author_name: Mapped[str] = mapped_column(nullable=False)
+    description: Mapped[str] = mapped_column(nullable=False)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+
+    course_chapters: Mapped[List["CourseChapter"]] = relationship(
+        back_populates="course"
+    )
+
+
+class CourseChapter(Base):
+    __tablename__ = "course_chapters"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(nullable=False)
+    index: Mapped[int] = mapped_column(nullable=False)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+
+    course_id: Mapped[int] = mapped_column(ForeignKey("courses.id"))
+    course: Mapped["Course"] = relationship(back_populates="course_chapters")
+
+    chapter_contents: Mapped[List["ChapterContent"]] = relationship(
+        back_populates="course_chapter"
+    )
+
+
+class ChapterContent(Base):
+    __tablename__ = "chapter_contents"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(nullable=False)
+    index: Mapped[int] = mapped_column(nullable=False)
+    description: Mapped[str] = mapped_column(nullable=False)
+    video_url: Mapped[str] = mapped_column(nullable=True)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+
+    course_chapter_id: Mapped[int] = mapped_column(
+        ForeignKey("course_chapters.id")
+    )
+    course_chapter: Mapped["CourseChapter"] = relationship(
+        back_populates="chapter_contents"
+    )
+
+
+class ContentStatusEnum(enum.Enum):
+    not_started = "not_started"
+    in_progress = "in_progress"
+    completed = "completed"
+
+
+class UserContentStatus(Base):
+    __tablename__ = "user_content_status"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    chapter_content_id: Mapped[int] = mapped_column(
+        ForeignKey("chapter_contents.id")
+    )
+    status: Mapped[ContentStatusEnum] = mapped_column(
+        Enum(ContentStatusEnum),
+        nullable=False,
+        default=ContentStatusEnum.not_started,
+    )
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+
+    user: Mapped["User"] = relationship()
+    chapter_content: Mapped["ChapterContent"] = relationship()
