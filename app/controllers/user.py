@@ -36,4 +36,4 @@ class UserController(
         
         update.new_password = Hasher.get_password_hash(update.new_password)
             
-        return super().update(id, update)
+        return super().update(id, update, {'current_password'})
