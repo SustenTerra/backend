@@ -85,6 +85,25 @@ class Course(Base):
     course_chapters: Mapped[List["CourseChapter"]] = relationship(
         back_populates="course"
     )
+    course_category_id: Mapped[int] = mapped_column(
+        ForeignKey("course_categories.id")
+    )
+    course_category: Mapped["CourseCategory"] = relationship(
+        back_populates="courses"
+    )
+
+
+class CourseCategory(Base):
+    __tablename__ = "course_categories"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(nullable=False)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+
+    courses: Mapped[List["Course"]] = relationship(
+        back_populates="course_category"
+    )
 
 
 class CourseChapter(Base):
