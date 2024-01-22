@@ -4,6 +4,7 @@ from app.controllers.session import SessionController
 from app.hashing import Hasher
 from app.models import User
 from app.repositories.user import UserRepository
+from app.services.auth import get_logged_user
 
 
 class TestSessionController:
@@ -32,3 +33,7 @@ class TestSessionController:
         assert login.user.email == self.created_user.email
         assert login.user.full_name == self.created_user.full_name
         assert login.user.phone == self.created_user.phone
+
+        logged_user = get_logged_user(login.token, self.user_repository)
+        assert logged_user is not None
+        assert logged_user.id == self.created_user.id
