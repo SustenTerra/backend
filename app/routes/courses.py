@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 
 courses = APIRouter()
 
@@ -8,5 +8,5 @@ courses = APIRouter()
     tags=["courses"],
     description="List all courses",
 )
-def list_all_courses():
-    pass
+def list_all_courses(request: Request):
+    return {"full_name": request.state.user.full_name}
