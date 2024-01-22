@@ -28,39 +28,34 @@ def create_user(
 @users.get("/users/me", tags=["users"], response_model=UserView)
 def get_user(
     controller: UserController = Depends(get_user_controller),
-    user: UserView = Depends(auth.get_current_user),
+    user: UserView = Depends(auth.get_logged_user),
 ):
     return controller.get_by_id(user.id)
 
 
-@users.get("/users", tags=["users"], response_model=list[UserView])
-def list_users(controller: UserController = Depends(get_user_controller)):
-    return controller.get_all()
-
-
-@users.patch("/users/{user_id}", tags=["users"], response_model=UserView)
+@users.patch("/users/me", tags=["users"], response_model=UserView)
 def update_user(
-    user_id: int,
     body: UserUpdate,
     controller: UserController = Depends(get_user_controller),
+    user: UserView = Depends(auth.get_logged_user),
 ):
-    return controller.update(user_id, body)
+    return controller.update(user.id, body)
 
 
 @users.patch(
-    "/users/{user_id}/update_password", tags=["users"], response_model=UserView
+    "/users/me/update_password", tags=["users"], response_model=UserView
 )
 def update_user_password(
-    user_id: int,
     body: UserUpdatePassword,
     controller: UserController = Depends(get_user_controller),
+    user: UserView = Depends(auth.get_logged_user),
 ):
-    return controller.update_password(user_id, body)
+    return controller.update_password(user.id, body)
 
 
-@users.delete("/users/{user_id}", tags=["users"])
+@users.delete("/users/me", tags=["users"])
 def delete_user(
-    user_id: int,
     controller: UserController = Depends(get_user_controller),
+    user: UserView = Depends(auth.get_logged_user),
 ):
-    return controller.delete(user_id)
+    return controller.delete(user.id)

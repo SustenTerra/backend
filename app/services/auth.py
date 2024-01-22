@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import APIKeyHeader
 from jose import JWTError, jwt
 
@@ -12,7 +12,7 @@ config = Config()
 apikey_scheme = APIKeyHeader(name="Authorization", scheme_name="Bearer")
 
 
-def get_current_user(
+def get_logged_user(
     token: Annotated[str, Depends(apikey_scheme)],
     user_repository: UserRepository = Depends(get_user_repository),
 ):
@@ -29,7 +29,7 @@ def get_current_user(
         user_id = int(payload.get("sub", -1))
         if user_id is None:
             raise credentials_exception
-    except JWTError as e:
+    except JWTError:
         raise credentials_exception
 
     user = user_repository.get_by_id(user_id)
