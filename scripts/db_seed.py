@@ -20,15 +20,15 @@ def get_db_session():
 
 
 def clear_all_tables(session: Session):
+    session.query(FavoritedPost).delete()
     session.query(Post).delete()
     session.query(PostCategory).delete()
+    session.query(UserContentStatus).delete()
     session.query(User).delete()
-    session.query(FavoritedPost).delete()
+    session.query(ChapterContent).delete()
+    session.query(CourseChapter).delete()
     session.query(Course).delete()
     session.query(CourseCategory).delete()
-    session.query(CourseChapter).delete()
-    session.query(ChapterContent).delete()
-    session.query(UserContentStatus).delete()
 
     session.commit()
 
