@@ -1,7 +1,5 @@
-from typing import Annotated
-
 from fastapi import Depends, HTTPException, status
-from fastapi.security import APIKeyHeader
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
 
 from app.config import Config
@@ -9,13 +7,17 @@ from app.deps import get_user_repository
 from app.repositories.user import UserRepository
 
 config = Config()
-apikey_scheme = APIKeyHeader(name="Authorization", scheme_name="Bearer")
+apikey_scheme = HTTPBearer()
 
 
 def get_logged_user(
-    token: Annotated[str, Depends(apikey_scheme)],
+    token: str | HTTPAuthorizationCredentials = Depends(apikey_scheme),
     user_repository: UserRepository = Depends(get_user_repository),
 ):
+    if isinstance(token, HTTPAuthorizationCredentials):
+        token = token.credentials
+    token = token.replace("Bearer ", "")
+
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",

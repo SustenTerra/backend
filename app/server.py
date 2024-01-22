@@ -37,21 +37,31 @@ async def authenticate_routes_middleware(
     if request.url.path not in get_private_routes_endpoints():
         return await call_next(request)
 
-    if not request.headers.get("Authorization"):
+    API_KEY_HEADER = "Authorization"
+
+    if not request.headers.get(API_KEY_HEADER):
         return JSONResponse(
             status_code=401,
-            content={"detail": "Authorization header is required"},
+            content={"detail": f"{API_KEY_HEADER} header is required"},
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    token = request.headers.get("Authorization", "").replace("Bearer ", "")
+    token = request.headers.get(API_KEY_HEADER, "")
 
     SessionLocal = sessionmaker(bind=engine)
     session = SessionLocal()
 
     user_repository = UserRepository(User, session)
 
-    user = auth.get_logged_user(token, user_repository)
+    try:
+        user = auth.get_logged_user(token, user_repository)
+    except HTTPException as e:
+        return JSONResponse(
+            status_code=e.status_code,
+            content={"detail": e.detail},
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
     request.state.user = user
 
     session.close()
