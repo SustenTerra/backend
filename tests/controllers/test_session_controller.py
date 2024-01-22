@@ -1,4 +1,5 @@
 import pytest
+from fastapi.security import HTTPAuthorizationCredentials
 
 from app.controllers.session import SessionController
 from app.hashing import Hasher
@@ -34,6 +35,10 @@ class TestSessionController:
         assert login.user.full_name == self.created_user.full_name
         assert login.user.phone == self.created_user.phone
 
-        logged_user = get_logged_user(login.token, self.user_repository)
+        auth = HTTPAuthorizationCredentials(
+            scheme="Bearer",
+            credentials=login.token,
+        )
+        logged_user = get_logged_user(auth, self.user_repository)
         assert logged_user is not None
         assert logged_user.id == self.created_user.id
