@@ -12,3 +12,9 @@ class Config(BaseModel):
     DB_NAME: str = os.getenv("DB_NAME", "mydatabase")
     DB_USER: str = os.getenv("DB_USER", "myuser")
     DB_PASSWORD: str = os.getenv("DB_PASSWORD", "mypassword")
+
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "secret")
+    ALGORITHM: str = os.getenv("ALGORITHM", "HS256")
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = int(
+        os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30)
+    )
