@@ -25,11 +25,12 @@ def create_user(
     return controller.create(body)
 
 
-@users.get("/users/{user_id}", tags=["users"], response_model=UserView)
+@users.get("/users/me", tags=["users"], response_model=UserView)
 def get_user(
-    user_id: int, controller: UserController = Depends(get_user_controller)
+    controller: UserController = Depends(get_user_controller),
+    user: UserView = Depends(auth.get_current_user),
 ):
-    return controller.get_by_id(user_id)
+    return controller.get_by_id(user.id)
 
 
 @users.get("/users", tags=["users"], response_model=list[UserView])
@@ -61,7 +62,5 @@ def update_user_password(
 def delete_user(
     user_id: int,
     controller: UserController = Depends(get_user_controller),
-    user: UserView = Depends(auth.get_current_user),
 ):
-    print(user.email)
     return controller.delete(user_id)
