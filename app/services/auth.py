@@ -11,13 +11,9 @@ apikey_scheme = HTTPBearer()
 
 
 def get_logged_user(
-    token: str | HTTPAuthorizationCredentials = Depends(apikey_scheme),
+    auth: HTTPAuthorizationCredentials = Depends(apikey_scheme),
     user_repository: UserRepository = Depends(get_user_repository),
 ):
-    if isinstance(token, HTTPAuthorizationCredentials):
-        token = token.credentials
-    token = token.replace("Bearer ", "")
-
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -25,10 +21,13 @@ def get_logged_user(
     )
     try:
         payload = jwt.decode(
-            token, config.SECRET_KEY, algorithms=[config.ALGORITHM]
+            auth.credentials,
+            config.SECRET_KEY,
+            algorithms=[config.ALGORITHM],
         )
 
         user_id = int(payload.get("sub", -1))
+
         if user_id is None:
             raise credentials_exception
     except JWTError:
