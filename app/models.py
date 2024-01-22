@@ -44,8 +44,8 @@ class Post(Base):
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     user: Mapped["User"] = relationship(back_populates="posts")
-    category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
-    category: Mapped["Category"] = relationship(back_populates="posts")
+    category_id: Mapped[int] = mapped_column(ForeignKey("post_categories.id"))
+    category: Mapped["PostCategory"] = relationship(back_populates="posts")
 
 
 class FavoritedPost(Base):
@@ -61,8 +61,8 @@ class FavoritedPost(Base):
     post: Mapped["Post"] = relationship()
 
 
-class Category(Base):
-    __tablename__ = "categories"
+class PostCategory(Base):
+    __tablename__ = "post_categories"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
