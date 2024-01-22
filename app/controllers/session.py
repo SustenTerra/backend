@@ -40,7 +40,8 @@ class SessionController:
             minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES
         )
         access_token = self._create_access_token(
-            data={"sub": found_user.id}, expires_delta=access_token_expires
+            data={"sub": str(found_user.id)},
+            expires_delta=access_token_expires,
         )
 
         return LoginView(
