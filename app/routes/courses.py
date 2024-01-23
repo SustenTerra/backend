@@ -1,10 +1,9 @@
 from fastapi import APIRouter, Depends
 
-from app.services import auth
+from app.controllers.course import CourseController
+from app.deps import get_course_controller
 
 courses = APIRouter()
-
-courses.dependencies = [Depends(auth.get_logged_user)]
 
 
 @courses.get(
@@ -12,5 +11,7 @@ courses.dependencies = [Depends(auth.get_logged_user)]
     tags=["courses"],
     description="List all courses",
 )
-def list_all_courses():
-    return {"Private routes": "Success"}
+def list_all_courses(
+    controller: CourseController = Depends(get_course_controller),
+):
+    return controller.get_all()
