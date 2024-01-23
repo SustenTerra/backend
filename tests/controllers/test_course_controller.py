@@ -28,6 +28,24 @@ class TestCourseController:
         assert len(courses) == 1
         assert courses[0].id == self.created_course.id
         assert courses[0].name == self.created_course.name
+        assert courses[0].author_name == self.created_course.author_name
+        assert courses[0].chapters_count == 0
+
+    def test_list_courses_with_chapter(self, setup, make_course_chapter):
+        created_course_chapter = make_course_chapter(
+            course=self.created_course, index=1
+        )
+        self.session.add(created_course_chapter)
+        self.session.commit()
+
+        courses = self.controller.get_all()
+
+        assert courses is not None
+        assert len(courses) == 1
+        assert courses[0].id == self.created_course.id
+        assert courses[0].name == self.created_course.name
+        assert courses[0].author_name == self.created_course.author_name
+        assert courses[0].chapters_count == 1
 
     def test_list_courses_by_category_name(
         self, setup, make_course_category, make_course
