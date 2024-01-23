@@ -1,6 +1,6 @@
 import pytest
 
-from app.models import CourseCategory, User
+from app.models import Course, CourseCategory, User
 
 
 @pytest.fixture
@@ -28,3 +28,18 @@ def make_course_category(faker):
         return CourseCategory(**{**defaults, **kwargs})
 
     return _make_course_category
+
+
+@pytest.fixture
+def make_course(faker):
+    def _make_course(course_category: CourseCategory, **kwargs):
+        defaults = dict(
+            name=faker.name(),
+            author_name=faker.name(),
+            description=faker.text(),
+            course_category_id=course_category.id,
+        )
+
+        return Course(**{**defaults, **kwargs})
+
+    return _make_course
