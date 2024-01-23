@@ -7,7 +7,7 @@ from app.schemas.course_category import (
 )
 
 
-class CourseController(
+class CourseCategoryController(
     BaseController[
         CourseCategory,
         CourseCategoryRepository,
