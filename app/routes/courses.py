@@ -4,7 +4,8 @@ from fastapi import APIRouter, Depends
 
 from app.controllers.course import CourseController
 from app.deps import get_course_controller
-from app.schemas.course import CourseListView
+from app.models import User
+from app.schemas.course import CourseListView, CourseView
 from app.services.auth import get_logged_user
 
 courses = APIRouter(tags=["courses"])
@@ -24,12 +25,25 @@ def list_all_courses(
 
 
 @courses.get(
+    "/courses/in_progress",
+    description="List all courses in progress",
+    response_model=List[CourseListView],
+)
+def list_all_courses_in_progress(
+    user: User = Depends(get_logged_user),
+    controller: CourseController = Depends(get_course_controller),
+):
+    return controller.get_all_in_progress(user.id)
+
+
+@courses.get(
     "/courses/{course_id}",
     description="Get one course by id",
-    dependencies=[Depends(get_logged_user)],
+    response_model=CourseView,
 )
 def get_course_by_id(
     course_id: int,
+    user: User = Depends(get_logged_user),
     controller: CourseController = Depends(get_course_controller),
 ):
-    return controller.get_by_id(course_id)
+    return controller.get_by_id(course_id, user.id)

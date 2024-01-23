@@ -2,12 +2,12 @@ from fastapi import APIRouter, Depends
 
 from app.controllers.chapter_content import ChapterContentController
 from app.deps import get_chapter_content_controller
+from app.models import User
 from app.schemas.chapter_content import ChapterContentView
 from app.services.auth import get_logged_user
 
 chapter_contents = APIRouter(
     tags=["chapter_contents"],
-    dependencies=[Depends(get_logged_user)],
 )
 
 
@@ -18,8 +18,9 @@ chapter_contents = APIRouter(
 )
 def get_content_by_id(
     chapter_content_id: int,
+    user: User = Depends(get_logged_user),
     controller: ChapterContentController = Depends(
         get_chapter_content_controller
     ),
 ):
-    return controller.get_by_id(chapter_content_id)
+    return controller.get_by_id(chapter_content_id, user.id)
