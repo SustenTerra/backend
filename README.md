@@ -14,9 +14,9 @@
 - Run `make install` to install dependencies
 - Run `make db-up` to start the database
 - Run `make start` to run server for the first time and run migrations
-- (Optionally) Run `make db-seed` to run seed
+- (Optionally) Run `make db-seed` to run seed and fill database with fake data
 
 ## Run
 
 - Run `make start` to run server
-- Access `http://localhost:8000/docs` to see the documentation
+- Access (http://localhost:8000/docs) to see the documentation

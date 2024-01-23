@@ -65,7 +65,7 @@ class PostCategory(Base):
     __tablename__ = "post_categories"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(nullable=False)
+    name: Mapped[str] = mapped_column(nullable=False, unique=True)
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
@@ -83,13 +83,16 @@ class Course(Base):
     updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     course_chapters: Mapped[List["CourseChapter"]] = relationship(
-        back_populates="course"
+        back_populates="course",
+        lazy="joined",
+        order_by="CourseChapter.index",
     )
     course_category_id: Mapped[int] = mapped_column(
         ForeignKey("course_categories.id")
     )
     course_category: Mapped["CourseCategory"] = relationship(
-        back_populates="courses"
+        back_populates="courses",
+        lazy="joined",
     )
 
 
@@ -97,7 +100,7 @@ class CourseCategory(Base):
     __tablename__ = "course_categories"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(nullable=False)
+    name: Mapped[str] = mapped_column(nullable=False, unique=True)
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
@@ -119,7 +122,9 @@ class CourseChapter(Base):
     course: Mapped["Course"] = relationship(back_populates="course_chapters")
 
     chapter_contents: Mapped[List["ChapterContent"]] = relationship(
-        back_populates="course_chapter"
+        back_populates="course_chapter",
+        lazy="joined",
+        order_by="ChapterContent.index",
     )
 
 

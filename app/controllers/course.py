@@ -13,7 +13,7 @@ class CourseController(
         self,
         category_name: Optional[str] = None,
         search_term: Optional[str] = None,
-    ) -> list[Course]:
+    ):
         if category_name:
             return self.repository.get_all_by_category_name(category_name)
 

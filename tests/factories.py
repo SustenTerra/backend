@@ -1,6 +1,6 @@
 import pytest
 
-from app.models import Course, CourseCategory, User
+from app.models import Course, CourseCategory, CourseChapter, User
 
 
 @pytest.fixture
@@ -43,3 +43,17 @@ def make_course(faker):
         return Course(**{**defaults, **kwargs})
 
     return _make_course
+
+
+@pytest.fixture
+def make_course_chapter(faker):
+    def _make_course_chapter(course: Course, index: int, **kwargs):
+        defaults = dict(
+            name=faker.name(),
+            index=index,
+            course_id=course.id,
+        )
+
+        return CourseChapter(**{**defaults, **kwargs})
+
+    return _make_course_chapter
