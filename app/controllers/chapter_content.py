@@ -1,6 +1,6 @@
 from app.controllers.base import BaseController
 from app.exceptions.chapter_content import CannotOpenContentException
-from app.models import ChapterContent, ContentStatusEnum
+from app.models import ChapterContent, ContentStatusEnum, UserContentStatus
 from app.repositories.chapter_content import ChapterContentRepository
 from app.repositories.user_content_status import UserContentStatusRepository
 from app.schemas.chapter_content import (
@@ -35,6 +35,18 @@ class ChapterContentController(
 
         return status is not None
 
+    def mark_content_as_viewed(self, user_id: int, content_id: int) -> None:
+        if self.content_was_viewed(user_id, content_id):
+            return
+
+        self.content_status_repository.add(
+            UserContentStatus(
+                user_id=user_id,
+                content_id=content_id,
+                status=ContentStatusEnum.completed,
+            )
+        )
+
     def get_by_id(self, id: int, user_id: int) -> ChapterContent | None:
         content = super().get_by_id(id)
         if content is None:
@@ -46,6 +58,9 @@ class ChapterContentController(
         ):
             raise CannotOpenContentException(content.id)
 
-        # Mark as viewed
+        self.mark_content_as_viewed(
+            user_id=user_id,
+            content_id=content.id,
+        )
 
         return content
