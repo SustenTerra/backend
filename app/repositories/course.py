@@ -17,7 +17,7 @@ class CourseRepository(BaseRepository[Course]):
                 Course.created_at,
                 Course.updated_at,
             )
-            .join(Course.course_chapters)
+            .join(Course.course_chapters, isouter=True)
             .join(Course.course_category)
             .group_by(Course.id, CourseCategory.name)
         )

@@ -2,7 +2,7 @@ import pytest
 
 from app.controllers.chapter_content import ChapterContentController
 from app.controllers.course import CourseController
-from app.models import ChapterContent, Course, UserContentStatus
+from app.models import ChapterContent, Course, CourseChapter, UserContentStatus
 from app.repositories.chapter_content import ChapterContentRepository
 from app.repositories.course import CourseRepository
 from app.repositories.user_content_status import UserContentStatusRepository
@@ -10,8 +10,13 @@ from app.repositories.user_content_status import UserContentStatusRepository
 
 class TestCourseController:
     @pytest.fixture
-    def setup(self, db_session, make_course, make_course_category):
-        self.session = db_session
+    def setup(
+        self,
+        db_session,
+        make_course,
+        make_course_category,
+        make_course_chapter,
+    ):
         self.repository = CourseRepository(Course, db_session)
 
         content_repository = ChapterContentRepository(
@@ -39,6 +44,14 @@ class TestCourseController:
         )
         self.repository.add(self.created_course)
 
+        self.created_course_chapter: CourseChapter = make_course_chapter(
+            course=self.created_course, index=0
+        )
+        db_session.add(self.created_course_chapter)
+        db_session.commit()
+
+        self.session = db_session
+
     def test_list_courses(self, setup):
         courses = self.controller.get_all()
 
@@ -47,7 +60,7 @@ class TestCourseController:
         assert courses[0].id == self.created_course.id
         assert courses[0].name == self.created_course.name
         assert courses[0].author_name == self.created_course.author_name
-        assert courses[0].chapters_count == 0
+        assert courses[0].chapters_count == 1
 
     def test_list_courses_with_chapter(self, setup, make_course_chapter):
         created_course_chapter = make_course_chapter(
@@ -63,7 +76,7 @@ class TestCourseController:
         assert courses[0].id == self.created_course.id
         assert courses[0].name == self.created_course.name
         assert courses[0].author_name == self.created_course.author_name
-        assert courses[0].chapters_count == 1
+        assert courses[0].chapters_count == 2
 
     def test_list_courses_by_category_name(
         self, setup, make_course_category, make_course
