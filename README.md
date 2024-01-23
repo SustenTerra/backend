@@ -1,5 +1,18 @@
 # Sustentinta - Backend
 
+FastAPI Backend for Sustentinta APP.
+It has two main big features:
+
+#### Marketplace
+
+- Users can create post and sell their products
+- Users favorite products from other users
+
+#### Courses
+
+- Users can see the available courses
+- Users can enroll in courses
+
 ## Pre requisites
 
 - Poetry (https://python-poetry.org/docs/#installation)
