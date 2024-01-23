@@ -19,3 +19,4 @@
 ## Run
 
 - Run `make start` to run server
+- Access `http://localhost:8000/docs` to see the documentation
