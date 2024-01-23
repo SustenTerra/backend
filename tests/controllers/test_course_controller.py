@@ -1,8 +1,10 @@
 import pytest
 
 from app.controllers.course import CourseController
-from app.models import Course
+from app.models import ChapterContent, Course, UserContentStatus
+from app.repositories.chapter_content import ChapterContentRepository
 from app.repositories.course import CourseRepository
+from app.repositories.user_content_status import UserContentStatusRepository
 
 
 class TestCourseController:
@@ -10,7 +12,20 @@ class TestCourseController:
     def setup(self, db_session, make_course, make_course_category):
         self.session = db_session
         self.repository = CourseRepository(Course, db_session)
-        self.controller = CourseController(Course, self.repository)
+
+        content_repository = ChapterContentRepository(
+            ChapterContent, db_session
+        )
+        user_content_status_repository = UserContentStatusRepository(
+            UserContentStatus, db_session
+        )
+
+        self.controller = CourseController(
+            Course,
+            self.repository,
+            content_repository,
+            user_content_status_repository,
+        )
 
         self.created_course_category = make_course_category()
         db_session.add(self.created_course_category)
