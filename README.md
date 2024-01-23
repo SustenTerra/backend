@@ -33,3 +33,4 @@ It has two main big features:
 
 - Run `make start` to run server
 - Access (http://localhost:8000/docs) to see the documentation
+- To run tests run `make test`
