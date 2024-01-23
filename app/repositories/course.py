@@ -1,4 +1,4 @@
-from app.models import Course
+from app.models import Course, CourseCategory
 from app.repositories.base import BaseRepository
 
 
@@ -15,7 +15,7 @@ class CourseRepository(BaseRepository[Course]):
             self.default_query.join(Course.course_category)
             .filter(
                 (Course.name.ilike(f"%{term}%"))
-                | (Course.course_category.has(name=term))
+                | (CourseCategory.name.ilike(f"%{term}%"))
             )
             .all()
         )
