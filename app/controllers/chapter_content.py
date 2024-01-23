@@ -1,4 +1,5 @@
 from app.controllers.base import BaseController
+from app.exceptions.chapter_content import CannotOpenContentException
 from app.models import ChapterContent, ContentStatusEnum
 from app.repositories.chapter_content import ChapterContentRepository
 from app.repositories.user_content_status import UserContentStatusRepository
@@ -38,3 +39,13 @@ class ChapterContentController(
         content = super().get_by_id(id)
         if content is None:
             return None
+
+        previous_content = self.repository.get_previous_content(content.id)
+        if previous_content and not self.content_was_viewed(
+            user_id, previous_content.id
+        ):
+            raise CannotOpenContentException(content.id)
+
+        # Mark as viewed
+
+        return content
