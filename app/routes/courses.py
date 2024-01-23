@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import APIRouter, Depends
 
 from app.controllers.course import CourseController
@@ -12,6 +14,8 @@ courses = APIRouter()
     description="List all courses",
 )
 def list_all_courses(
+    category_name: Optional[str] = None,
+    search_term: Optional[str] = None,
     controller: CourseController = Depends(get_course_controller),
 ):
-    return controller.get_all()
+    return controller.get_all(category_name, search_term)
