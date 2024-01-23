@@ -25,6 +25,18 @@ def list_all_courses(
 
 
 @courses.get(
+    "/courses/in_progress",
+    description="List all courses in progress",
+    response_model=List[CourseListView],
+)
+def list_all_courses_in_progress(
+    user: User = Depends(get_logged_user),
+    controller: CourseController = Depends(get_course_controller),
+):
+    return controller.get_all_in_progress(user.id)
+
+
+@courses.get(
     "/courses/{course_id}",
     description="Get one course by id",
     response_model=CourseView,

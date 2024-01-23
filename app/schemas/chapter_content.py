@@ -23,6 +23,7 @@ class ChapterContentUpdate(BaseModel):
 
 
 class ChapterContentView(ChapterContentBase):
+    id: int
     chapter_index: int
     chapter_name: str
     previous_chapter_content_id: Optional[int] = Field(default=None)

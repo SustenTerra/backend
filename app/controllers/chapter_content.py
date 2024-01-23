@@ -42,7 +42,7 @@ class ChapterContentController(
         self.content_status_repository.add(
             UserContentStatus(
                 user_id=user_id,
-                content_id=content_id,
+                chapter_content_id=content_id,
                 status=ContentStatusEnum.completed,
             )
         )

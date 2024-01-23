@@ -65,3 +65,6 @@ class CourseController(
                 )
 
         return course_view
+
+    def get_all_in_progress(self, user_id: int):
+        return self.repository.get_all_in_progress(user_id)
