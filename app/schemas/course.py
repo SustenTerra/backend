@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -25,5 +25,42 @@ class CourseListView(BaseModel):
     created_at: datetime
     updated_at: datetime
 
-    class ConfigDict:
-        from_attributes = True
+
+class CourseCategoryView(BaseModel):
+    id: int
+    name: str
+    created_at: datetime
+    updated_at: datetime
+
+
+class CourseChapterContentView(BaseModel):
+    id: int
+    name: str
+    index: int
+    description: str
+    video_url: Optional[str] = Field(default=None)
+    was_viewed: Optional[bool] = Field(default=False)
+    is_available: Optional[bool] = Field(default=False)
+    created_at: datetime
+    updated_at: datetime
+
+
+class CourseChapterView(BaseModel):
+    id: int
+    name: str
+    index: int
+    course_id: int
+    chapter_contents: List[CourseChapterContentView]
+    created_at: datetime
+    updated_at: datetime
+
+
+class CourseView(BaseModel):
+    id: int
+    name: str
+    author_name: str
+    description: str
+    created_at: datetime
+    updated_at: datetime
+    course_chapters: List[CourseChapterView]
+    course_category: CourseCategoryView

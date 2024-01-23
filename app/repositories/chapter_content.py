@@ -4,9 +4,11 @@ from app.schemas.chapter_content import ChapterContentView
 
 
 class ChapterContentRepository(BaseRepository[ChapterContent]):
-    def get_previous_content(
-        self, content: ChapterContent
-    ) -> ChapterContent | None:
+    def get_previous_content(self, content_id: int) -> ChapterContent | None:
+        content = super().get_by_id(content_id)
+        if content is None:
+            return None
+
         return (
             self.session.query(ChapterContent)
             .filter(
@@ -16,9 +18,11 @@ class ChapterContentRepository(BaseRepository[ChapterContent]):
             .first()
         )
 
-    def get_next_content(
-        self, content: ChapterContent
-    ) -> ChapterContent | None:
+    def get_next_content(self, content_id: int) -> ChapterContent | None:
+        content = super().get_by_id(content_id)
+        if content is None:
+            return None
+
         return (
             self.session.query(ChapterContent)
             .filter(
@@ -34,8 +38,8 @@ class ChapterContentRepository(BaseRepository[ChapterContent]):
         if content is None:
             return None
 
-        previous_content = self.get_previous_content(content)
-        next_content = self.get_next_content(content)
+        previous_content = self.get_previous_content(content.id)
+        next_content = self.get_next_content(content.id)
 
         return ChapterContentView(
             **content.__dict__,
