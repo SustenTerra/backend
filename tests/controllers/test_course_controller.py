@@ -1,5 +1,6 @@
 import pytest
 
+from app.controllers.chapter_content import ChapterContentController
 from app.controllers.course import CourseController
 from app.models import ChapterContent, Course, UserContentStatus
 from app.repositories.chapter_content import ChapterContentRepository
@@ -19,12 +20,14 @@ class TestCourseController:
         user_content_status_repository = UserContentStatusRepository(
             UserContentStatus, db_session
         )
-
-        self.controller = CourseController(
-            Course,
-            self.repository,
+        chapter_content_controller = ChapterContentController(
+            ChapterContent,
             content_repository,
             user_content_status_repository,
+        )
+
+        self.controller = CourseController(
+            Course, self.repository, chapter_content_controller
         )
 
         self.created_course_category = make_course_category()
