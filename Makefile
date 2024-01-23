@@ -1,5 +1,6 @@
 install:
 	@poetry install
+	@poetry run pre-commit install
 
 start:
 	@poetry run uvicorn app.server:app --reload
