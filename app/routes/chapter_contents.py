@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 
 from app.controllers.chapter_content import ChapterContentController
 from app.deps import get_chapter_content_controller
+from app.schemas.chapter_content import ChapterContentView
 from app.services.auth import get_logged_user
 
 chapter_contents = APIRouter(
@@ -13,6 +14,7 @@ chapter_contents = APIRouter(
 @chapter_contents.get(
     "/chapter_contents/{chapter_content_id}",
     description="Get one chapter_content by id",
+    response_model=ChapterContentView,
 )
 def get_content_by_id(
     chapter_content_id: int,
