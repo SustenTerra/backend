@@ -73,23 +73,23 @@ def get_course_category_controller(
     return CourseCategoryController(CourseCategory, repository)
 
 
-def get_course_controller(
-    repository: CourseRepository = Depends(get_course_repository),
-    content_repository: ChapterContentRepository = Depends(
-        get_chapter_content_repository
-    ),
-    user_content_status_repository: UserContentStatusRepository = Depends(
-        get_user_content_status_repository
-    ),
-):
-    return CourseController(
-        Course, repository, content_repository, user_content_status_repository
-    )
-
-
 def get_chapter_content_controller(
     repository: ChapterContentRepository = Depends(
         get_chapter_content_repository
     ),
+    content_status_repository: UserContentStatusRepository = Depends(
+        get_user_content_status_repository
+    ),
 ):
-    return ChapterContentController(ChapterContent, repository)
+    return ChapterContentController(
+        ChapterContent, repository, content_status_repository
+    )
+
+
+def get_course_controller(
+    repository: CourseRepository = Depends(get_course_repository),
+    content_controller: ChapterContentController = Depends(
+        get_chapter_content_controller
+    ),
+):
+    return CourseController(Course, repository, content_controller)
