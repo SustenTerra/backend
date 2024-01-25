@@ -16,6 +16,7 @@ pytest = "^7.4.4"
 faker = "^22.2.0"
 passlib = "^1.7.4"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+uvicorn = "^0.27.0"
 
 
 [build-system]
