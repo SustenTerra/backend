@@ -6,7 +6,7 @@ start:
 	@poetry run uvicorn app.server:app --reload
 
 start-port:
-	@poetry run uvicorn app.server:app --port ${PORT}
+	@poetry run uvicorn app.server:app --host 0.0.0.0 --port ${PORT}
 
 test: ## Run tests locally. Usage: "make test [path]" Example: "make test path=tests/controllers/"
 	@poetry run pytest $(path)
