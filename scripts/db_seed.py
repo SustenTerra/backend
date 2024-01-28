@@ -57,7 +57,7 @@ def create_users(session: Session):
         user = User(
             full_name=faker.name(),
             email=faker.email(),
-            phone=faker.phone_number(),
+            phone=faker.msisdn(),
             password=faker.password(),
         )
 
