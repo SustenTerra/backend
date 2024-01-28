@@ -7,19 +7,19 @@ from sqlalchemy.orm import Session, sessionmaker
 from app.database.connection import engine
 from app.hashing import Hasher
 from app.models import (
+    ChapterContent,
+    ContentStatusEnum,
+    Course,
+    CourseCategory,
+    CourseChapter,
     FavoritedPost,
     Post,
     PostCategory,
-    UserContentStatus,
     User,
-    ChapterContent,
-    CourseChapter,
-    Course,
-    CourseCategory,
-    ContentStatusEnum,
+    UserContentStatus,
 )
 
-faker = Faker()
+faker = Faker(locale="pt_BR")
 
 
 def get_db_session():
