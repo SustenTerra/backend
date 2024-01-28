@@ -18,3 +18,8 @@ class Config(BaseModel):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = int(
         os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 10080)
     )
+
+    AWS_ACCESS_KEY: str = os.getenv("AWS_ACCESS_KEY", "key")
+    AWS_ACCESS_KEY_SECRET: str = os.getenv("AWS_ACCESS_KEY_SECRET", "secret")
+    AWS_REGION: str = os.getenv("AWS_REGION", "us-east-1")
+    AWS_BUCKET_NAME: str = os.getenv("AWS_BUCKET_NAME", "mybucket")
