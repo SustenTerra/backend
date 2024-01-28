@@ -6,11 +6,13 @@ from app.controllers.course import CourseController
 from app.controllers.course_category import CourseCategoryController
 from app.controllers.session import SessionController
 from app.controllers.user import UserController
+from app.controllers.post import PostController
 from app.database.connection import engine
 from app.models import (
     ChapterContent,
     Course,
     CourseCategory,
+    Post,
     User,
     UserContentStatus,
 )
@@ -19,6 +21,7 @@ from app.repositories.course import CourseRepository
 from app.repositories.course_category import CourseCategoryRepository
 from app.repositories.user import UserRepository
 from app.repositories.user_content_status import UserContentStatusRepository
+from app.repositories.post import PostRepository
 
 
 def get_session():
@@ -51,6 +54,10 @@ def get_user_content_status_repository(
     session: Session = Depends(get_session),
 ):
     return UserContentStatusRepository(UserContentStatus, session)
+
+
+def get_post_repository(session: Session = Depends(get_session)):
+    return PostRepository(Post, session)
 
 
 def get_user_controller(
@@ -93,3 +100,9 @@ def get_course_controller(
     ),
 ):
     return CourseController(Course, repository, content_controller)
+
+
+def get_post_controller(
+    repository: PostRepository = Depends(get_post_repository),
+):
+    return PostController(Post, repository)

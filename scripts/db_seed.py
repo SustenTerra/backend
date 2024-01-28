@@ -6,7 +6,18 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from app.database.connection import engine
 from app.hashing import Hasher
-from app.models import *
+from app.models import (
+    FavoritedPost,
+    Post,
+    PostCategory,
+    UserContentStatus,
+    User,
+    ChapterContent,
+    CourseChapter,
+    Course,
+    CourseCategory,
+    ContentStatusEnum,
+)
 
 faker = Faker()
 
@@ -46,7 +57,7 @@ def create_users(session: Session):
         user = User(
             full_name=faker.name(),
             email=faker.email(),
-            phone=faker.phone_number(),
+            phone=faker.msisdn(),
             password=faker.password(),
         )
 
@@ -192,7 +203,8 @@ def create_user_content_statuses(session: Session):
 
 def main():
     answer = input(
-        "This will clear all tables and seed the database. Are you sure? (y/N) "
+        "This will clear all tables and seed the database.\
+              Are you sure? (y/N) "
     )
     if answer.lower() != "y":
         print("Aborting...")
