@@ -35,7 +35,7 @@ class Post(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(nullable=False)
-    image_url: Mapped[str] = mapped_column(nullable=False)
+    image_key: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str] = mapped_column(nullable=False)
     price: Mapped[int] = mapped_column(nullable=False)
     views: Mapped[int] = mapped_column(default=0)

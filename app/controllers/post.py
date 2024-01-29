@@ -25,10 +25,13 @@ class PostController(
             raise UserNotAllowed()
 
     def create(self, create: PostCreateWithImage) -> Post:
-        img_key = self.bucket_manager.upload_file(create.image)
-        create.image_url = self.bucket_manager.get_presigned_url(img_key)
+        image_key = self.bucket_manager.upload_file(create.image)
 
-        return super().create(PostCreate(**create.model_dump()))
+        body = PostCreate(
+            image_key=image_key, **create.model_dump(exclude={"image"})
+        )
+
+        return super().create(body)
 
     def update(self, id: int, update: PostUpdate, user_id: int) -> Post:
         self._check_if_user_is_allowed(id, user_id)

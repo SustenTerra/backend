@@ -9,9 +9,9 @@ from app.routes.course_categories import (
     course_categories as course_categories_router,
 )
 from app.routes.courses import courses as courses_router
+from app.routes.posts import posts as posts_router
 from app.routes.sessions import sessions as sessions_router
 from app.routes.users import users as users_router
-from app.routes.posts import posts as posts_router
 
 Base.metadata.create_all(engine)
 

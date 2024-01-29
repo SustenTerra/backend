@@ -4,7 +4,12 @@ from fastapi import APIRouter, Depends, Form, UploadFile
 
 from app.controllers.post import PostController
 from app.deps import get_post_controller
-from app.schemas.post import PostCreateWithImage, PostUpdate, PostView
+from app.schemas.post import (
+    CREATE_POST_OPENAPI_SCHEMA,
+    PostCreateWithImage,
+    PostUpdate,
+    PostView,
+)
 from app.schemas.users import UserView
 from app.services import auth
 
@@ -16,6 +21,7 @@ posts = APIRouter()
     tags=["posts"],
     response_model=PostView,
     description="Create a new post",
+    openapi_extra=CREATE_POST_OPENAPI_SCHEMA,
 )
 def create_post(
     title: Annotated[str, Form()],
