@@ -17,6 +17,8 @@ faker = "^22.2.0"
 passlib = "^1.7.4"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 uvicorn = "^0.27.0"
+boto3 = "^1.34.29"
+python-multipart = "^0.0.6"
 
 
 [build-system]

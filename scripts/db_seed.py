@@ -85,7 +85,7 @@ def create_posts(session: Session):
 
         post = Post(
             title=faker.text(max_nb_chars=30),
-            image_url=faker.image_url(),
+            image_key=faker.text(max_nb_chars=30),
             description=faker.text(max_nb_chars=200),
             price=faker.pyint(min_value=0, max_value=1000),
             views=faker.pyint(min_value=0, max_value=1000),
@@ -203,8 +203,10 @@ def create_user_content_statuses(session: Session):
 
 def main():
     answer = input(
-        "This will clear all tables and seed the database.\
-              Are you sure? (y/N) "
+        (
+            "This will clear all tables and seed the database."
+            "Are you sure? (y/N)"
+        )
     )
     if answer.lower() != "y":
         print("Aborting...")
