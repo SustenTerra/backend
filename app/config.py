@@ -23,3 +23,6 @@ class Config(BaseModel):
     AWS_ACCESS_KEY_SECRET: str = os.getenv("AWS_ACCESS_KEY_SECRET", "secret")
     AWS_REGION: str = os.getenv("AWS_REGION", "us-east-1")
     AWS_BUCKET_NAME: str = os.getenv("AWS_BUCKET_NAME", "mybucket")
+    AWS_BUCKET_EXPIRATION: int = int(
+        os.getenv("AWS_BUCKET_EXPIRATION", 3600 * 24 * 7)
+    )

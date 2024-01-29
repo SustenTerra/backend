@@ -1,15 +1,11 @@
-from app.schemas.users import UserView
-from fastapi import APIRouter, Depends
+from typing import Annotated, List
 
-from typing import List
+from fastapi import APIRouter, Depends, Form, UploadFile
 
 from app.controllers.post import PostController
 from app.deps import get_post_controller
-from app.schemas.post import (
-    PostCreate,
-    PostUpdate,
-    PostView,
-)
+from app.schemas.post import PostCreateWithImage, PostUpdate, PostView
+from app.schemas.users import UserView
 from app.services import auth
 
 posts = APIRouter()
@@ -22,11 +18,24 @@ posts = APIRouter()
     description="Create a new post",
 )
 def create_post(
-    body: PostCreate,
+    title: Annotated[str, Form()],
+    image: Annotated[UploadFile, Form()],
+    description: Annotated[str, Form()],
+    price: Annotated[int, Form()],
+    category_id: Annotated[int, Form()],
     controller: PostController = Depends(get_post_controller),
     user: UserView = Depends(auth.get_logged_user),
 ):
-    return controller.create(body, user.id)
+    body = PostCreateWithImage(
+        title=title,
+        image=image,
+        description=description,
+        price=price,
+        category_id=category_id,
+        user_id=user.id,
+    )
+
+    return controller.create(body)
 
 
 @posts.get(
