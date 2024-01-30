@@ -4,24 +4,27 @@ from sqlalchemy.orm import Session, sessionmaker
 from app.controllers.chapter_content import ChapterContentController
 from app.controllers.course import CourseController
 from app.controllers.course_category import CourseCategoryController
+from app.controllers.post import PostController
+from app.controllers.post_category import PostCategoryController
 from app.controllers.session import SessionController
 from app.controllers.user import UserController
-from app.controllers.post import PostController
 from app.database.connection import engine
 from app.models import (
     ChapterContent,
     Course,
     CourseCategory,
     Post,
+    PostCategory,
     User,
     UserContentStatus,
 )
 from app.repositories.chapter_content import ChapterContentRepository
 from app.repositories.course import CourseRepository
 from app.repositories.course_category import CourseCategoryRepository
+from app.repositories.post import PostRepository
+from app.repositories.post_category import PostCategoryRepository
 from app.repositories.user import UserRepository
 from app.repositories.user_content_status import UserContentStatusRepository
-from app.repositories.post import PostRepository
 
 
 def get_session():
@@ -40,6 +43,10 @@ def get_user_repository(session: Session = Depends(get_session)):
 
 def get_course_category_repository(session: Session = Depends(get_session)):
     return CourseCategoryRepository(CourseCategory, session)
+
+
+def get_post_category_repository(session: Session = Depends(get_session)):
+    return PostCategoryRepository(PostCategory, session)
 
 
 def get_course_repository(session: Session = Depends(get_session)):
@@ -78,6 +85,12 @@ def get_course_category_controller(
     ),
 ):
     return CourseCategoryController(CourseCategory, repository)
+
+
+def get_post_category_controller(
+    repository: PostCategoryRepository = Depends(get_post_category_repository),
+):
+    return PostCategoryController(CourseCategory, repository)
 
 
 def get_chapter_content_controller(
