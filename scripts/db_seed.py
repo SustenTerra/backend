@@ -18,6 +18,7 @@ from app.models import (
     User,
     UserContentStatus,
 )
+from app.schemas.post import PostTypeEnum
 
 faker = Faker(locale="pt_BR")
 
@@ -83,10 +84,14 @@ def create_posts(session: Session):
         categories = session.query(PostCategory).all()
         category = choice(categories)
 
+        post_type = choice([value for value in PostTypeEnum])
+
         post = Post(
             title=faker.text(max_nb_chars=30),
             image_key=faker.text(max_nb_chars=30),
             description=faker.text(max_nb_chars=200),
+            post_type=post_type.value,
+            location=faker.text(max_nb_chars=30),
             price=faker.pyint(min_value=0, max_value=1000),
             views=faker.pyint(min_value=0, max_value=1000),
             user_id=user.id,

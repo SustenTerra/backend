@@ -1,4 +1,4 @@
-from typing import Annotated, List
+from typing import Annotated, List, Optional
 
 from fastapi import APIRouter, Depends, Form, UploadFile
 
@@ -27,7 +27,9 @@ def create_post(
     title: Annotated[str, Form()],
     image: Annotated[UploadFile, Form()],
     description: Annotated[str, Form()],
-    price: Annotated[int, Form()],
+    price: Annotated[Optional[int], Form()],
+    post_type: Annotated[str, Form()],
+    location: Annotated[str, Form()],
     category_id: Annotated[int, Form()],
     controller: PostController = Depends(get_post_controller),
     user: UserView = Depends(auth.get_logged_user),
@@ -37,6 +39,8 @@ def create_post(
         image=image,
         description=description,
         price=price,
+        post_type=post_type,
+        location=location,
         category_id=category_id,
         user_id=user.id,
     )

@@ -1,4 +1,5 @@
 from datetime import datetime
+from enum import Enum
 from typing import Optional
 
 from fastapi import UploadFile
@@ -12,25 +13,29 @@ class PostCategoryView(BaseModel):
     name: str
 
 
+class PostTypeEnum(Enum):
+    ad = "ad"
+    event = "event"
+    any_service = "any_service"
+    art_service = "art_service"
+
+
 class PostBase(BaseModel):
     title: str
-    image_key: str
     description: str
-    price: int
+    post_type: str
+    location: str
+    price: Optional[int]
     category_id: int
+    user_id: int
 
 
 class PostCreate(PostBase):
-    user_id: int
+    image_key: str
 
 
-class PostCreateWithImage(BaseModel):
-    title: str
+class PostCreateWithImage(PostBase):
     image: UploadFile
-    description: str
-    price: int
-    category_id: int
-    user_id: int
 
 
 class PostUpdate(BaseModel):
@@ -45,6 +50,7 @@ class PostView(PostBase):
     id: int
     created_at: datetime
     updated_at: datetime
+    image_key: str
     user: UserView
     category: PostCategoryView
 
