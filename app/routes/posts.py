@@ -44,6 +44,7 @@ def create_post(
 
 @posts.get(
     "/posts",
+    tags=["posts"],
     description="List all posts",
     response_model=List[PostView],
 )
@@ -58,6 +59,7 @@ def list_all_posts(
 
 @posts.get(
     "/posts/{post_id}",
+    tags=["posts"],
     description="Get one post by id",
     response_model=PostView,
 )
@@ -80,6 +82,7 @@ def update_post(
 
 @posts.get(
     "/posts/highlights/",
+    tags=["posts"],
     description="List top 5 viewed posts",
     response_model=List[PostView],
 )
