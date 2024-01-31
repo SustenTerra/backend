@@ -50,9 +50,10 @@ def create_post(
 def list_all_posts(
     search_term: Optional[str] = None,
     user_id: Optional[int] = None,
+    category_name: Optional[str] = None,
     controller: PostController = Depends(get_post_controller),
 ):
-    return controller.get_all(search_term, user_id)
+    return controller.get_all(search_term, user_id, category_name)
 
 
 @posts.get(

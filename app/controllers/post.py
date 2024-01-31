@@ -43,8 +43,14 @@ class PostController(
         return found_post
 
     def get_all(
-        self, search_term: Optional[str], user_id: Optional[int]
+        self,
+        search_term: Optional[str],
+        user_id: Optional[int],
+        category_name: Optional[str],
     ) -> list[Post]:
+        if category_name:
+            return self.repository.get_by_category_name(category_name.strip())
+
         if search_term:
             return self.repository.get_by_search(search_term.strip())
 

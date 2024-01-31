@@ -21,3 +21,10 @@ class PostRepository(BaseRepository[Post]):
 
     def get_by_user_id(self, user_id: int):
         return self.default_query.filter(Post.user_id == user_id).all()
+
+    def get_by_category_name(self, category_name: str):
+        return (
+            self.default_query.filter(PostCategory.name == category_name)
+            .join(Post.category)
+            .all()
+        )
