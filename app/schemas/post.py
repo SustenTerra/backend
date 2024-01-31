@@ -59,33 +59,3 @@ class PostView(PostBase):
     def image_url(self) -> str:
         bucket_manager = BucketManager()
         return bucket_manager.get_presigned_url(self.image_key)
-
-
-CREATE_POST_OPENAPI_SCHEMA = {
-    "requestBody": {
-        "content": {
-            "multipart/form-data": {
-                "schema": {
-                    "type": "object",
-                    "properties": {
-                        "title": {"type": "string", "isRequired": True},
-                        "image": {
-                            "type": "string",
-                            "format": "binary",
-                            "required": True,
-                        },
-                        "description": {
-                            "type": "string",
-                            "required": True,
-                        },
-                        "price": {"type": "integer", "required": True},
-                        "category_id": {
-                            "type": "integer",
-                            "required": True,
-                        },
-                    },
-                },
-            },
-        },
-    },
-}
