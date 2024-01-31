@@ -33,6 +33,13 @@ class PostController(
 
         return super().create(body)
 
+    def get_by_id(self, id: int) -> Post | None:
+        found_post = self.repository.get_by_id(id)
+        if found_post:
+            super().update(id, PostUpdate(views=found_post.views + 1))
+
+        return super().get_by_id(id)
+
     def update(self, id: int, update: PostUpdate, user_id: int) -> Post:
         self._check_if_user_is_allowed(id, user_id)
 
