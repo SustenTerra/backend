@@ -1,3 +1,5 @@
+from typing import Optional
+
 from app.controllers.base import BaseController
 from app.exceptions.user import UserNotAllowed
 from app.models import Post
@@ -39,6 +41,17 @@ class PostController(
             super().update(id, PostUpdate(views=found_post.views + 1))
 
         return found_post
+
+    def get_all(
+        self, search_term: Optional[str], user_id: Optional[int]
+    ) -> list[Post]:
+        if search_term:
+            return self.repository.get_by_search(search_term.strip())
+
+        if user_id:
+            return self.repository.get_by_user_id(user_id)
+
+        return super().get_all()
 
     def update(self, id: int, update: PostUpdate, user_id: int) -> Post:
         self._check_if_user_is_allowed(id, user_id)
