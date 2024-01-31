@@ -6,13 +6,9 @@ from fastapi import UploadFile
 from fastapi.logger import logger
 from pydantic import BaseModel, Field, computed_field
 
+from app.schemas.post_category import PostCategoryView
 from app.schemas.users import UserView
 from app.services.bucket_manager import BucketManager
-
-
-class PostCategoryView(BaseModel):
-    id: int
-    name: str
 
 
 class PostTypeEnum(Enum):

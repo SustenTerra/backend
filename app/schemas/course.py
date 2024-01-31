@@ -3,6 +3,8 @@ from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
+from app.schemas.course_category import CourseCategoryView
+
 
 class CourseCreate(BaseModel):
     name: str
@@ -22,13 +24,6 @@ class CourseListView(BaseModel):
     author_name: str
     category_name: str
     chapters_count: int
-    created_at: datetime
-    updated_at: datetime
-
-
-class CourseCategoryView(BaseModel):
-    id: int
-    name: str
     created_at: datetime
     updated_at: datetime
 
