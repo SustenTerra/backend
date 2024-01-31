@@ -75,6 +75,17 @@ def update_post(
     return controller.update(post_id, body, user.id)
 
 
+@posts.get(
+    "/posts/highlights/",
+    description="List top 5 viewed posts",
+    response_model=List[PostView],
+)
+def list_highlight_posts(
+    controller: PostController = Depends(get_post_controller),
+):
+    return controller.get_top_5_viewed_posts()
+
+
 @posts.delete("/posts/{post_id}", tags=["posts"])
 def delete_post(
     post_id: int,

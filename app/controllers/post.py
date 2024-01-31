@@ -49,3 +49,6 @@ class PostController(
         self._check_if_user_is_allowed(id, user_id)
 
         return super().delete(id)
+
+    def get_top_5_viewed_posts(self):
+        return self.repository.get_top_5_viewed_posts()

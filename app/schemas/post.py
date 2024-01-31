@@ -11,6 +11,7 @@ from app.services.bucket_manager import BucketManager
 
 
 class PostCategoryView(BaseModel):
+    id: int
     name: str
 
 
@@ -28,7 +29,6 @@ class PostBase(BaseModel):
     location: str
     price: Optional[int]
     category_id: int
-    views: int
     user_id: int
 
 
@@ -54,6 +54,7 @@ class PostView(PostBase):
     created_at: datetime
     updated_at: datetime
     image_key: str
+    views: int
     user: UserView
     category: PostCategoryView
 
