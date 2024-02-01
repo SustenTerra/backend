@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.routes.chapter_contents import (
     chapter_contents as chapter_contents_router,
@@ -15,6 +16,14 @@ from app.routes.sessions import sessions as sessions_router
 from app.routes.users import users as users_router
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(users_router)
 app.include_router(sessions_router)
