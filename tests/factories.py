@@ -35,6 +35,7 @@ def make_course(faker):
     def _make_course(course_category: CourseCategory, **kwargs):
         defaults = dict(
             name=faker.name(),
+            image_url=faker.image_url(),
             author_name=faker.name(),
             description=faker.text(),
             course_category_id=course_category.id,

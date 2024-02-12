@@ -21,6 +21,7 @@ class CourseUpdate(BaseModel):
 class CourseListView(BaseModel):
     id: int
     name: str
+    image_url: str
     author_name: str
     category_name: str
     chapters_count: int
@@ -53,6 +54,7 @@ class CourseChapterView(BaseModel):
 class CourseView(BaseModel):
     id: int
     name: str
+    image_url: str
     author_name: str
     description: str
     created_at: datetime
