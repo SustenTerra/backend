@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routes.chapter_contents import (
     chapter_contents as chapter_contents_router,
 )
+from app.routes.chat import chat as chat_router
 from app.routes.course_categories import (
     course_categories as course_categories_router,
 )
@@ -15,7 +16,7 @@ from app.routes.posts import posts as posts_router
 from app.routes.sessions import sessions as sessions_router
 from app.routes.users import users as users_router
 
-app = FastAPI()
+app = FastAPI(title="SustenTerra")
 
 app.add_middleware(
     CORSMiddleware,
@@ -32,3 +33,4 @@ app.include_router(course_categories_router)
 app.include_router(post_categories_router)
 app.include_router(chapter_contents_router)
 app.include_router(posts_router)
+app.include_router(chat_router)

@@ -12,6 +12,5 @@ class UpdateChat(BaseModel):
     messages: List[Message]
 
 
-class QuestionParams(BaseModel):
-    number_of_questions: int
-    original_text: str
+class ResponseChat(BaseModel):
+    messages: List[Message]

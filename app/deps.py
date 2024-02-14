@@ -2,6 +2,7 @@ from fastapi import Depends
 from sqlalchemy.orm import Session, sessionmaker
 
 from app.controllers.chapter_content import ChapterContentController
+from app.controllers.chat import ChatController
 from app.controllers.course import CourseController
 from app.controllers.course_category import CourseCategoryController
 from app.controllers.post import PostController
@@ -124,3 +125,9 @@ def get_post_controller(
     repository: PostRepository = Depends(get_post_repository),
 ):
     return PostController(Post, repository)
+
+
+def get_chat_controller(
+    openai_client: OpenAIClient = Depends(get_openai_client),
+):
+    return ChatController(openai_client)
