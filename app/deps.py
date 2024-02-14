@@ -25,6 +25,7 @@ from app.repositories.post import PostRepository
 from app.repositories.post_category import PostCategoryRepository
 from app.repositories.user import UserRepository
 from app.repositories.user_content_status import UserContentStatusRepository
+from app.services.openai_client import OpenAIClient
 
 
 def get_session():
@@ -35,6 +36,10 @@ def get_session():
         yield session
     finally:
         session.close()
+
+
+def get_openai_client():
+    return OpenAIClient()
 
 
 def get_user_repository(session: Session = Depends(get_session)):

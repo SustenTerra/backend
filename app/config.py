@@ -26,3 +26,7 @@ class Config(BaseModel):
     AWS_BUCKET_EXPIRATION: int = int(
         os.getenv("AWS_BUCKET_EXPIRATION", 3600 * 24 * 7)
     )
+
+    OPEN_AI_KEY: str = os.getenv("OPEN_AI_KEY", "key")
+    MODEL_NAME: str = "gpt-3.5-turbo"
+    MODEL_TEMPERATURE: float = 0.5
