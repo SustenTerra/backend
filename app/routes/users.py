@@ -33,6 +33,14 @@ def get_user(
     return controller.get_by_id(user.id)
 
 
+@users.get("/users/{user_id}", tags=["users"], response_model=UserView)
+def get_specific_user(
+    user_id: int,
+    controller: UserController = Depends(get_user_controller),
+):
+    return controller.get_by_id(user_id)
+
+
 @users.patch("/users/me", tags=["users"], response_model=UserView)
 def update_user(
     body: UserUpdate,
