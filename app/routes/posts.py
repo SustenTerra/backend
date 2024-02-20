@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, File, Form, UploadFile
 
 from app.controllers.post import PostController
 from app.deps import get_post_controller
-from app.schemas.post import PostCreateWithImage, PostUpdate, PostView
+from app.schemas.post import PostCreateWithImage, PostUpdateWithImage, PostView
 from app.schemas.users import UserView
 from app.services import auth
 
@@ -73,10 +73,25 @@ def get_post_by_id(
 @posts.patch("/posts/{post_id}", tags=["posts"], response_model=PostView)
 def update_post(
     post_id: int,
-    body: PostUpdate,
+    image: Optional[UploadFile] = File(default=None),
+    title: Optional[str] = Form(default=None),
+    description: Optional[str] = Form(default=None),
+    price: Optional[int] = Form(default=None),
+    post_type: Optional[str] = Form(default=None),
+    location: Optional[str] = Form(default=None),
+    category_id: Optional[int] = Form(default=None),
     controller: PostController = Depends(get_post_controller),
-    user: PostView = Depends(auth.get_logged_user),
+    user: UserView = Depends(auth.get_logged_user),
 ):
+    body = PostUpdateWithImage(
+        title=title,
+        image=image,
+        description=description,
+        price=price,
+        post_type=post_type,
+        location=location,
+        category_id=category_id,
+    )
     return controller.update(post_id, body, user.id)
 
 

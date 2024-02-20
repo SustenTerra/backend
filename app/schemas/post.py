@@ -36,13 +36,22 @@ class PostCreateWithImage(PostBase):
     image: UploadFile
 
 
-class PostUpdate(BaseModel):
+class PostUpdateBase(BaseModel):
     title: Optional[str] = Field(default=None)
-    image_url: Optional[str] = Field(default=None)
     description: Optional[str] = Field(default=None)
+    post_type: Optional[str] = Field(default=None)
+    location: Optional[str] = Field(default=None)
     price: Optional[int] = Field(default=None)
     views: Optional[int] = Field(default=None)
     category_id: Optional[int] = Field(default=None)
+
+
+class PostUpdate(PostUpdateBase):
+    image_key: Optional[str] = Field(default=None)
+
+
+class PostUpdateWithImage(PostUpdateBase):
+    image: Optional[UploadFile] = Field(default=None)
 
 
 class PostView(PostBase):

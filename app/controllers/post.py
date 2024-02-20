@@ -4,7 +4,12 @@ from app.controllers.base import BaseController
 from app.exceptions.user import UserNotAllowed
 from app.models import Post
 from app.repositories.post import PostRepository
-from app.schemas.post import PostCreate, PostCreateWithImage, PostUpdate
+from app.schemas.post import (
+    PostCreate,
+    PostCreateWithImage,
+    PostUpdate,
+    PostUpdateWithImage,
+)
 from app.services.bucket_manager import BucketManager
 
 
@@ -59,10 +64,20 @@ class PostController(
 
         return super().get_all()
 
-    def update(self, id: int, update: PostUpdate, user_id: int) -> Post:
+    def update(
+        self, id: int, update: PostUpdateWithImage, user_id: int
+    ) -> Post:
         self._check_if_user_is_allowed(id, user_id)
 
-        return super().update(id, update)
+        image_key = None
+        if update.image:
+            image_key = self.bucket_manager.upload_file(update.image)
+
+        body = PostUpdate(
+            image_key=image_key, **update.model_dump(exclude={"image"})
+        )
+
+        return super().update(id, body)
 
     def delete(self, id: int, user_id: int) -> None:
         self._check_if_user_is_allowed(id, user_id)
