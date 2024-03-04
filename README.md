@@ -1,6 +1,6 @@
-# Sustentinta - Backend
+# SustenTerra - Backend
 
-FastAPI Backend for Sustentinta APP.
+FastAPI Backend for SustenTerra APP.
 It has two main big features:
 
 #### Marketplace
@@ -23,11 +23,12 @@ It has two main big features:
 ## Installation
 
 - Clone the repository
-- Set poetry environment in folder `poetry config virtualenvs.in-project true`
+- (Recommended) Set poetry environment in folder `poetry config virtualenvs.in-project true`
 - Run `make install` to install dependencies
 - Run `make db-up` to start the database
-- Run `make start` to run server for the first time and run migrations
+- Run `make db-upgrade` to run migrations
 - (Optionally) Run `make db-seed` to run seed and fill database with fake data
+- Run `make start` to run server for the first time and run migrations
 
 ## Run
 
