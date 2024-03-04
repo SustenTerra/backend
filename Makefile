@@ -5,7 +5,7 @@ install:
 start:
 	@poetry run uvicorn app.server:app --reload
 
-start-port:
+start-port: ## Start server with specific port. Only needed on production. Usage: "make start-port PORT=8000"
 	@poetry run alembic upgrade head 
 	@poetry run uvicorn app.server:app --host 0.0.0.0 --port ${PORT}
 
