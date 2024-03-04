@@ -29,13 +29,20 @@ class BaseController(
             self.model_class(**schema.model_dump(exclude_unset=True))
         )
 
-    def update(self, id: int, schema: UpdateSchema, set_to_exclude: Optional[set[str]] = None) -> Optional[ModelClass]:
+    def update(
+        self,
+        id: int,
+        schema: UpdateSchema,
+        set_to_exclude: Optional[set[str]] = None,
+    ) -> Optional[ModelClass]:
         return self.repository.update(
-            id, schema.model_dump(
+            id,
+            schema.model_dump(
                 exclude_none=True,
                 exclude_unset=True,
                 exclude=set_to_exclude,
-                by_alias=True)
+                by_alias=True,
+            ),
         )
 
     def delete(self, id: int) -> None:
