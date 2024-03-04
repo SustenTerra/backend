@@ -59,6 +59,7 @@ class UserUpdate(BaseModel):
         pattern=r"^[0-9]{9,15}$",
     )
 
+
 class UserUpdatePassword(BaseModel):
     current_password: str = Field(
         min_length=8,
