@@ -19,6 +19,8 @@ It has two main big features:
 - Docker (https://www.docker.com/get-started/)
   - Docker Compose (https://docs.docker.com/compose/install/)
 - Make (https://www.gnu.org/software/make/)
+  - If on windows, you can download Make from (https://gnuwin32.sourceforge.net/packages/make.htm)
+  - Or you can use WSL (https://docs.microsoft.com/en-us/windows/wsl/install)
 
 ## Installation
 
