@@ -2,6 +2,7 @@ import enum
 from datetime import datetime
 from typing import List
 
+
 from sqlalchemy import Enum, ForeignKey
 from sqlalchemy.orm import (
     Mapped,
@@ -29,6 +30,8 @@ class User(Base):
     favorited_posts: Mapped[List["FavoritedPost"]] = relationship(
         back_populates="user"
     )
+
+    address: Mapped["Address"] = relationship(back_populates="user")
 
 
 class Post(Base):
@@ -175,3 +178,18 @@ class UserContentStatus(Base):
 
     user: Mapped["User"] = relationship()
     chapter_content: Mapped["ChapterContent"] = relationship()
+
+
+class Address(Base):
+    __tablename__ = "addresses"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    street: Mapped[str] = mapped_column(nullable=False)
+    number: Mapped[int] = mapped_column(nullable=False)
+    neighborhood: Mapped[str] = mapped_column(nullable=False)
+    complement: Mapped[str] = mapped_column(nullable=False)
+    city: Mapped[str] = mapped_column(nullable=False)
+    state: Mapped[str] = mapped_column(nullable=False)
+    cep: Mapped[str] = mapped_column(nullable=False)
+
+    user: Mapped["User"] = relationship(back_populates="address")
