@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 
-from app.schemas.users import UserView
+from app.users.schema import UserView
 
 
 class LoginPayload(BaseModel):

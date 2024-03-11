@@ -8,7 +8,7 @@ from app.controllers.course_category import CourseCategoryController
 from app.controllers.post import PostController
 from app.controllers.post_category import PostCategoryController
 from app.controllers.session import SessionController
-from app.controllers.user import UserController
+from app.users.controller import UserController
 from app.database.connection import engine
 from app.models import (
     ChapterContent,
@@ -24,7 +24,7 @@ from app.repositories.course import CourseRepository
 from app.repositories.course_category import CourseCategoryRepository
 from app.repositories.post import PostRepository
 from app.repositories.post_category import PostCategoryRepository
-from app.repositories.user import UserRepository
+from app.users.repository import UserRepository
 from app.repositories.user_content_status import UserContentStatusRepository
 from app.services.openai_client import OpenAIClient
 

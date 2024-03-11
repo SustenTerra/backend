@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, File, Form, UploadFile
 from app.controllers.post import PostController
 from app.deps import get_post_controller
 from app.schemas.post import PostCreateWithImage, PostUpdateWithImage, PostView
-from app.schemas.users import UserView
+from app.users.schema import UserView
 from app.services import auth
 
 posts = APIRouter()

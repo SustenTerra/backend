@@ -5,8 +5,8 @@ from app.exceptions.user import (
 )
 from app.hashing import Hasher
 from app.models import User
-from app.repositories.user import UserRepository
-from app.schemas.users import UserCreate, UserUpdate, UserUpdatePassword
+from app.users.repository import UserRepository
+from app.users.schema import UserCreate, UserUpdate, UserUpdatePassword
 
 
 class UserController(

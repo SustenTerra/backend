@@ -4,7 +4,7 @@ from jose import JWTError, jwt
 
 from app.config import Config
 from app.deps import get_user_repository
-from app.repositories.user import UserRepository
+from app.users.repository import UserRepository
 
 config = Config()
 apikey_scheme = HTTPBearer()

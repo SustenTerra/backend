@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 
-from app.controllers.user import UserController
+from app.users.controller import UserController
 from app.deps import get_user_controller
-from app.schemas.users import (
+from app.users.schema import (
     UserCreate,
     UserUpdate,
     UserUpdatePassword,

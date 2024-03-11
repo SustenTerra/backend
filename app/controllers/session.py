@@ -6,9 +6,9 @@ from jose import jwt
 from app.config import Config
 from app.exceptions.user import UserPasswordDoNotMatchException
 from app.hashing import Hasher
-from app.repositories.user import UserRepository
+from app.users.repository import UserRepository
 from app.schemas.sessions import LoginView
-from app.schemas.users import UserView
+from app.users.schema import UserView
 
 config = Config()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")

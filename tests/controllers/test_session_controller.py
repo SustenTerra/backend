@@ -4,7 +4,7 @@ from fastapi.security import HTTPAuthorizationCredentials
 from app.controllers.session import SessionController
 from app.hashing import Hasher
 from app.models import User
-from app.repositories.user import UserRepository
+from app.users.repository import UserRepository
 from app.services.auth import get_logged_user
 
 
