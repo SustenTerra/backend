@@ -7,7 +7,7 @@ from app.course.controller import CourseController
 from app.course_category.controller import CourseCategoryController
 from app.post.controller import PostController
 from app.post_category.controller import PostCategoryController
-from app.controllers.session import SessionController
+from app.session.controller import SessionController
 from app.users.controller import UserController
 from app.database.connection import engine
 from app.models import (

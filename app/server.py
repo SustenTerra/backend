@@ -13,7 +13,7 @@ from app.post_category.route import (
     post_categories as post_categories_router,
 )
 from app.post.route import posts as posts_router
-from app.routes.sessions import sessions as sessions_router
+from app.session.route import sessions as sessions_router
 from app.users.route import users as users_router
 
 app = FastAPI(title="SustenTerra")
