@@ -5,7 +5,7 @@ from app.controllers.course import CourseController
 from app.models import ChapterContent, Course, CourseChapter, UserContentStatus
 from app.repositories.chapter_content import ChapterContentRepository
 from app.repositories.course import CourseRepository
-from app.repositories.user_content_status import UserContentStatusRepository
+from app.users.content_status import UserContentStatusRepository
 
 
 class TestCourseController:

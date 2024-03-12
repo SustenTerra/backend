@@ -25,7 +25,7 @@ from app.repositories.course_category import CourseCategoryRepository
 from app.repositories.post import PostRepository
 from app.repositories.post_category import PostCategoryRepository
 from app.users.repository import UserRepository
-from app.repositories.user_content_status import UserContentStatusRepository
+from app.users.content_status import UserContentStatusRepository
 from app.services.openai_client import OpenAIClient
 
 

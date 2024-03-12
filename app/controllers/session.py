@@ -4,7 +4,7 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 
 from app.config import Config
-from app.exceptions.user import UserPasswordDoNotMatchException
+from app.users.exceptions import UserPasswordDoNotMatchException
 from app.hashing import Hasher
 from app.users.repository import UserRepository
 from app.schemas.sessions import LoginView

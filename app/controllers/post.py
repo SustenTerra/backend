@@ -1,7 +1,7 @@
 from typing import Optional
 
 from app.controllers.base import BaseController
-from app.exceptions.user import UserNotAllowed
+from app.users.exceptions import UserNotAllowed
 from app.models import Post
 from app.repositories.post import PostRepository
 from app.schemas.post import (
