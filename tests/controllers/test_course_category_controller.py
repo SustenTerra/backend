@@ -1,8 +1,8 @@
 import pytest
 
-from app.controllers.course_category import CourseCategoryController
+from app.course_category.controller import CourseCategoryController
 from app.models import CourseCategory
-from app.repositories.course_category import CourseCategoryRepository
+from app.course_category.repository import CourseCategoryRepository
 
 
 class TestCourseCategoryController:

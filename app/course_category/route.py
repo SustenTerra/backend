@@ -2,9 +2,9 @@ from typing import List
 
 from fastapi import APIRouter, Depends
 
-from app.controllers.course_category import CourseCategoryController
+from app.course_category.controller import CourseCategoryController
 from app.deps import get_course_category_controller
-from app.schemas.course_category import CourseCategoryView
+from app.course_category.schema import CourseCategoryView
 
 course_categories = APIRouter()
 
