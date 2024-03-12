@@ -45,7 +45,7 @@ class AddressBase(BaseModel):
         pattern=r"^[0-9]{9,15}$",
         json_schema_extra={
             "title": "Cep",
-            "description": "User's postal address",
+            "description": "User postal address",
             "examples": ["58429-170"],
         },
     )
