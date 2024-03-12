@@ -1,7 +1,7 @@
 from sqlalchemy import func
 
 from app.models import Course, CourseCategory, CourseChapter, UserContentStatus
-from app.repositories.base import BaseRepository
+from app.base.repository import BaseRepository
 
 
 class CourseRepository(BaseRepository[Course]):

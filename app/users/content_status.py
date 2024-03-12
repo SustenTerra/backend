@@ -1,5 +1,5 @@
 from app.models import ContentStatusEnum, UserContentStatus
-from app.repositories.base import BaseRepository
+from app.base.repository import BaseRepository
 
 
 class UserContentStatusRepository(BaseRepository[UserContentStatus]):

@@ -1,5 +1,5 @@
 from app.models import CourseCategory
-from app.repositories.base import BaseRepository
+from app.base.repository import BaseRepository
 
 
 class CourseCategoryRepository(BaseRepository[CourseCategory]):

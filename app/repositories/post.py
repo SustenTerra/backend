@@ -1,5 +1,5 @@
 from app.models import Post, PostCategory, User
-from app.repositories.base import BaseRepository
+from app.base.repository import BaseRepository
 
 
 class PostRepository(BaseRepository[Post]):

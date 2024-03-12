@@ -3,7 +3,7 @@ from typing import Generic, Optional, TypeVar
 from pydantic import BaseModel
 from sqlalchemy.orm.decl_api import DeclarativeMeta
 
-from app.repositories.base import BaseRepository
+from app.base.repository import BaseRepository
 
 ModelClass = TypeVar("ModelClass", bound=DeclarativeMeta)
 ModelRepository = TypeVar("ModelRepository", bound=BaseRepository)

@@ -1,4 +1,4 @@
-from app.controllers.base import BaseController
+from app.base.controller import BaseController
 from app.users.exceptions import (
     UserAlreadyRegisteredException,
     UserPasswordDoNotMatchException,

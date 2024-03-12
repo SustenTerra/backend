@@ -1,5 +1,5 @@
 from app.models import ChapterContent
-from app.repositories.base import BaseRepository
+from app.base.repository import BaseRepository
 from app.chapter_content.schema import ChapterContentView
 
 

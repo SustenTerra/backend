@@ -1,7 +1,7 @@
 from typing import Optional
 
 from app.models import User
-from app.repositories.base import BaseRepository
+from app.base.repository import BaseRepository
 
 
 class UserRepository(BaseRepository[User]):

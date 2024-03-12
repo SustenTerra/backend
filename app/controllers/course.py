@@ -1,6 +1,6 @@
 from typing import Optional
 
-from app.controllers.base import BaseController
+from app.base.controller import BaseController
 from app.chapter_content.controller import ChapterContentController
 from app.models import Course
 from app.repositories.course import CourseRepository
