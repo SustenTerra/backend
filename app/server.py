@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.chapter_content.route import (
     chapter_contents as chapter_contents_router,
 )
-from app.routes.chat import chat as chat_router
+from app.chat.route import chat as chat_router
 from app.course_category.route import (
     course_categories as course_categories_router,
 )

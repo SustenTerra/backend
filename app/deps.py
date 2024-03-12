@@ -2,7 +2,7 @@ from fastapi import Depends
 from sqlalchemy.orm import Session, sessionmaker
 
 from app.chapter_content.controller import ChapterContentController
-from app.controllers.chat import ChatController
+from app.chat.controller import ChatController
 from app.controllers.course import CourseController
 from app.course_category.controller import CourseCategoryController
 from app.controllers.post import PostController

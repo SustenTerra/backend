@@ -1,5 +1,5 @@
 from app.models import User
-from app.schemas.chat import Message, ResponseChat, UpdateChat
+from app.chat.schema import Message, ResponseChat, UpdateChat
 from app.services.openai_client import OpenAIClient
 from app.services.prompts import get_system_prompts
 
