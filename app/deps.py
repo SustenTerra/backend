@@ -1,15 +1,15 @@
 from fastapi import Depends
 from sqlalchemy.orm import Session, sessionmaker
 
-from app.controllers.chapter_content import ChapterContentController
-from app.controllers.chat import ChatController
-from app.controllers.course import CourseController
-from app.controllers.course_category import CourseCategoryController
-from app.controllers.post import PostController
-from app.controllers.post_category import PostCategoryController
-from app.controllers.session import SessionController
-from app.controllers.user import UserController
-from app.controllers.address import AddressController
+from app.address.controller import AddressController
+from app.chapter_content.controller import ChapterContentController
+from app.chat.controller import ChatController
+from app.course.controller import CourseController
+from app.course_category.controller import CourseCategoryController
+from app.post.controller import PostController
+from app.post_category.controller import PostCategoryController
+from app.session.controller import SessionController
+from app.user.controller import UserController
 from app.database.connection import engine
 from app.models import (
     ChapterContent,
@@ -21,15 +21,15 @@ from app.models import (
     UserContentStatus,
     Address,
 )
-from app.repositories.chapter_content import ChapterContentRepository
-from app.repositories.course import CourseRepository
-from app.repositories.course_category import CourseCategoryRepository
-from app.repositories.post import PostRepository
-from app.repositories.post_category import PostCategoryRepository
-from app.repositories.user import UserRepository
-from app.repositories.user_content_status import UserContentStatusRepository
-from app.repositories.address import AddressRepository
-from app.services.openai_client import OpenAIClient
+from app.chapter_content.repository import ChapterContentRepository
+from app.course.repository import CourseRepository
+from app.course_category.repository import CourseCategoryRepository
+from app.post.repository import PostRepository
+from app.post_category.repository import PostCategoryRepository
+from app.user.repository import UserRepository
+from app.user.content_status import UserContentStatusRepository
+from app.address.repository import AddressRepository
+from app.service.openai_client import OpenAIClient
 
 
 def get_session():
