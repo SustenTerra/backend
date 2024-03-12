@@ -7,7 +7,7 @@ class AddressBase(BaseModel):
         json_schema_extra={
             "title": "Street",
             "description": "User's street name",
-            "examples": ["Rua das Acácias"],
+            "examples": ["Acacia Street"],
         },
     )
     number: str = Field(
@@ -17,7 +17,7 @@ class AddressBase(BaseModel):
         json_schema_extra={
             "title": "Neighborhood",
             "description": "Neighborhood where the user lives",
-            "examples": ["Universitário"],
+            "examples": ["University District"],
         },
     )
     complement: str = Field(
