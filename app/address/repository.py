@@ -4,5 +4,5 @@ from app.base.repository import BaseRepository
 
 
 class AddressRepository(BaseRepository[Address]):
-    def get_address_by_user_id(self, user_id: str) -> Optional[int]:
+    def get_address_by_user_id(self, user_id: int) -> Optional[int]:
         return self.default_query.filter_by(user_id=user_id).first()

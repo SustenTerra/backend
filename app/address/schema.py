@@ -11,7 +11,6 @@ class AddressBase(BaseModel):
         },
     )
     number: str = Field(
-        pattern=r"^[0-9]{9,15}$",
         description="Number of the place where the user lives",
     )
     neighborhood: str = Field(
@@ -43,7 +42,7 @@ class AddressBase(BaseModel):
         },
     )
     cep: str = Field(
-        pattern=r"^\d{5}-\d{3}$",
+        pattern=r"^[0-9]{9,15}$",
         json_schema_extra={
             "title": "Cep",
             "description": "User's postal address",

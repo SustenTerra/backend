@@ -12,7 +12,7 @@ from app.address.schema import (
 class AddressController(
     BaseController[Address, AddressRepository, AddressCreate, AddressUpdate]
 ):
-    def create(self, user_id, create: AddressCreateWithoutUserId):
+    def create(self, user_id: int, create: AddressCreateWithoutUserId):
         found_user_id = self.repository.get_address_by_user_id(user_id=user_id)
 
         if found_user_id:
