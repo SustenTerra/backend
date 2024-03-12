@@ -2,10 +2,10 @@ from typing import List, Optional
 
 from fastapi import APIRouter, Depends
 
-from app.controllers.course import CourseController
+from app.course.controller import CourseController
 from app.deps import get_course_controller
 from app.models import User
-from app.schemas.course import CourseListView, CourseView
+from app.course.schema import CourseListView, CourseView
 from app.services.auth import get_logged_user
 
 courses = APIRouter(tags=["courses"])

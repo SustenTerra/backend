@@ -3,8 +3,8 @@ from typing import Optional
 from app.base.controller import BaseController
 from app.chapter_content.controller import ChapterContentController
 from app.models import Course
-from app.repositories.course import CourseRepository
-from app.schemas.course import CourseCreate, CourseUpdate, CourseView
+from app.course.repository import CourseRepository
+from app.course.schema import CourseCreate, CourseUpdate, CourseView
 
 
 class CourseController(

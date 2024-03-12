@@ -1,10 +1,10 @@
 import pytest
 
 from app.chapter_content.controller import ChapterContentController
-from app.controllers.course import CourseController
+from app.course.controller import CourseController
 from app.models import ChapterContent, Course, CourseChapter, UserContentStatus
 from app.chapter_content.repository import ChapterContentRepository
-from app.repositories.course import CourseRepository
+from app.course.repository import CourseRepository
 from app.users.content_status import UserContentStatusRepository
 
 
