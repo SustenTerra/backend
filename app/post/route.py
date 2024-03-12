@@ -2,9 +2,9 @@ from typing import Annotated, List, Optional
 
 from fastapi import APIRouter, Depends, File, Form, UploadFile
 
-from app.controllers.post import PostController
+from app.post.controller import PostController
 from app.deps import get_post_controller
-from app.schemas.post import PostCreateWithImage, PostUpdateWithImage, PostView
+from app.post.schema import PostCreateWithImage, PostUpdateWithImage, PostView
 from app.users.schema import UserView
 from app.services import auth
 

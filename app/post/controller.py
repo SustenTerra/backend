@@ -3,8 +3,8 @@ from typing import Optional
 from app.base.controller import BaseController
 from app.users.exceptions import UserNotAllowed
 from app.models import Post
-from app.repositories.post import PostRepository
-from app.schemas.post import (
+from app.post.repository import PostRepository
+from app.post.schema import (
     PostCreate,
     PostCreateWithImage,
     PostUpdate,

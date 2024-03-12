@@ -18,7 +18,7 @@ from app.models import (
     User,
     UserContentStatus,
 )
-from app.schemas.post import PostTypeEnum
+from app.post.schema import PostTypeEnum
 
 faker = Faker(locale="pt_BR")
 
