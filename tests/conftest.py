@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from app.models import Base
-from tests.fixture.factories import *  # noqa: F401, F403
+from tests.factories import *  # noqa: F401, F403
 
 
 def pytest_addoption(parser):
