@@ -2,7 +2,7 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 
-class UserAddressBase(BaseModel):
+class AddressBase(BaseModel):
     street: str = Field(
         json_schema_extra={
             "title": "Street",
@@ -43,7 +43,7 @@ class UserAddressBase(BaseModel):
         },
     )
     cep: str = Field(
-        pattern=r"^[0-9]{9,15}$",
+        pattern=r"^\d{5}-\d{3}$",
         json_schema_extra={
             "title": "Cep",
             "description": "User's postal address",
@@ -52,15 +52,23 @@ class UserAddressBase(BaseModel):
     )
 
 
-class UserAddressCreate(UserAddressBase):
+class AddressCreate(AddressBase):
+    user_id: int
+
+
+class AddressCreateWithoutUserId(AddressBase):
     pass
 
 
-class UserAddressUpdate(UserAddressBase):
+class AddressView(AddressBase):
+    id: int
+
+
+class AddressUpdate(AddressBase):
     street: Optional[str] = Field(
         default=None, description="User's street name"
     )
-    number: Optional[int] = Field(
+    number: Optional[str] = Field(
         default=None, description="Number of the place where the user lives"
     )
     complement: Optional[str] = Field(

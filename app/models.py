@@ -185,7 +185,7 @@ class Address(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     street: Mapped[str] = mapped_column(nullable=False)
-    number: Mapped[int] = mapped_column(nullable=False)
+    number: Mapped[str] = mapped_column(nullable=False)
     neighborhood: Mapped[str] = mapped_column(nullable=False)
     complement: Mapped[str] = mapped_column(nullable=False)
     city: Mapped[str] = mapped_column(nullable=False)

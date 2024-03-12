@@ -15,6 +15,7 @@ from app.routes.post_categories import (
 from app.routes.posts import posts as posts_router
 from app.routes.sessions import sessions as sessions_router
 from app.routes.users import users as users_router
+from app.routes.address import addresses as addresses_router
 
 app = FastAPI(title="SustenTerra")
 
@@ -34,3 +35,4 @@ app.include_router(post_categories_router)
 app.include_router(chapter_contents_router)
 app.include_router(posts_router)
 app.include_router(chat_router)
+app.include_router(addresses_router)

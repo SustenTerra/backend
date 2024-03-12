@@ -1,6 +1,8 @@
+from typing import Optional
 from app.models import Address
 from app.repositories.base import BaseRepository
 
 
-class UserRepository(BaseRepository[Address]):
-    pass
+class AddressRepository(BaseRepository[Address]):
+    def get_address_by_user_id(self, user_id: str) -> Optional[int]:
+        return self.default_query.filter_by(user_id=user_id).first()

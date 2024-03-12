@@ -9,6 +9,7 @@ from app.controllers.post import PostController
 from app.controllers.post_category import PostCategoryController
 from app.controllers.session import SessionController
 from app.controllers.user import UserController
+from app.controllers.address import AddressController
 from app.database.connection import engine
 from app.models import (
     ChapterContent,
@@ -18,6 +19,7 @@ from app.models import (
     PostCategory,
     User,
     UserContentStatus,
+    Address,
 )
 from app.repositories.chapter_content import ChapterContentRepository
 from app.repositories.course import CourseRepository
@@ -26,6 +28,7 @@ from app.repositories.post import PostRepository
 from app.repositories.post_category import PostCategoryRepository
 from app.repositories.user import UserRepository
 from app.repositories.user_content_status import UserContentStatusRepository
+from app.repositories.address import AddressRepository
 from app.services.openai_client import OpenAIClient
 
 
@@ -71,6 +74,10 @@ def get_user_content_status_repository(
 
 def get_post_repository(session: Session = Depends(get_session)):
     return PostRepository(Post, session)
+
+
+def get_address_repository(session: Session = Depends(get_session)):
+    return AddressRepository(Address, session)
 
 
 def get_user_controller(
@@ -131,3 +138,9 @@ def get_chat_controller(
     openai_client: OpenAIClient = Depends(get_openai_client),
 ):
     return ChatController(openai_client)
+
+
+def get_address_controller(
+    repository: AddressRepository = Depends(get_address_repository),
+):
+    return AddressController(Address, repository)
