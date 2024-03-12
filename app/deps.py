@@ -1,6 +1,7 @@
 from fastapi import Depends
 from sqlalchemy.orm import Session, sessionmaker
 
+from app.address.controller import AddressController
 from app.chapter_content.controller import ChapterContentController
 from app.chat.controller import ChatController
 from app.course.controller import CourseController
@@ -18,6 +19,7 @@ from app.models import (
     PostCategory,
     User,
     UserContentStatus,
+    Address,
 )
 from app.chapter_content.repository import ChapterContentRepository
 from app.course.repository import CourseRepository
@@ -26,6 +28,7 @@ from app.post.repository import PostRepository
 from app.post_category.repository import PostCategoryRepository
 from app.user.repository import UserRepository
 from app.user.content_status import UserContentStatusRepository
+from app.address.repository import AddressRepository
 from app.service.openai_client import OpenAIClient
 
 
@@ -71,6 +74,10 @@ def get_user_content_status_repository(
 
 def get_post_repository(session: Session = Depends(get_session)):
     return PostRepository(Post, session)
+
+
+def get_address_repository(session: Session = Depends(get_session)):
+    return AddressRepository(Address, session)
 
 
 def get_user_controller(
@@ -131,3 +138,9 @@ def get_chat_controller(
     openai_client: OpenAIClient = Depends(get_openai_client),
 ):
     return ChatController(openai_client)
+
+
+def get_address_controller(
+    repository: AddressRepository = Depends(get_address_repository),
+):
+    return AddressController(Address, repository)
