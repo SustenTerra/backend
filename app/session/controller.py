@@ -7,7 +7,7 @@ from app.config import Config
 from app.user.exceptions import UserPasswordDoNotMatchException
 from app.hashing import Hasher
 from app.user.repository import UserRepository
-from app.schemas.sessions import LoginView
+from app.session.schema import LoginView
 from app.user.schema import UserView
 
 config = Config()
