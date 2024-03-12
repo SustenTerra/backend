@@ -6,7 +6,7 @@ from app.course.controller import CourseController
 from app.deps import get_course_controller
 from app.models import User
 from app.course.schema import CourseListView, CourseView
-from app.services.auth import get_logged_user
+from app.service.auth import get_logged_user
 
 courses = APIRouter(tags=["courses"])
 

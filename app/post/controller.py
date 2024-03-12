@@ -1,7 +1,7 @@
 from typing import Optional
 
 from app.base.controller import BaseController
-from app.user.exceptions import UserNotAllowed
+from app.user.exception import UserNotAllowed
 from app.models import Post
 from app.post.repository import PostRepository
 from app.post.schema import (
@@ -10,7 +10,7 @@ from app.post.schema import (
     PostUpdate,
     PostUpdateWithImage,
 )
-from app.services.bucket_manager import BucketManager
+from app.service.bucket_manager import BucketManager
 
 
 class PostController(

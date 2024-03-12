@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field, computed_field
 
 from app.post_category.schema import PostCategoryView
 from app.user.schema import UserView
-from app.services.bucket_manager import BucketManager
+from app.service.bucket_manager import BucketManager
 
 
 class PostTypeEnum(Enum):

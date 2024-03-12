@@ -8,7 +8,7 @@ from app.user.schema import (
     UserUpdatePassword,
     UserView,
 )
-from app.services import auth
+from app.service import auth
 
 users = APIRouter()
 

@@ -4,7 +4,7 @@ from app.chat.controller import ChatController
 from app.deps import get_chat_controller
 from app.models import User
 from app.chat.schema import ResponseChat, UpdateChat
-from app.services.auth import get_logged_user
+from app.service.auth import get_logged_user
 
 chat = APIRouter(tags=["chat"])
 

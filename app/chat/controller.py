@@ -1,7 +1,7 @@
 from app.models import User
 from app.chat.schema import Message, ResponseChat, UpdateChat
-from app.services.openai_client import OpenAIClient
-from app.services.prompts import get_system_prompts
+from app.service.openai_client import OpenAIClient
+from app.service.prompts import get_system_prompts
 
 
 class ChatController:

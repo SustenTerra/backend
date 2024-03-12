@@ -26,7 +26,7 @@ from app.post.repository import PostRepository
 from app.post_category.repository import PostCategoryRepository
 from app.user.repository import UserRepository
 from app.user.content_status import UserContentStatusRepository
-from app.services.openai_client import OpenAIClient
+from app.service.openai_client import OpenAIClient
 
 
 def get_session():

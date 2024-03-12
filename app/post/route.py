@@ -6,7 +6,7 @@ from app.post.controller import PostController
 from app.deps import get_post_controller
 from app.post.schema import PostCreateWithImage, PostUpdateWithImage, PostView
 from app.user.schema import UserView
-from app.services import auth
+from app.service import auth
 
 posts = APIRouter()
 
