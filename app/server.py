@@ -9,7 +9,7 @@ from app.course_category.route import (
     course_categories as course_categories_router,
 )
 from app.routes.courses import courses as courses_router
-from app.routes.post_categories import (
+from app.post_category.route import (
     post_categories as post_categories_router,
 )
 from app.routes.posts import posts as posts_router

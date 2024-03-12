@@ -6,7 +6,7 @@ from app.controllers.chat import ChatController
 from app.controllers.course import CourseController
 from app.course_category.controller import CourseCategoryController
 from app.controllers.post import PostController
-from app.controllers.post_category import PostCategoryController
+from app.post_category.controller import PostCategoryController
 from app.controllers.session import SessionController
 from app.users.controller import UserController
 from app.database.connection import engine
@@ -23,7 +23,7 @@ from app.chapter_content.repository import ChapterContentRepository
 from app.repositories.course import CourseRepository
 from app.course_category.repository import CourseCategoryRepository
 from app.repositories.post import PostRepository
-from app.repositories.post_category import PostCategoryRepository
+from app.post_category.repository import PostCategoryRepository
 from app.users.repository import UserRepository
 from app.users.content_status import UserContentStatusRepository
 from app.services.openai_client import OpenAIClient

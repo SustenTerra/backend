@@ -2,9 +2,9 @@ from typing import List
 
 from fastapi import APIRouter, Depends
 
-from app.controllers.post_category import PostCategoryController
+from app.post_category.controller import PostCategoryController
 from app.deps import get_post_category_controller
-from app.schemas.post_category import PostCategoryView
+from app.post_category.schema import PostCategoryView
 
 post_categories = APIRouter()
 

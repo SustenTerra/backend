@@ -6,7 +6,7 @@ from fastapi import UploadFile
 from fastapi.logger import logger
 from pydantic import BaseModel, Field, computed_field
 
-from app.schemas.post_category import PostCategoryView
+from app.post_category.schema import PostCategoryView
 from app.users.schema import UserView
 from app.services.bucket_manager import BucketManager
 
