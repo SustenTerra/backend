@@ -1,7 +1,7 @@
 from typing import Optional
 
 from app.controllers.base import BaseController
-from app.controllers.chapter_content import ChapterContentController
+from app.chapter_content.controller import ChapterContentController
 from app.models import Course
 from app.repositories.course import CourseRepository
 from app.schemas.course import CourseCreate, CourseUpdate, CourseView

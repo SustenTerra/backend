@@ -1,9 +1,9 @@
 from app.controllers.base import BaseController
-from app.exceptions.chapter_content import CannotOpenContentException
+from app.chapter_content.exceptions import CannotOpenContentException
 from app.models import ChapterContent, ContentStatusEnum, UserContentStatus
-from app.repositories.chapter_content import ChapterContentRepository
+from app.chapter_content.repository import ChapterContentRepository
 from app.users.content_status import UserContentStatusRepository
-from app.schemas.chapter_content import (
+from app.chapter_content.schema import (
     ChapterContentCreate,
     ChapterContentUpdate,
 )

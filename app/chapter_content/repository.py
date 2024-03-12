@@ -1,6 +1,6 @@
 from app.models import ChapterContent
 from app.repositories.base import BaseRepository
-from app.schemas.chapter_content import ChapterContentView
+from app.chapter_content.schema import ChapterContentView
 
 
 class ChapterContentRepository(BaseRepository[ChapterContent]):
