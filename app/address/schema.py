@@ -42,7 +42,7 @@ class AddressBase(BaseModel):
         },
     )
     cep: str = Field(
-        pattern=r"^[0-9]{9,15}$",
+        pattern=r"^[0-9]{8,15}$",
         json_schema_extra={
             "title": "Cep",
             "description": "User postal address",
@@ -86,5 +86,5 @@ class AddressUpdate(AddressBase):
     cep: Optional[str] = Field(
         default=None,
         description="User's postal address",
-        pattern=r"^\d{5}-\d{3}$",
+        pattern=r"^[0-9]{8,15}$",
     )
