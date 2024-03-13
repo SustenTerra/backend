@@ -28,3 +28,16 @@ def create_user_address(
     user: UserView = Depends(auth.get_logged_user),
 ):
     return controller.create(user.id, body)
+
+
+@addresses.get(
+    "/users/me/addresses",
+    tags=["addresses"],
+    response_model=AddressView,
+    description="Get Users Addresses",
+)
+def get_address(
+    controller: AddressController = Depends(get_address_controller),
+    user: UserView = Depends(auth.get_logged_user),
+):
+    return controller.get_address_by_user_id(user.id)
