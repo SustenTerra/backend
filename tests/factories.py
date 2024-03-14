@@ -1,6 +1,14 @@
 import pytest
 
-from app.models import Course, CourseCategory, CourseChapter, User
+from app.models import (
+    ChapterContent,
+    ContentStatusEnum,
+    Course,
+    CourseCategory,
+    CourseChapter,
+    User,
+    UserContentStatus,
+)
 
 
 @pytest.fixture
@@ -58,3 +66,53 @@ def make_course_chapter(faker):
         return CourseChapter(**{**defaults, **kwargs})
 
     return _make_course_chapter
+
+
+@pytest.fixture
+def make_user_content_status_in_progress():
+    def _make_user_content_status_in_progress(
+        user: User, chapter_content: ChapterContent, **kwargs
+    ):
+        defaults = dict(
+            status=ContentStatusEnum.in_progress,
+            user_id=user.id,
+            chapter_content_id=chapter_content.id,
+        )
+
+        return UserContentStatus(**{**defaults, **kwargs})
+
+    return _make_user_content_status_in_progress
+
+
+@pytest.fixture
+def make_user_content_status_not_started():
+    def _make_user_content_status_not_started(
+        user: User, chapter_content: ChapterContent, **kwargs
+    ):
+        defaults = dict(
+            status=ContentStatusEnum.not_started,
+            user_id=user.id,
+            chapter_content_id=chapter_content.id,
+        )
+
+        return UserContentStatus(**{**defaults, **kwargs})
+
+    return _make_user_content_status_not_started
+
+
+@pytest.fixture
+def make_chapter_content(faker):
+    def _make_chapter_content(
+        course_chapter: CourseChapter, index: int, **kwargs
+    ):
+        defaults = dict(
+            name=faker.name(),
+            index=index,
+            description=faker.text(),
+            video_url=faker.image_url(),
+            course_chapter_id=course_chapter.id,
+        )
+
+        return ChapterContent(**{**defaults, **kwargs})
+
+    return _make_chapter_content
