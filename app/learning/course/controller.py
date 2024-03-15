@@ -3,7 +3,12 @@ from typing import Optional
 from app.common.base.controller import BaseController
 from app.learning.chapter_content.controller import ChapterContentController
 from app.learning.course.repository import CourseRepository
-from app.learning.course.schema import CourseCreate, CourseUpdate, CourseView
+from app.learning.course.schema import (
+    CourseCreate,
+    CourseUpdate,
+    CourseView,
+    CourseCreateWithAuthorId,
+)
 from app.models import Course
 
 

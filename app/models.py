@@ -26,6 +26,8 @@ class User(Base):
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
+    courses: Mapped[List["Course"]] = relationship()
+
     posts: Mapped[List["Post"]] = relationship(back_populates="user")
     favorited_posts: Mapped[List["FavoritedPost"]] = relationship(
         back_populates="user"
@@ -84,6 +86,9 @@ class Course(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
     author_name: Mapped[str] = mapped_column(nullable=False)
+    author_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id"), nullable=True
+    )
     image_url: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str] = mapped_column(nullable=False)
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)

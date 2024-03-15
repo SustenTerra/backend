@@ -4,9 +4,9 @@ from fastapi import APIRouter, Depends
 
 from app.learning.course.controller import CourseController
 from app.learning.course.deps import get_course_controller
-from app.learning.course.schema import CourseListView, CourseView
 from app.models import User
-from app.service.auth import get_logged_user
+from app.learning.course.schema import CourseCreate, CourseListView, CourseView
+from app.service.auth import get_logged_teacher_user, get_logged_user
 
 courses = APIRouter(tags=["courses"])
 
@@ -22,6 +22,20 @@ def list_all_courses(
     controller: CourseController = Depends(get_course_controller),
 ):
     return controller.get_all(category_name, search_term)
+
+
+@courses.post(
+    "/courses",
+    tags=["courses"],
+    description="Create a course",
+    response_model=CourseView,
+)
+def create_course(
+    body: CourseCreate,
+    user: User = Depends(get_logged_teacher_user),
+    controller: CourseController = Depends(get_course_controller),
+):
+    return controller.create(user.id, body)
 
 
 @courses.get(

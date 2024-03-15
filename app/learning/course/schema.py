@@ -3,7 +3,7 @@ from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
-from app.course_category.schema import CourseCategoryView
+from app.learning.course_category.schema import CourseCategoryView
 
 
 class CourseBase(BaseModel):
