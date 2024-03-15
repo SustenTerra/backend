@@ -1,7 +1,8 @@
 import pytest
 
-from app.course.repository import CourseRepository
-from app.course_category.repository import CourseCategoryRepository
+from app.common.user.repository import UserRepository
+from app.learning.course.repository import CourseRepository
+from app.learning.course_category.repository import CourseCategoryRepository
 from app.models import (
     ChapterContent,
     Course,
@@ -10,7 +11,6 @@ from app.models import (
     User,
     UserContentStatus,
 )
-from app.user.repository import UserRepository
 
 
 class TestCourseRepository:

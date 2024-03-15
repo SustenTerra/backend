@@ -2,7 +2,7 @@ from fastapi import HTTPException
 from openai import AuthenticationError, OpenAI
 
 from app.config import Config
-from app.chat.schema import UpdateChat
+from app.learning.chat.schema import UpdateChat
 
 
 class OpenAIClient:

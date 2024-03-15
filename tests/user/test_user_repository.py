@@ -1,7 +1,7 @@
 import pytest
 
+from app.common.user.repository import UserRepository
 from app.models import User
-from app.user.repository import UserRepository
 
 
 class TestUserRepository:

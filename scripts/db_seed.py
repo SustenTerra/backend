@@ -5,6 +5,7 @@ from faker import Faker
 from sqlalchemy.orm import Session, sessionmaker
 
 from app.database.connection import engine
+from app.marketplace.post.schema import PostTypeEnum
 from app.models import (
     ChapterContent,
     ContentStatusEnum,
@@ -17,7 +18,6 @@ from app.models import (
     User,
     UserContentStatus,
 )
-from app.post.schema import PostTypeEnum
 from app.service.hashing import Hasher
 
 faker = Faker(locale="pt_BR")

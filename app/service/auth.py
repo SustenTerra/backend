@@ -2,9 +2,9 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
 
+from app.common.user.deps import get_user_repository
+from app.common.user.repository import UserRepository
 from app.config import Config
-from app.user.deps import get_user_repository
-from app.user.repository import UserRepository
 
 config = Config()
 apikey_scheme = HTTPBearer()

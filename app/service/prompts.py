@@ -1,6 +1,6 @@
 from typing import List
 
-from app.chat.schema import Message
+from app.learning.chat.schema import Message
 
 
 def get_system_prompts(user_name: str) -> List[Message]:

@@ -1,11 +1,11 @@
 import pytest
 from fastapi.security import HTTPAuthorizationCredentials
 
+from app.common.session.controller import SessionController
+from app.common.user.repository import UserRepository
 from app.models import User
 from app.service.auth import get_logged_user
 from app.service.hashing import Hasher
-from app.session.controller import SessionController
-from app.user.repository import UserRepository
 
 
 class TestSessionController:
