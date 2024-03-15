@@ -8,7 +8,9 @@ from app.models import Course
 
 
 class CourseController(
-    BaseController[Course, CourseRepository, CourseCreate, CourseUpdate]
+    BaseController[
+        Course, CourseRepository, CourseCreateWithAuthorId, CourseUpdate
+    ]
 ):
     def __init__(
         self,
@@ -18,6 +20,12 @@ class CourseController(
     ):
         super().__init__(model_class, repository)
         self.content_controller = content_controller
+
+    def create(self, user_id: int, create: CourseCreate):
+        course_to_create = CourseCreateWithAuthorId(
+            **create.model_dump(), author_id=user_id
+        )
+        return super().create(course_to_create)
 
     def get_all(
         self,

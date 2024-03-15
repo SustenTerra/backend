@@ -3,13 +3,54 @@ from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
-from app.learning.course_category.schema import CourseCategoryView
+from app.course_category.schema import CourseCategoryView
 
 
-class CourseCreate(BaseModel):
-    name: str
-    description: str
-    author_name: str
+class CourseBase(BaseModel):
+    name: str = Field(
+        json_schema_extra={
+            "title": "name",
+            "description": "Name of the course",
+            "examples": ["Geotinta Course"],
+        }
+    )
+    author_name: str = Field(
+        json_schema_extra={
+            "title": "author_name",
+            "description": "Name of the course author",
+            "examples": ["Jhon Doe"],
+        }
+    )
+
+    image_url: str = Field(
+        json_schema_extra={
+            "title": "image_url",
+            "description": "Url of the image",
+            "examples": ["pinterest.com"],
+        }
+    )
+    description: str = Field(
+        json_schema_extra={
+            "title": "description",
+            "description": "Description of the course",
+            "examples": ["it's about how to extract geotinta"],
+        }
+    )
+    course_category_id: int = Field(
+        json_schema_extra={
+            "title": "course_category_id",
+            "description": "Id of the category of the course",
+            "examples": ["1"],
+        }
+    )
+
+
+class CourseCreate(CourseBase):
+    pass
+
+
+class CourseCreateWithAuthorId(CourseBase):
+    author_id: int
 
 
 class CourseUpdate(BaseModel):
