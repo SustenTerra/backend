@@ -3,12 +3,19 @@ from typing import Optional
 from app.common.base.controller import BaseController
 from app.learning.chapter_content.controller import ChapterContentController
 from app.learning.course.repository import CourseRepository
-from app.learning.course.schema import CourseCreate, CourseUpdate, CourseView
+from app.learning.course.schema import (
+    CourseCreate,
+    CourseUpdate,
+    CourseView,
+    CourseCreateWithAuthorId,
+)
 from app.models import Course
 
 
 class CourseController(
-    BaseController[Course, CourseRepository, CourseCreate, CourseUpdate]
+    BaseController[
+        Course, CourseRepository, CourseCreateWithAuthorId, CourseUpdate
+    ]
 ):
     def __init__(
         self,
@@ -18,6 +25,12 @@ class CourseController(
     ):
         super().__init__(model_class, repository)
         self.content_controller = content_controller
+
+    def create(self, user_id: int, create: CourseCreate):
+        course_to_create = CourseCreateWithAuthorId(
+            **create.model_dump(), author_id=user_id
+        )
+        return super().create(course_to_create)
 
     def get_all(
         self,
