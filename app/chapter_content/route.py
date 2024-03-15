@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
 
 from app.chapter_content.controller import ChapterContentController
-from app.deps import get_chapter_content_controller
-from app.models import User
+from app.chapter_content.deps import get_chapter_content_controller
 from app.chapter_content.schema import ChapterContentView
+from app.models import User
 from app.service.auth import get_logged_user
 
 chapter_contents = APIRouter(

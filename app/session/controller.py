@@ -4,10 +4,10 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 
 from app.config import Config
-from app.user.exception import UserPasswordDoNotMatchException
-from app.hashing import Hasher
-from app.user.repository import UserRepository
+from app.service.hashing import Hasher
 from app.session.schema import LoginView
+from app.user.exception import UserPasswordDoNotMatchException
+from app.user.repository import UserRepository
 from app.user.schema import UserView
 
 config = Config()

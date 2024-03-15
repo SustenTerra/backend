@@ -1,10 +1,10 @@
 import pytest
 
-from app.user.controller import UserController
 from app.models import User
+from app.service.hashing import Hasher
+from app.user.controller import UserController
 from app.user.repository import UserRepository
 from app.user.schema import UserCreate, UserUpdate, UserUpdatePassword
-from app.hashing import Hasher
 
 
 class TestUserController:

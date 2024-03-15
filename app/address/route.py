@@ -1,13 +1,10 @@
 from fastapi import APIRouter, Depends
 
 from app.address.controller import AddressController
-from app.deps import get_address_controller
-from app.address.schema import (
-    AddressCreateWithoutUserId,
-    AddressView,
-)
-from app.user.schema import UserView
+from app.address.deps import get_address_controller
+from app.address.schema import AddressCreateWithoutUserId, AddressView
 from app.service import auth
+from app.user.schema import UserView
 
 addresses = APIRouter(
     dependencies=[

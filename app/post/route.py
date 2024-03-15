@@ -3,10 +3,10 @@ from typing import Annotated, List, Optional
 from fastapi import APIRouter, Depends, File, Form, UploadFile
 
 from app.post.controller import PostController
-from app.deps import get_post_controller
+from app.post.deps import get_post_controller
 from app.post.schema import PostCreateWithImage, PostUpdateWithImage, PostView
-from app.user.schema import UserView
 from app.service import auth
+from app.user.schema import UserView
 
 posts = APIRouter()
 

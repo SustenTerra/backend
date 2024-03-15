@@ -1,10 +1,10 @@
 from app.base.controller import BaseController
+from app.models import User
+from app.service.hashing import Hasher
 from app.user.exception import (
     UserAlreadyRegisteredException,
     UserPasswordDoNotMatchException,
 )
-from app.hashing import Hasher
-from app.models import User
 from app.user.repository import UserRepository
 from app.user.schema import UserCreate, UserUpdate, UserUpdatePassword
 

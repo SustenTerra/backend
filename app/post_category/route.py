@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, Depends
 
 from app.post_category.controller import PostCategoryController
-from app.deps import get_post_category_controller
+from app.post_category.deps import get_post_category_controller
 from app.post_category.schema import PostCategoryView
 
 post_categories = APIRouter()
