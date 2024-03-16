@@ -1,6 +1,7 @@
 import pytest
 
 from app.models import (
+    Address,
     ChapterContent,
     ContentStatusEnum,
     Course,
@@ -116,3 +117,21 @@ def make_chapter_content(faker):
         return ChapterContent(**{**defaults, **kwargs})
 
     return _make_chapter_content
+
+
+@pytest.fixture
+def make_user_address(faker):
+    def _make_user_address(user_id: int, **kwargs):
+        defaults = dict(
+            street=faker.text(),
+            number=faker.text(),
+            neighborhood=faker.text(),
+            complement=faker.text(),
+            city=faker.text(),
+            state=faker.text(),
+            cep=faker.text(),
+            user_id=user_id,
+        )
+        return Address(**{**defaults, **kwargs})
+
+    return _make_user_address
