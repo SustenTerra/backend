@@ -2,6 +2,7 @@ from typing import Optional
 
 from app.common.base.controller import BaseController
 from app.common.user.exception import UserNotAllowed
+from app.marketplace.post.exception import InvalidLocationException
 from app.marketplace.post.repository import PostRepository
 from app.marketplace.post.schema import (
     PostCreate,
@@ -58,6 +59,9 @@ class PostController(
             return self.repository.get_by_category_name(category_name.strip())
 
         if location:
+            if len(location) != 2 or not location.isalpha():
+                raise InvalidLocationException(location=location)
+
             return self.repository.get_by_location(location.strip())
 
         if search_term:
