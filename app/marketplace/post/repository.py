@@ -28,3 +28,6 @@ class PostRepository(BaseRepository[Post]):
             .join(Post.category)
             .all()
         )
+
+    def get_by_location(self, location: str):
+        return self.default_query.filter(Post.location == location).all()
