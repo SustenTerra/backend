@@ -55,14 +55,13 @@ class PostController(
         category_name: Optional[str],
         location: Optional[str],
     ) -> list[Post]:
-        if category_name:
-            return self.repository.get_by_category_name(category_name.strip())
-
         if location:
             if len(location) != 2 or not location.isalpha():
                 raise InvalidLocationException(location=location)
+            self.repository.location = location.strip()
 
-            return self.repository.get_by_location(location.strip())
+        if category_name:
+            return self.repository.get_by_category_name(category_name.strip())
 
         if search_term:
             return self.repository.get_by_search(search_term.strip())
