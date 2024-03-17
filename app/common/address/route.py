@@ -45,7 +45,7 @@ def get_address(
 
 
 @addresses.patch(
-    "users/me/addresses",
+    "/users/me/addresses",
     tags=["addresses"],
     response_model=AddressView,
     description="Update User Address",
