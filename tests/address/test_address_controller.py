@@ -3,7 +3,7 @@ import pytest
 from app.common.address.repository import AddressRepository
 from app.models import Address, User
 from app.common.user.repository import UserRepository
-from app.common.address.schema import AddressCreateWithoutUserId
+from app.common.address.schema import AddressCreateWithoutUserId, AddressUpdate
 from app.common.address.controller import AddressController
 
 
@@ -62,3 +62,25 @@ class TestAddressController:
         assert found_address.cep == self.user_address.cep
         assert found_address.state == self.user_address.state
         assert found_address.user_id == self.user_address.user_id
+
+    def test_update_address(self, setup, faker):
+        update = AddressUpdate(
+            street=faker.text(),
+            number=faker.text(),
+            neighborhood=faker.text(),
+            complement=faker.text(),
+            city=faker.text(),
+            state=faker.text(),
+            cep="9876543210",
+        )
+
+        update_address = self.controller.update(self.created_user2.id, update)
+        assert update_address is not None
+        assert update_address.street == self.user_address.street
+        assert update_address.number == self.user_address.number
+        assert update_address.neighborhood == self.user_address.neighborhood
+        assert update_address.complement == self.user_address.complement
+        assert update_address.city == self.user_address.city
+        assert update_address.cep == self.user_address.cep
+        assert update_address.state == self.user_address.state
+        assert update_address.user_id == self.user_address.user_id
