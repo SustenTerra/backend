@@ -64,6 +64,7 @@ class CourseListView(BaseModel):
     name: str
     image_url: str
     author_name: str
+    author_id: Optional[int] = Field(default=None)
     category_name: str
     chapters_count: int
     created_at: datetime

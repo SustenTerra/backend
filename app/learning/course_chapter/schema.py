@@ -12,27 +12,23 @@ class CourseChapterBase(BaseModel):
             "examples": ["Getting Started"],
         }
     )
-    index: int = Field(
-        json_schema_extra={
-            "title": "index",
-            "description": "Index of the Chapter",
-            "examples": ["1"],
-        }
-    )
 
 
 class CourseChapterCreate(CourseChapterBase):
-    pass
-
-
-class CourseChapterCreateWithCoursId(CourseChapterBase):
     course_id: int
 
 
+class CourseChapterCreateWithIndex(CourseChapterCreate):
+    index: int
+
+
 class CourseChapterView(CourseChapterBase):
-    id: int
     name: str
     index: int
     course: CourseView
     created_at: datetime
     updated_at: datetime
+
+
+class CourseChapterUpdate(CourseChapterBase):
+    name: str
