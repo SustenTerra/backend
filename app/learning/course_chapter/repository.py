@@ -11,5 +11,5 @@ class CourseChapterRepository(BaseRepository[CourseChapter]):
 
     def get_all_by_course_id(self, course_id: int):
         return self.query_for_list_view.filter(
-            CourseChapter.id == course_id
+            CourseChapter.course_id == course_id
         ).all()

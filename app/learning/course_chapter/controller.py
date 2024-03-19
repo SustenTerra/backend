@@ -39,7 +39,9 @@ class CourseChapterController(
 
         chapters_size = self.repository.get_all_by_course_id(course.id)
 
-        index = len(chapters_size) + 1
+        leng = len(chapters_size) - 1
+
+        index = leng + 1
 
         chapter_to_create = CourseChapterCreateWithIndex(
             **create.model_dump(), index=index
