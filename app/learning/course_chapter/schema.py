@@ -25,7 +25,7 @@ class CourseChapterCreateWithIndex(CourseChapterCreate):
 class CourseChapterView(CourseChapterBase):
     name: str
     index: int
-    course: CourseView
+    course_id: int
     created_at: datetime
     updated_at: datetime
 

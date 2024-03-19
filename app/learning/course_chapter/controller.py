@@ -1,5 +1,6 @@
 from app.common.base.controller import BaseController
 
+from app.learning.course.exception import CourseIdNotFoundException
 from app.learning.course.repository import CourseRepository
 from app.learning.course_chapter.exception import (
     UserDontMatchCourseOwnerException,
@@ -11,7 +12,6 @@ from app.learning.course_chapter.schema import (
     CourseChapterUpdate,
 )
 from app.models import Course, CourseChapter
-from backend.app.learning.course.exception import CourseIdNotFoundException
 
 
 class CourseChapterController(
@@ -38,13 +38,9 @@ class CourseChapterController(
         if author_id != course.author_id:
             raise UserDontMatchCourseOwnerException()
 
-        chapters_size = self.repository.get_all_by_course_id(course.id)
-
-        leng = len(chapters_size) - 1
-
-        index = leng + 1
+        chapters = self.repository.get_all_courses_by_course_id(course.id)
 
         chapter_to_create = CourseChapterCreateWithIndex(
-            **create.model_dump(), index=index
+            **create.model_dump(), index=len(chapters)
         )
         return super().create(chapter_to_create)
