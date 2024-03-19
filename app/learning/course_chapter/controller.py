@@ -1,9 +1,11 @@
 from app.common.base.controller import BaseController
 from app.common.user.exception import (
     CourseIdNotFoundException,
-    UserDontMatchCourseOwnerException,
 )
 from app.learning.course.repository import CourseRepository
+from app.learning.course_chapter.exception import (
+    UserDontMatchCourseOwnerException,
+)
 from app.learning.course_chapter.repository import CourseChapterRepository
 from app.learning.course_chapter.schema import (
     CourseChapterCreate,
