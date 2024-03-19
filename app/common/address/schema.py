@@ -63,7 +63,7 @@ class AddressView(AddressBase):
     id: int
 
 
-class AddressUpdate(AddressBase):
+class AddressUpdate(BaseModel):
     street: Optional[str] = Field(
         default=None, description="User's street name"
     )

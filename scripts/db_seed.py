@@ -86,12 +86,15 @@ def create_posts(session: Session):
 
         post_type = choice([value for value in PostTypeEnum])
 
+        locations = ["PB", "PE", "SP"]
+        location = choice(locations)
+
         post = Post(
             title=faker.text(max_nb_chars=30),
             image_key=faker.text(max_nb_chars=30),
             description=faker.text(max_nb_chars=200),
             post_type=post_type.value,
-            location=faker.text(max_nb_chars=30),
+            location=location,
             price=faker.pyint(min_value=0, max_value=1000),
             views=faker.pyint(min_value=0, max_value=1000),
             user_id=user.id,

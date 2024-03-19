@@ -31,5 +31,3 @@ class UserNotAllowed(HTTPException):
             status_code=403,
             detail="Operation forbidden for current user",
         )
-
-
