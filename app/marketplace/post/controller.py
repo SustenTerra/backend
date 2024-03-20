@@ -14,6 +14,42 @@ from app.models import Post
 from app.service.bucket_manager import BucketManager
 
 
+BR_STATES = [
+    "AC",
+    "AL",
+    "AP",
+    "AM",
+    "BA",
+    "CE",
+    "DF",
+    "ES",
+    "GO",
+    "MA",
+    "MT",
+    "MS",
+    "MG",
+    "PA",
+    "PB",
+    "PR",
+    "PE",
+    "PI",
+    "RJ",
+    "RN",
+    "RS",
+    "RO",
+    "RR",
+    "SC",
+    "SP",
+    "SE",
+    "TO",
+]
+
+
+def verify_location(location: str):
+    if location.upper() not in BR_STATES:
+        raise InvalidLocationException(location)
+
+
 class PostController(
     BaseController[
         Post,
@@ -33,6 +69,8 @@ class PostController(
             raise UserNotAllowed()
 
     def create(self, create: PostCreateWithImage) -> Post:
+        verify_location(create.location)
+
         image_key = self.bucket_manager.upload_file(create.image)
 
         body = PostCreate(
@@ -75,6 +113,9 @@ class PostController(
         self, id: int, update: PostUpdateWithImage, user_id: int
     ) -> Post:
         self._check_if_user_is_allowed(id, user_id)
+
+        if hasattr(update, "location") and update.location is not None:
+            verify_location(update.location)
 
         image_key = None
         if update.image:
