@@ -93,6 +93,7 @@ class Course(Base):
     description: Mapped[str] = mapped_column(nullable=False)
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    published_at: Mapped[datetime] = mapped_column(nullable=True)
 
     course_chapters: Mapped[List["CourseChapter"]] = relationship(
         back_populates="course",
