@@ -13,7 +13,7 @@ class TestCourseController:
     def setup(
         self,
         db_session,
-        make_course,
+        make_course_published,
         make_course_category,
         make_course_chapter,
     ):
@@ -39,7 +39,7 @@ class TestCourseController:
         db_session.add(self.created_course_category)
         db_session.commit()
 
-        self.created_course: Course = make_course(
+        self.created_course: Course = make_course_published(
             course_category=self.created_course_category
         )
         self.repository.add(self.created_course)
@@ -79,14 +79,16 @@ class TestCourseController:
         assert courses[0].chapters_count == 2
 
     def test_list_courses_by_category_name(
-        self, setup, make_course_category, make_course
+        self, setup, make_course_category, make_course_published
     ):
         category_name = "TESTE"
         other_course_category = make_course_category(name=category_name)
         self.session.add(other_course_category)
         self.session.commit()
 
-        other_course = make_course(course_category=other_course_category)
+        other_course = make_course_published(
+            course_category=other_course_category
+        )
         self.repository.add(other_course)
 
         courses = self.controller.get_all(category_name=category_name)
@@ -97,7 +99,7 @@ class TestCourseController:
         assert courses[0].id == other_course.id
 
     def test_list_courses_by_search_term(
-        self, setup, make_course_category, make_course
+        self, setup, make_course_category, make_course_published
     ):
         search_term = "TESTE"
         search_term2 = "TESTE2"
@@ -105,7 +107,7 @@ class TestCourseController:
         self.session.add(other_course_category)
         self.session.commit()
 
-        other_course = make_course(
+        other_course = make_course_published(
             course_category=other_course_category, name=search_term2
         )
         self.repository.add(other_course)

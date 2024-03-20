@@ -56,6 +56,25 @@ def make_course(faker):
 
 
 @pytest.fixture
+def make_course_published(faker):
+    def _make_course(course_category: CourseCategory, **kwargs):
+        defaults = dict(
+            name=faker.name(),
+            image_url=faker.image_url(),
+            author_name=faker.name(),
+            description=faker.text(),
+            course_category_id=course_category.id,
+            published_at=faker.date_time_between(
+                start_date="-1y", end_date="now"
+            ),
+        )
+
+        return Course(**{**defaults, **kwargs})
+
+    return _make_course
+
+
+@pytest.fixture
 def make_course_chapter(faker):
     def _make_course_chapter(course: Course, index: int, **kwargs):
         defaults = dict(

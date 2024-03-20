@@ -15,7 +15,13 @@ from app.models import (
 
 class TestCourseRepository:
     @pytest.fixture
-    def setup(self, db_session, make_course, make_course_category):
+    def setup(
+        self,
+        db_session,
+        make_course,
+        make_course_category,
+        make_course_published,
+    ):
         self.repository = CourseRepository(Course, db_session)
         category_repository = CourseCategoryRepository(
             CourseCategory, db_session
@@ -26,8 +32,12 @@ class TestCourseRepository:
         category_repository.add(self.created_category_1)
         category_repository.add(self.created_category_2)
 
-        self.created_course_1: Course = make_course(self.created_category_1)
-        self.created_course_2: Course = make_course(self.created_category_2)
+        self.created_course_1: Course = make_course_published(
+            self.created_category_1
+        )
+        self.created_course_2: Course = make_course_published(
+            self.created_category_2
+        )
         self.repository.add(self.created_course_1)
         self.repository.add(self.created_course_2)
 
