@@ -21,6 +21,7 @@ class CourseRepository(BaseRepository[Course]):
             .join(Course.course_chapters, isouter=True)
             .join(Course.course_category)
             .group_by(Course.id, CourseCategory.name)
+            .filter(Course.published_at.isnot(None))
         )
 
     def get_all(self):
