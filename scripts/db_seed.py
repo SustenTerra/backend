@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session, sessionmaker
 from app.database.connection import engine
 from app.marketplace.post.schema import PostTypeEnum
 from app.models import (
+    Address,
     ChapterContent,
     ContentStatusEnum,
     Course,
@@ -21,6 +22,15 @@ from app.models import (
 from app.service.hashing import Hasher
 
 faker = Faker(locale="pt_BR")
+unique_names = set()
+
+
+def get_unique_name():
+    name = faker.name()
+    while name in unique_names:
+        name = faker.name()
+    unique_names.add(name)
+    return name
 
 
 def get_db_session():
@@ -36,6 +46,7 @@ def clear_all_tables(session: Session):
     session.query(Post).delete()
     session.query(PostCategory).delete()
     session.query(UserContentStatus).delete()
+    session.query(Address).delete()
     session.query(User).delete()
     session.query(ChapterContent).delete()
     session.query(CourseChapter).delete()
@@ -69,7 +80,7 @@ def create_users(session: Session):
 def create_post_categories(session: Session):
     for _ in range(10):
         post_category = PostCategory(
-            name=faker.text(max_nb_chars=10),
+            name=get_unique_name(),
         )
 
         session.add(post_category)
@@ -125,7 +136,7 @@ def create_favorited_posts(session: Session):
 def create_course_categories(session: Session):
     for _ in range(10):
         course_category = CourseCategory(
-            name=faker.text(max_nb_chars=10),
+            name=get_unique_name(),
         )
 
         session.add(course_category)
