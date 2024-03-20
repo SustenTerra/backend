@@ -50,7 +50,7 @@ def get_logged_teacher_user(
     )
     not_valid_teacher_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Youre not an available teacher",
+        detail="You are not an available teacher",
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:

@@ -2,6 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.common.address.route import addresses as addresses_router
+from app.learning.course_chapter.route import (
+    course_chapters as course_chapters_router,
+)
 from app.common.session.route import sessions as sessions_router
 from app.common.user.route import users as users_router
 from app.learning.chapter_content.route import (
@@ -36,3 +39,4 @@ app.include_router(chapter_contents_router)
 app.include_router(posts_router)
 app.include_router(chat_router)
 app.include_router(addresses_router)
+app.include_router(course_chapters_router)
