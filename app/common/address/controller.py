@@ -33,7 +33,7 @@ class AddressController(
         address = self.repository.get_address_by_user_id(user_id=user_id)
 
         if not address:
-            raise UserAddressAlreadyRegisteredException()
+            raise UserAddressNotFoundException()
 
         return address
 

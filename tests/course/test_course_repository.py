@@ -21,11 +21,20 @@ class TestCourseRepository:
         make_course,
         make_course_category,
         make_course_published,
+        make_user,
+        make_user_teacher,
     ):
+        self.created_user = make_user()
+        self.created_teacher = make_user_teacher()
+
+        user_repository = UserRepository(User, db_session)
         self.repository = CourseRepository(Course, db_session)
         category_repository = CourseCategoryRepository(
             CourseCategory, db_session
         )
+
+        user_repository.add(self.created_user)
+        user_repository.add(self.created_teacher)
 
         self.created_category_1 = make_course_category()
         self.created_category_2 = make_course_category()
@@ -36,10 +45,14 @@ class TestCourseRepository:
             self.created_category_1
         )
         self.created_course_2: Course = make_course_published(
-            self.created_category_2
+            self.created_category_2, self.created_teacher.id
+        )
+        self.created_course_3: Course = make_course(
+            self.created_category_1, self.created_teacher.id
         )
         self.repository.add(self.created_course_1)
         self.repository.add(self.created_course_2)
+        self.repository.add(self.created_course_3)
 
         self.session = db_session
 
@@ -111,7 +124,6 @@ class TestCourseRepository:
         make_course_chapter,
         make_chapter_content,
         make_user_content_status_in_progress,
-        make_user,
     ):
         created_course_chapter: CourseChapter = make_course_chapter(
             course=self.created_course_1, index=0
@@ -125,21 +137,17 @@ class TestCourseRepository:
         self.session.add(created_chapter_content)
         self.session.commit()
 
-        created_user: User = make_user()
-        user_repository = UserRepository(User, self.session)
-        user_repository.add(created_user)
-        found_user = user_repository.get_by_id(1)
-        assert found_user is not None
-
         create_user_content_status: UserContentStatus = (
             make_user_content_status_in_progress(
-                user=created_user, chapter_content=created_chapter_content
+                user=self.created_user, chapter_content=created_chapter_content
             )
         )
         self.session.add(create_user_content_status)
         self.session.commit()
 
-        found_courses = self.repository.get_all_in_progress(found_user.id)
+        found_courses = self.repository.get_all_in_progress(
+            self.created_user.id
+        )
 
         assert len(found_courses) == 1
         assert found_courses[0].name == self.created_course_1.name
@@ -170,3 +178,10 @@ class TestCourseRepository:
         found_courses = self.repository.get_all()
 
         assert len(found_courses) == 1
+
+    def test_get_all_by_teacher_id(self, setup):
+        found_courses = self.repository.get_all_by_teacher_id(
+            self.created_teacher.id
+        )
+
+        assert len(found_courses) == 2
