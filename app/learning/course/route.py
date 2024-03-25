@@ -61,3 +61,16 @@ def get_course_by_id(
     controller: CourseController = Depends(get_course_controller),
 ):
     return controller.get_by_id(course_id, user.id)
+
+
+@courses.get(
+    "/users/me/courses",
+    tags=["courses"],
+    description="List all of the teacher's courses",
+    response_model=List[CourseListView],
+)
+def list_all_teacher_courses(
+    user: User = Depends(get_logged_teacher_user),
+    controller: CourseController = Depends(get_course_controller),
+):
+    return controller.get_courses_by_teacher_id(user.id)

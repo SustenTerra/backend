@@ -2,6 +2,7 @@ from typing import Optional
 
 from app.common.base.controller import BaseController
 from app.learning.chapter_content.controller import ChapterContentController
+from app.learning.course.exception import NoCourseRegisteredFoundException
 from app.learning.course.repository import CourseRepository
 from app.learning.course.schema import (
     CourseCreate,
@@ -81,3 +82,11 @@ class CourseController(
 
     def get_all_in_progress(self, user_id: int):
         return self.repository.get_all_in_progress(user_id)
+
+    def get_courses_by_teacher_id(self, user_id: int) -> list[Course]:
+        courses = self.repository.get_all_by_teacher_id(user_id=user_id)
+
+        if not courses:
+            raise NoCourseRegisteredFoundException
+
+        return courses

@@ -24,6 +24,25 @@ class CourseRepository(BaseRepository[Course]):
             .filter(Course.published_at.isnot(None))
         )
 
+    @property
+    def query_list_view_for_teachers(self):
+        return (
+            self.session.query(
+                Course.id,
+                Course.name,
+                Course.image_url,
+                Course.author_name,
+                Course.author_id,
+                CourseCategory.name.label("category_name"),
+                func.count(CourseChapter.id).label("chapters_count"),
+                Course.created_at,
+                Course.updated_at,
+            )
+            .join(Course.course_chapters, isouter=True)
+            .join(Course.course_category)
+            .group_by(Course.id, CourseCategory.name)
+        )
+
     def get_all(self):
         return self.query_for_list_view.all()
 
@@ -45,3 +64,8 @@ class CourseRepository(BaseRepository[Course]):
             .filter(UserContentStatus.user_id == user_id)
             .all()
         )
+
+    def get_all_by_teacher_id(self, user_id: int):
+        return self.query_list_view_for_teachers.filter(
+            Course.author_id == user_id
+        ).all()
