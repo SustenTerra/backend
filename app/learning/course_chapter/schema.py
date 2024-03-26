@@ -31,4 +31,5 @@ class CourseChapterView(CourseChapterBase):
 
 
 class CourseChapterUpdate(CourseChapterBase):
-    name: str
+    pass
+    
