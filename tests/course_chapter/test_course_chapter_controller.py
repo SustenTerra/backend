@@ -68,10 +68,6 @@ class TestAddressController:
             self.created_teacher1.id,
             CourseChapterCreate(name=name, course_id=course_id),
         )
-
-        course = self.course_repository.get_by_id(1)
-        if course:
-            print(course.course_chapters)
         # Check if the course is being created
         assert created_chapter is not None
 
