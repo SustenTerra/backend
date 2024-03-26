@@ -24,23 +24,28 @@ class TestCourseRepository:
         make_user,
         make_user_teacher,
     ):
-        self.created_user = make_user()
-        self.created_teacher = make_user_teacher()
-
-        user_repository = UserRepository(User, db_session)
+        # Cria o Repositório do Curso
         self.repository = CourseRepository(Course, db_session)
+
+        # Cria o Repositório da Categoria do Curso
         category_repository = CourseCategoryRepository(
             CourseCategory, db_session
         )
 
+        # Cria o usuário e o usuário professor
+        self.created_user = make_user()
+        self.created_teacher = make_user_teacher()
+        user_repository = UserRepository(User, db_session)
         user_repository.add(self.created_user)
         user_repository.add(self.created_teacher)
 
+        # Cria as Categorias dos cursos
         self.created_category_1 = make_course_category()
         self.created_category_2 = make_course_category()
         category_repository.add(self.created_category_1)
         category_repository.add(self.created_category_2)
 
+        # Cria os cursos
         self.created_course_1: Course = make_course_published(
             self.created_category_1
         )

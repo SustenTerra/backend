@@ -17,33 +17,37 @@ class TestCourseController:
         make_course_category,
         make_course_chapter,
     ):
+        # Create Repositories
         self.repository = CourseRepository(Course, db_session)
-
         content_repository = ChapterContentRepository(
             ChapterContent, db_session
         )
         user_content_status_repository = UserContentStatusRepository(
             UserContentStatus, db_session
         )
+
+        # Create Controllers
         chapter_content_controller = ChapterContentController(
             ChapterContent,
             content_repository,
             user_content_status_repository,
         )
-
         self.controller = CourseController(
             Course, self.repository, chapter_content_controller
         )
 
+        # Create Course Category
         self.created_course_category = make_course_category()
         db_session.add(self.created_course_category)
         db_session.commit()
 
+        # Create Course
         self.created_course: Course = make_course_published(
             course_category=self.created_course_category
         )
         self.repository.add(self.created_course)
 
+        # Create Course Chapter
         self.created_course_chapter: CourseChapter = make_course_chapter(
             course=self.created_course, index=0
         )

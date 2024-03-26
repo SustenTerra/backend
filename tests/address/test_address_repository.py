@@ -9,11 +9,15 @@ from app.models import User
 class TestAddressRepository:
     @pytest.fixture
     def setup(self, db_session, make_user_address, make_user):
+        # Cria os repositórios
         self.user_repository = UserRepository(User, db_session)
+        self.repository = AddressRepository(Address, db_session)
+
+        # Cria um usuário
         self.created_user1: User = make_user()
         self.user_repository.add(self.created_user1)
 
-        self.repository = AddressRepository(Address, db_session)
+        # Cria um endereço
         self.user_address: Address = make_user_address(self.created_user1.id)
         self.repository.add(self.user_address)
 
