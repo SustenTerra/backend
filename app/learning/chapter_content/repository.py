@@ -50,3 +50,23 @@ class ChapterContentRepository(BaseRepository[ChapterContent]):
             ),
             next_chapter_content_id=next_content.id if next_content else None,
         )
+
+    def get_by_name(self, content_name: str) -> ChapterContentView | None:
+        content = self.default_query.filter_by(
+            content_name=content_name
+        ).first()
+        if content is None:
+            return None
+
+        previous_content = self.get_previous_content(content.id)
+        next_content = self.get_next_content(content.id)
+
+        return ChapterContentView(
+            **content.__dict__,
+            chapter_index=content.course_chapter.index,
+            chapter_name=content.course_chapter.name,
+            previous_chapter_content_id=(
+                previous_content.id if previous_content else None
+            ),
+            next_chapter_content_id=next_content.id if next_content else None,
+        )

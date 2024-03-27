@@ -26,6 +26,12 @@ class ChapterContentController(
         super().__init__(model_class, repository)
         self.content_status_repository = content_status_repository
 
+    def create(self, create: ChapterContentCreate):
+        found_chapter_content = self.repository.get_by_name(create.name)
+        if found_chapter_content:
+            raise
+        return super().create(create)
+
     def content_was_viewed(self, user_id: int, content_id: int) -> bool:
         status = (
             self.content_status_repository.get_by_user_and_content_and_status(
