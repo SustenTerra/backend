@@ -39,14 +39,11 @@ class CourseBase(BaseModel):
 
 
 class CourseCreate(CourseBase):
-    pass
-
-
-class CourseCreateWithAuthorId(CourseBase):
+    image_key: str
     author_id: int
 
 
-class CourseCreateWithImage(CourseCreateWithAuthorId):
+class CourseCreateWithImage(CourseBase):
     image: UploadFile
 
 
