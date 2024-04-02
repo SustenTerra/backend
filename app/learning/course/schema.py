@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import List, Optional
 
+from fastapi import UploadFile
 from pydantic import BaseModel, Field
 
 from app.learning.course_category.schema import CourseCategoryView
@@ -19,14 +20,6 @@ class CourseBase(BaseModel):
             "title": "author_name",
             "description": "Name of the course author",
             "examples": ["Jhon Doe"],
-        }
-    )
-
-    image_url: str = Field(
-        json_schema_extra={
-            "title": "image_url",
-            "description": "Url of the image",
-            "examples": ["pinterest.com"],
         }
     )
     description: str = Field(
@@ -51,6 +44,10 @@ class CourseCreate(CourseBase):
 
 class CourseCreateWithAuthorId(CourseBase):
     author_id: int
+
+
+class CourseCreateWithImage(CourseCreateWithAuthorId):
+    image: UploadFile
 
 
 class CourseUpdate(BaseModel):
