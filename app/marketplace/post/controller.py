@@ -23,9 +23,14 @@ class PostController(
         PostUpdate,
     ]
 ):
-    def __init__(self, model_class: Post, repository: PostRepository):
+    def __init__(
+        self,
+        model_class: Post,
+        repository: PostRepository,
+        bucket_manager: BucketManager,
+    ):
         super().__init__(model_class, repository)
-        self.bucket_manager = BucketManager()
+        self.bucket_manager = bucket_manager
 
     def _check_if_user_is_allowed(self, post_id, user_id) -> None:
         found_post = self.repository.get_by_id(post_id)

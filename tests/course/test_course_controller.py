@@ -1,3 +1,5 @@
+from unittest.mock import MagicMock
+
 import pytest
 
 from app.common.user.content_status import UserContentStatusRepository
@@ -6,6 +8,7 @@ from app.learning.chapter_content.repository import ChapterContentRepository
 from app.learning.course.controller import CourseController
 from app.learning.course.repository import CourseRepository
 from app.models import ChapterContent, Course, CourseChapter, UserContentStatus
+from app.service.bucket_manager import BucketManager
 
 
 class TestCourseController:
@@ -17,6 +20,9 @@ class TestCourseController:
         make_course_category,
         make_course_chapter,
     ):
+        bucket_manager_mock = MagicMock(spec=BucketManager)
+        bucket_manager_mock.upload_file.return_value = "path/to/image.jpg"
+
         # Create Repositories
         self.repository = CourseRepository(Course, db_session)
         content_repository = ChapterContentRepository(
@@ -33,7 +39,10 @@ class TestCourseController:
             user_content_status_repository,
         )
         self.controller = CourseController(
-            Course, self.repository, chapter_content_controller
+            Course,
+            self.repository,
+            chapter_content_controller,
+            bucket_manager_mock,
         )
 
         # Create Course Category

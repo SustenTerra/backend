@@ -22,10 +22,11 @@ class CourseController(
         model_class: Course,
         repository: CourseRepository,
         content_controller: ChapterContentController,
+        bucket_manager: BucketManager,
     ):
         super().__init__(model_class, repository)
         self.content_controller = content_controller
-        self.bucket_manager = BucketManager()
+        self.bucket_manager = bucket_manager
 
     def create(self, user_id: int, create: CourseCreateWithImage):
         image_key = self.bucket_manager.upload_file(create.image)
