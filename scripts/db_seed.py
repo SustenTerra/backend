@@ -150,7 +150,7 @@ def create_courses(session: Session):
 
         course = Course(
             name=faker.text(max_nb_chars=30),
-            image_url=faker.image_url(),
+            image_key=f"{faker.text(max_nb_chars=5)}.png",
             description=faker.text(max_nb_chars=200),
             author_name=faker.name(),
             course_category_id=category.id,
