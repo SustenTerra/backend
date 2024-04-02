@@ -10,44 +10,9 @@ from app.marketplace.post.schema import (
     PostUpdate,
     PostUpdateWithImage,
 )
+from app.marketplace.post.utils import BR_STATES
 from app.models import Post
 from app.service.bucket_manager import BucketManager
-
-
-BR_STATES = [
-    "AC",
-    "AL",
-    "AP",
-    "AM",
-    "BA",
-    "CE",
-    "DF",
-    "ES",
-    "GO",
-    "MA",
-    "MT",
-    "MS",
-    "MG",
-    "PA",
-    "PB",
-    "PR",
-    "PE",
-    "PI",
-    "RJ",
-    "RN",
-    "RS",
-    "RO",
-    "RR",
-    "SC",
-    "SP",
-    "SE",
-    "TO",
-]
-
-
-def verify_location(location: str):
-    if location.upper() not in BR_STATES:
-        raise InvalidLocationException(location)
 
 
 class PostController(
@@ -68,8 +33,12 @@ class PostController(
         if found_post and found_post.user_id != user_id:
             raise UserNotAllowed()
 
+    def __verify_location(self, location: str) -> None:
+        if location.upper() not in BR_STATES:
+            raise InvalidLocationException(location)
+
     def create(self, create: PostCreateWithImage) -> Post:
-        verify_location(create.location)
+        self.__verify_location(create.location)
 
         image_key = self.bucket_manager.upload_file(create.image)
 
@@ -115,7 +84,7 @@ class PostController(
         self._check_if_user_is_allowed(id, user_id)
 
         if hasattr(update, "location") and update.location is not None:
-            verify_location(update.location)
+            self.__verify_location(update.location)
 
         image_key = None
         if update.image:
