@@ -11,7 +11,7 @@ class CourseRepository(BaseRepository[Course]):
             self.session.query(
                 Course.id,
                 Course.name,
-                Course.image_url,
+                Course.image_key,
                 Course.author_name,
                 CourseCategory.name.label("category_name"),
                 func.count(CourseChapter.id).label("chapters_count"),
@@ -30,7 +30,7 @@ class CourseRepository(BaseRepository[Course]):
             self.session.query(
                 Course.id,
                 Course.name,
-                Course.image_url,
+                Course.image_key,
                 Course.author_name,
                 Course.author_id,
                 CourseCategory.name.label("category_name"),
