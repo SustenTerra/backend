@@ -1,14 +1,15 @@
-import pytest
-from fastapi import UploadFile
 from io import BytesIO
 from unittest.mock import MagicMock
 
-from app.models import Post
-from app.marketplace.post.repository import PostRepository
-from app.marketplace.post.schema import PostCreateWithImage
-from app.service.bucket_manager import BucketManager
+import pytest
+from fastapi import UploadFile
+
 from app.marketplace.post.controller import PostController
 from app.marketplace.post.exception import InvalidLocationException
+from app.marketplace.post.repository import PostRepository
+from app.marketplace.post.schema import PostCreateWithImage
+from app.models import Post
+from app.service.bucket_manager import BucketManager
 
 
 class TestPostController:
@@ -18,8 +19,9 @@ class TestPostController:
         bucket_manager_mock.upload_file.return_value = "path/to/image.jpg"
 
         post_repository = PostRepository(Post, db_session)
-        post_controller = PostController(Post, post_repository)
-        post_controller.bucket_manager = bucket_manager_mock
+        post_controller = PostController(
+            Post, post_repository, bucket_manager_mock
+        )
 
         user_password = "teste12345"
         user = make_user(
@@ -40,7 +42,7 @@ class TestPostController:
         return post_controller, user, bucket_manager_mock
 
     def test_create_post_successfully(self, setup):
-        post_controller, user, bucket_manager_mock = setup
+        post_controller, user, _ = setup
 
         fake_file = BytesIO(b"fake image data")
         fake_file.name = "test.jpg"

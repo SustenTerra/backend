@@ -8,6 +8,9 @@ db-up: ## Start database
 db-upgrade: ## Apply migrations
 	@poetry run alembic upgrade head
 
+db-downgrade: ## Downgrade migrations
+	@poetry run alembic downgrade -1
+
 db-seed: ## Seed database with test data
 	@poetry run python scripts/db_seed.py
 

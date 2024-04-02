@@ -2,7 +2,6 @@ import enum
 from datetime import datetime
 from typing import List
 
-
 from sqlalchemy import Enum, ForeignKey
 from sqlalchemy.orm import (
     Mapped,
@@ -89,7 +88,7 @@ class Course(Base):
     author_id: Mapped[int] = mapped_column(
         ForeignKey("users.id"), nullable=True
     )
-    image_url: Mapped[str] = mapped_column(nullable=False)
+    image_key: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str] = mapped_column(nullable=False)
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)

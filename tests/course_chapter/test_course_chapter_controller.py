@@ -9,11 +9,10 @@ from app.learning.course_chapter.schema import (
     CourseChapterCreate,
     CourseChapterUpdate,
 )
-
 from app.models import Course, CourseCategory, CourseChapter, User
 
 
-class TestAddressController:
+class TestCourseChapterController:
     @pytest.fixture
     def setup(
         self,
@@ -94,7 +93,9 @@ class TestAddressController:
         course_id = 1
 
         update = CourseChapterUpdate(name="new course")
-        updated_course_chapter = self.controller.update(course_id, update)
+        updated_course_chapter = self.controller.update(
+            self.created_teacher1.id, course_id, update
+        )
 
         assert updated_course_chapter is not None
         assert updated_course_chapter.name == update.name

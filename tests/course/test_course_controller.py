@@ -1,11 +1,23 @@
+from io import BytesIO
+from unittest.mock import MagicMock
+
 import pytest
+from fastapi import UploadFile
 
 from app.common.user.content_status import UserContentStatusRepository
 from app.learning.chapter_content.controller import ChapterContentController
 from app.learning.chapter_content.repository import ChapterContentRepository
 from app.learning.course.controller import CourseController
 from app.learning.course.repository import CourseRepository
-from app.models import ChapterContent, Course, CourseChapter, UserContentStatus
+from app.learning.course.schema import CourseCreateWithImage
+from app.models import (
+    ChapterContent,
+    Course,
+    CourseChapter,
+    User,
+    UserContentStatus,
+)
+from app.service.bucket_manager import BucketManager
 
 
 class TestCourseController:
@@ -16,7 +28,11 @@ class TestCourseController:
         make_course_published,
         make_course_category,
         make_course_chapter,
+        make_user_teacher,
     ):
+        bucket_manager_mock = MagicMock(spec=BucketManager)
+        bucket_manager_mock.upload_file.return_value = "path/to/image.jpg"
+
         # Create Repositories
         self.repository = CourseRepository(Course, db_session)
         content_repository = ChapterContentRepository(
@@ -33,7 +49,10 @@ class TestCourseController:
             user_content_status_repository,
         )
         self.controller = CourseController(
-            Course, self.repository, chapter_content_controller
+            Course,
+            self.repository,
+            chapter_content_controller,
+            bucket_manager_mock,
         )
 
         # Create Course Category
@@ -54,7 +73,32 @@ class TestCourseController:
         db_session.add(self.created_course_chapter)
         db_session.commit()
 
+        self.teacher: User = make_user_teacher()
+        db_session.add(self.teacher)
+        db_session.commit()
+
         self.session = db_session
+
+    def test_create_course(self, setup):
+        body = CourseCreateWithImage(
+            name="Test Course",
+            description="Test Description",
+            course_category_id=self.created_course_category.id,
+            author_name="Author Test",
+            image=UploadFile(
+                filename="test.jpg", file=BytesIO(b"fake image data")
+            ),
+        )
+
+        created_course = self.controller.create(self.teacher.id, body)
+
+        assert created_course is not None
+        assert created_course.name == body.name
+        assert created_course.description == body.description
+        assert created_course.author_name == body.author_name
+        assert created_course.course_category_id == body.course_category_id
+
+        self.controller.bucket_manager.upload_file.assert_called_once()
 
     def test_list_courses(self, setup):
         courses = self.controller.get_all()

@@ -64,7 +64,7 @@ def make_course(faker):
     ):
         defaults = dict(
             name=faker.name(),
-            image_url=faker.image_url(),
+            image_key=f"{faker.text()}.png",
             author_name=faker.name(),
             description=faker.text(),
             course_category_id=course_category.id,
@@ -83,7 +83,7 @@ def make_course_published(faker):
     ):
         defaults = dict(
             name=faker.name(),
-            image_url=faker.image_url(),
+            image_key=f"{faker.text()}.png",
             author_name=faker.name(),
             description=faker.text(),
             course_category_id=course_category.id,

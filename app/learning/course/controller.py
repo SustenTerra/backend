@@ -6,30 +6,33 @@ from app.learning.course.exception import NoCourseRegisteredFoundException
 from app.learning.course.repository import CourseRepository
 from app.learning.course.schema import (
     CourseCreate,
+    CourseCreateWithImage,
     CourseUpdate,
     CourseView,
-    CourseCreateWithAuthorId,
 )
 from app.models import Course
+from app.service.bucket_manager import BucketManager
 
 
 class CourseController(
-    BaseController[
-        Course, CourseRepository, CourseCreateWithAuthorId, CourseUpdate
-    ]
+    BaseController[Course, CourseRepository, CourseCreate, CourseUpdate]
 ):
     def __init__(
         self,
         model_class: Course,
         repository: CourseRepository,
         content_controller: ChapterContentController,
+        bucket_manager: BucketManager,
     ):
         super().__init__(model_class, repository)
         self.content_controller = content_controller
+        self.bucket_manager = bucket_manager
 
-    def create(self, user_id: int, create: CourseCreate):
-        course_to_create = CourseCreateWithAuthorId(
-            **create.model_dump(), author_id=user_id
+    def create(self, user_id: int, create: CourseCreateWithImage):
+        image_key = self.bucket_manager.upload_file(create.image)
+
+        course_to_create = CourseCreate(
+            **create.model_dump(), author_id=user_id, image_key=image_key
         )
         return super().create(course_to_create)
 
