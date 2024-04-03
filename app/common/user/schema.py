@@ -42,6 +42,7 @@ class UserCreate(UserBase):
 
 class UserView(UserBase):
     id: int
+    teacher_at: Optional[str] = Field(default=None)
 
 
 class UserUpdate(BaseModel):
