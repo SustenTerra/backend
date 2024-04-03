@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 
 from pydantic import BaseModel, Field
@@ -42,7 +43,7 @@ class UserCreate(UserBase):
 
 class UserView(UserBase):
     id: int
-    teacher_at: Optional[str] = Field(default=None)
+    teacher_at: Optional[datetime] = Field(default=None)
 
 
 class UserUpdate(BaseModel):
