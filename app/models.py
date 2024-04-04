@@ -192,9 +192,38 @@ class Address(Base):
     street: Mapped[str] = mapped_column(nullable=False)
     number: Mapped[str] = mapped_column(nullable=False)
     neighborhood: Mapped[str] = mapped_column(nullable=False)
-    complement: Mapped[str] = mapped_column(nullable=False)
+    complement: Mapped[Optional[str]] = mapped_column(nullable=True)
     city: Mapped[str] = mapped_column(nullable=False)
     state: Mapped[str] = mapped_column(nullable=False)
     cep: Mapped[str] = mapped_column(nullable=False)
 
     user: Mapped["User"] = relationship(back_populates="address")
+
+
+class Order(Base):
+    __tablename__ = "orders"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    post_id: Mapped[int] = mapped_column(ForeignKey("posts.id"))
+    order_address_id: Mapped[int] = mapped_column(
+        ForeignKey("order_addresses.id")
+    )
+    total: Mapped[int] = mapped_column(nullable=False)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+
+    user: Mapped["User"] = relationship()
+    post: Mapped["Post"] = relationship()
+    address: Mapped["OrderAddress"] = relationship()
+
+
+class OrderAddress(Base):
+    __tablename__ = "order_addresses"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    street: Mapped[str] = mapped_column(nullable=False)
+    number: Mapped[str] = mapped_column(nullable=False)
+    neighborhood: Mapped[str] = mapped_column(nullable=False)
+    complement: Mapped[Optional[str]] = mapped_column(nullable=True)
+    city: Mapped[str] = mapped_column(nullable=False)
+    state: Mapped[str] = mapped_column(nullable=False)
+    cep: Mapped[str] = mapped_column(nullable=False)
