@@ -10,10 +10,19 @@ from sqlalchemy.orm import (
     relationship,
 )
 
+from app.common.utils import datetime_now
+
 Base = declarative_base()
 
 
-class User(Base):
+class BaseTable(Base):
+    __abstract__ = True
+
+    created_at: Mapped[datetime] = mapped_column(default=datetime_now)
+    updated_at: Mapped[datetime] = mapped_column(default=datetime_now)
+
+
+class User(BaseTable):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -22,8 +31,6 @@ class User(Base):
     teacher_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
     phone: Mapped[str] = mapped_column(nullable=False)
     full_name: Mapped[str] = mapped_column(nullable=False)
-    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
-    updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     courses: Mapped[List["Course"]] = relationship()
 
@@ -35,7 +42,7 @@ class User(Base):
     address: Mapped["Address"] = relationship(back_populates="user")
 
 
-class Post(Base):
+class Post(BaseTable):
     __tablename__ = "posts"
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -46,8 +53,6 @@ class Post(Base):
     location: Mapped[str] = mapped_column(nullable=False)
     price: Mapped[Optional[int]] = mapped_column(nullable=True)
     views: Mapped[int] = mapped_column(default=0)
-    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
-    updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     user: Mapped["User"] = relationship(back_populates="posts")
@@ -55,31 +60,27 @@ class Post(Base):
     category: Mapped["PostCategory"] = relationship(back_populates="posts")
 
 
-class FavoritedPost(Base):
+class FavoritedPost(BaseTable):
     __tablename__ = "favorited_posts"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     post_id: Mapped[int] = mapped_column(ForeignKey("posts.id"))
-    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
-    updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     user: Mapped["User"] = relationship(back_populates="favorited_posts")
     post: Mapped["Post"] = relationship()
 
 
-class PostCategory(Base):
+class PostCategory(BaseTable):
     __tablename__ = "post_categories"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False, unique=True)
-    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
-    updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     posts: Mapped[List["Post"]] = relationship(back_populates="category")
 
 
-class Course(Base):
+class Course(BaseTable):
     __tablename__ = "courses"
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -90,8 +91,6 @@ class Course(Base):
     )
     image_key: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str] = mapped_column(nullable=False)
-    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
-    updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
     published_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
 
     course_chapters: Mapped[List["CourseChapter"]] = relationship(
@@ -108,27 +107,23 @@ class Course(Base):
     )
 
 
-class CourseCategory(Base):
+class CourseCategory(BaseTable):
     __tablename__ = "course_categories"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False, unique=True)
-    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
-    updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     courses: Mapped[List["Course"]] = relationship(
         back_populates="course_category"
     )
 
 
-class CourseChapter(Base):
+class CourseChapter(BaseTable):
     __tablename__ = "course_chapters"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
     index: Mapped[int] = mapped_column(nullable=False)
-    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
-    updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     course_id: Mapped[int] = mapped_column(ForeignKey("courses.id"))
     course: Mapped["Course"] = relationship(back_populates="course_chapters")
@@ -140,7 +135,7 @@ class CourseChapter(Base):
     )
 
 
-class ChapterContent(Base):
+class ChapterContent(BaseTable):
     __tablename__ = "chapter_contents"
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -148,8 +143,6 @@ class ChapterContent(Base):
     index: Mapped[int] = mapped_column(nullable=False)
     description: Mapped[str] = mapped_column(nullable=False)
     video_url: Mapped[Optional[str]] = mapped_column(nullable=True)
-    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
-    updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     course_chapter_id: Mapped[int] = mapped_column(
         ForeignKey("course_chapters.id")
@@ -165,7 +158,7 @@ class ContentStatusEnum(enum.Enum):
     completed = "completed"
 
 
-class UserContentStatus(Base):
+class UserContentStatus(BaseTable):
     __tablename__ = "user_content_status"
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -178,14 +171,12 @@ class UserContentStatus(Base):
         nullable=False,
         default=ContentStatusEnum.not_started,
     )
-    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
-    updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     user: Mapped["User"] = relationship()
     chapter_content: Mapped["ChapterContent"] = relationship()
 
 
-class Address(Base):
+class Address(BaseTable):
     __tablename__ = "addresses"
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
