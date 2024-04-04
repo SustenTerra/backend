@@ -1,8 +1,9 @@
-from datetime import datetime
 from typing import Any, Generic, Optional, TypeVar
 
 from sqlalchemy.orm import Query, Session
 from sqlalchemy.orm.decl_api import DeclarativeMeta
+
+from app.common.utils import datetime_now
 
 ModelClass = TypeVar("ModelClass", bound=DeclarativeMeta)
 
@@ -37,7 +38,7 @@ class BaseRepository(Generic[ModelClass]):
     def update(self, id: int, values: dict[Any, Any]) -> Optional[ModelClass]:
         actual_values = {
             **values,
-            "updated_at": datetime.now(),
+            "updated_at": datetime_now(),
         }
 
         self.default_query.filter_by(id=id).update(actual_values)
