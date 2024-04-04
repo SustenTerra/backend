@@ -28,6 +28,8 @@ class UserBase(BaseModel):
             "examples": ["5583999999999"],
         },
     )
+    updated_at: datetime
+    created_at: datetime
 
 
 class UserCreate(UserBase):

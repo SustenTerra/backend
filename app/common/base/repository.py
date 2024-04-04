@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any, Generic, Optional, TypeVar
 
 from sqlalchemy.orm import Query, Session
@@ -33,8 +34,13 @@ class BaseRepository(Generic[ModelClass]):
         self.session.commit()
         return model
 
-    def update(self, id: int, values: dict[str, Any]) -> Optional[ModelClass]:
-        self.default_query.filter_by(id=id).update(values)  # type: ignore
+    def update(self, id: int, values: dict[Any, Any]) -> Optional[ModelClass]:
+        actual_values = {
+            **values,
+            "updated_at": datetime.now(),
+        }
+
+        self.default_query.filter_by(id=id).update(actual_values)
         self.session.commit()
         return self.get_by_id(id)
 
