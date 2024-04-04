@@ -1,6 +1,6 @@
 import enum
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 from sqlalchemy import Enum, ForeignKey
 from sqlalchemy.orm import (
@@ -19,7 +19,7 @@ class User(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     password: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(nullable=False, unique=True)
-    teacher_at: Mapped[datetime] = mapped_column(nullable=True)
+    teacher_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
     phone: Mapped[str] = mapped_column(nullable=False)
     full_name: Mapped[str] = mapped_column(nullable=False)
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
@@ -44,7 +44,7 @@ class Post(Base):
     description: Mapped[str] = mapped_column(nullable=False)
     post_type: Mapped[str] = mapped_column(nullable=False)
     location: Mapped[str] = mapped_column(nullable=False)
-    price: Mapped[int] = mapped_column(nullable=True)
+    price: Mapped[Optional[int]] = mapped_column(nullable=True)
     views: Mapped[int] = mapped_column(default=0)
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
@@ -85,14 +85,14 @@ class Course(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
     author_name: Mapped[str] = mapped_column(nullable=False)
-    author_id: Mapped[int] = mapped_column(
+    author_id: Mapped[Optional[int]] = mapped_column(
         ForeignKey("users.id"), nullable=True
     )
     image_key: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str] = mapped_column(nullable=False)
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
-    published_at: Mapped[datetime] = mapped_column(nullable=True)
+    published_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
 
     course_chapters: Mapped[List["CourseChapter"]] = relationship(
         back_populates="course",
@@ -147,7 +147,7 @@ class ChapterContent(Base):
     name: Mapped[str] = mapped_column(nullable=False)
     index: Mapped[int] = mapped_column(nullable=False)
     description: Mapped[str] = mapped_column(nullable=False)
-    video_url: Mapped[str] = mapped_column(nullable=True)
+    video_url: Mapped[Optional[str]] = mapped_column(nullable=True)
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
