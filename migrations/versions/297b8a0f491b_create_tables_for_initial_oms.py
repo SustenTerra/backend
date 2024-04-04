@@ -1,8 +1,8 @@
 """Create tables for initial OMS
 
-Revision ID: 0a438af81b03
-Revises: 0cf73448e24c
-Create Date: 2024-04-04 08:10:22.139250
+Revision ID: 297b8a0f491b
+Revises: aa7524b7039a
+Create Date: 2024-04-04 09:13:21.555064
 
 """
 
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = "0a438af81b03"
-down_revision: Union[str, None] = "0cf73448e24c"
+revision: str = "297b8a0f491b"
+down_revision: Union[str, None] = "aa7524b7039a"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -30,6 +30,8 @@ def upgrade() -> None:
         sa.Column("city", sa.String(), nullable=False),
         sa.Column("state", sa.String(), nullable=False),
         sa.Column("cep", sa.String(), nullable=False),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_table(

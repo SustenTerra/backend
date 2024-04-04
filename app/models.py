@@ -191,7 +191,7 @@ class Address(BaseTable):
     user: Mapped["User"] = relationship(back_populates="address")
 
 
-class Order(Base):
+class Order(BaseTable):
     __tablename__ = "orders"
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
@@ -200,15 +200,13 @@ class Order(Base):
         ForeignKey("order_addresses.id")
     )
     total: Mapped[int] = mapped_column(nullable=False)
-    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
-    updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     user: Mapped["User"] = relationship()
     post: Mapped["Post"] = relationship()
     address: Mapped["OrderAddress"] = relationship()
 
 
-class OrderAddress(Base):
+class OrderAddress(BaseTable):
     __tablename__ = "order_addresses"
     id: Mapped[int] = mapped_column(primary_key=True)
     street: Mapped[str] = mapped_column(nullable=False)
