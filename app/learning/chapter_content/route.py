@@ -26,7 +26,7 @@ def create(
         get_chapter_content_controller
     ),
 ):
-    return controller.create(body)
+    return controller.create(user.id, body)
 
 
 @chapter_contents.get(

@@ -6,13 +6,16 @@ from pydantic import BaseModel, Field
 
 class ChapterContentBase(BaseModel):
     name: str
-    index: int
     description: str
     video_url: str
 
 
 class ChapterContentCreate(ChapterContentBase):
-    pass
+    course_chapter_id: int
+
+
+class ChapterContentCreateWithIndex(ChapterContentBase):
+    index: int
 
 
 class ChapterContentUpdate(BaseModel):
