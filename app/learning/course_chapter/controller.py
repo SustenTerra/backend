@@ -46,19 +46,18 @@ class CourseChapterController(
         )
         return super().create(chapter_to_create)
 
-    def update(self, author_id: int, course_chapter_id: int, update: CourseChapterUpdate):
-        
+    def update(
+        self, author_id: int, course_chapter_id: int, update: CourseChapterUpdate
+    ):
         chapter = self.repository.get_by_id(course_chapter_id)
-        
+
         if not chapter:
             raise ChapterIdNotFoundException
 
         chapter_author_id = chapter.course.author_id
-        
+
         if author_id != chapter_author_id:
             raise UserDontMatchCourseOwnerException()
-        
-        chapter_to_update = CourseChapterUpdate(
-            **update.model_dump()
-        )
+
+        chapter_to_update = CourseChapterUpdate(**update.model_dump())
         return super().update(course_chapter_id, chapter_to_update)

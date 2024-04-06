@@ -47,9 +47,7 @@ class User(BaseTable):
     courses: Mapped[List["Course"]] = relationship()
 
     posts: Mapped[List["Post"]] = relationship(back_populates="user")
-    favorited_posts: Mapped[List["FavoritedPost"]] = relationship(
-        back_populates="user"
-    )
+    favorited_posts: Mapped[List["FavoritedPost"]] = relationship(back_populates="user")
 
     address: Mapped["Address"] = relationship(back_populates="user")
 
@@ -110,9 +108,7 @@ class Course(BaseTable):
         lazy="joined",
         order_by="CourseChapter.index",
     )
-    course_category_id: Mapped[int] = mapped_column(
-        ForeignKey("course_categories.id")
-    )
+    course_category_id: Mapped[int] = mapped_column(ForeignKey("course_categories.id"))
     course_category: Mapped["CourseCategory"] = relationship(
         back_populates="courses",
         lazy="joined",
@@ -125,9 +121,7 @@ class CourseCategory(BaseTable):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False, unique=True)
 
-    courses: Mapped[List["Course"]] = relationship(
-        back_populates="course_category"
-    )
+    courses: Mapped[List["Course"]] = relationship(back_populates="course_category")
 
 
 class CourseChapter(BaseTable):
@@ -156,9 +150,7 @@ class ChapterContent(BaseTable):
     description: Mapped[str] = mapped_column(nullable=False)
     video_url: Mapped[Optional[str]] = mapped_column(nullable=True)
 
-    course_chapter_id: Mapped[int] = mapped_column(
-        ForeignKey("course_chapters.id")
-    )
+    course_chapter_id: Mapped[int] = mapped_column(ForeignKey("course_chapters.id"))
     course_chapter: Mapped["CourseChapter"] = relationship(
         back_populates="chapter_contents"
     )
@@ -175,9 +167,7 @@ class UserContentStatus(BaseTable):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    chapter_content_id: Mapped[int] = mapped_column(
-        ForeignKey("chapter_contents.id")
-    )
+    chapter_content_id: Mapped[int] = mapped_column(ForeignKey("chapter_contents.id"))
     status: Mapped[ContentStatusEnum] = mapped_column(
         Enum(ContentStatusEnum),
         nullable=False,

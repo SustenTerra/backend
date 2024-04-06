@@ -12,9 +12,7 @@ class ChatController:
         messages = get_system_prompts(user_name=user.full_name)
         messages.extend(body.messages)
 
-        new_content = self.openai_client.get_new_message(
-            UpdateChat(messages=messages)
-        )
+        new_content = self.openai_client.get_new_message(UpdateChat(messages=messages))
         if not new_content:
             return ResponseChat(messages=messages)
 

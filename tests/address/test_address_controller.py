@@ -54,9 +54,7 @@ class TestAddressController:
         assert address.user_id == self.created_user1.id
 
     def test_get_address(self, setup):
-        found_address = self.repository.get_address_by_user_id(
-            self.created_user2.id
-        )
+        found_address = self.repository.get_address_by_user_id(self.created_user2.id)
         assert found_address is not None
         assert found_address.street == self.user_address.street
         assert found_address.number == self.user_address.number

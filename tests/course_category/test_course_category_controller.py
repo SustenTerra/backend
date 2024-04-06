@@ -9,9 +9,7 @@ class TestCourseCategoryController:
     @pytest.fixture
     def setup(self, db_session, make_course_category):
         self.repository = CourseCategoryRepository(CourseCategory, db_session)
-        self.controller = CourseCategoryController(
-            CourseCategory, self.repository
-        )
+        self.controller = CourseCategoryController(CourseCategory, self.repository)
 
         self.created_category: CourseCategory = make_course_category()
         self.repository.add(self.created_category)

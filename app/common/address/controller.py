@@ -16,16 +16,12 @@ class AddressController(
     BaseController[Address, AddressRepository, AddressCreate, AddressUpdate]
 ):
     def create(self, user_id: int, create: AddressCreateWithoutUserId):
-        checked_address = self.repository.get_address_by_user_id(
-            user_id=user_id
-        )
+        checked_address = self.repository.get_address_by_user_id(user_id=user_id)
 
         if checked_address:
             raise UserAddressAlreadyRegisteredException()
 
-        address_to_create = AddressCreate(
-            **create.model_dump(), user_id=user_id
-        )
+        address_to_create = AddressCreate(**create.model_dump(), user_id=user_id)
 
         return super().create(address_to_create)
 

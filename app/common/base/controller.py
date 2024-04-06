@@ -11,9 +11,7 @@ CreateSchema = TypeVar("CreateSchema", bound=BaseModel)
 UpdateSchema = TypeVar("UpdateSchema", bound=BaseModel)
 
 
-class BaseController(
-    Generic[ModelClass, ModelRepository, CreateSchema, UpdateSchema]
-):
+class BaseController(Generic[ModelClass, ModelRepository, CreateSchema, UpdateSchema]):
     def __init__(self, model_class: ModelClass, repository: ModelRepository):
         self.model_class = model_class
         self.repository: ModelRepository = repository
