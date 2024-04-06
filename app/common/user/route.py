@@ -50,9 +50,7 @@ def update_user(
     return controller.update(user.id, body)
 
 
-@users.patch(
-    "/users/me/update_password", tags=["users"], response_model=UserView
-)
+@users.patch("/users/me/update_password", tags=["users"], response_model=UserView)
 def update_user_password(
     body: UserUpdatePassword,
     controller: UserController = Depends(get_user_controller),

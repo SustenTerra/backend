@@ -19,9 +19,7 @@ class TestPostController:
         bucket_manager_mock.upload_file.return_value = "path/to/image.jpg"
 
         post_repository = PostRepository(Post, db_session)
-        post_controller = PostController(
-            Post, post_repository, bucket_manager_mock
-        )
+        post_controller = PostController(Post, post_repository, bucket_manager_mock)
 
         user_password = "teste12345"
         user = make_user(

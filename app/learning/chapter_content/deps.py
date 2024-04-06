@@ -14,9 +14,7 @@ def get_chapter_content_repository(session: Session = Depends(get_session)):
 
 
 def get_chapter_content_controller(
-    repository: ChapterContentRepository = Depends(
-        get_chapter_content_repository
-    ),
+    repository: ChapterContentRepository = Depends(get_chapter_content_repository),
     content_status_repository: UserContentStatusRepository = Depends(
         get_user_content_status_repository
     ),

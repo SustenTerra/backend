@@ -35,9 +35,7 @@ class TestCourseController:
 
         # Create Repositories
         self.repository = CourseRepository(Course, db_session)
-        content_repository = ChapterContentRepository(
-            ChapterContent, db_session
-        )
+        content_repository = ChapterContentRepository(ChapterContent, db_session)
         user_content_status_repository = UserContentStatusRepository(
             UserContentStatus, db_session
         )
@@ -85,9 +83,7 @@ class TestCourseController:
             description="Test Description",
             course_category_id=self.created_course_category.id,
             author_name="Author Test",
-            image=UploadFile(
-                filename="test.jpg", file=BytesIO(b"fake image data")
-            ),
+            image=UploadFile(filename="test.jpg", file=BytesIO(b"fake image data")),
         )
 
         created_course = self.controller.create(self.teacher.id, body)
@@ -134,9 +130,7 @@ class TestCourseController:
         self.session.add(other_course_category)
         self.session.commit()
 
-        other_course = make_course_published(
-            course_category=other_course_category
-        )
+        other_course = make_course_published(course_category=other_course_category)
         self.repository.add(other_course)
 
         courses = self.controller.get_all(category_name=category_name)

@@ -9,9 +9,7 @@ from app.models import User
 from app.service.hashing import Hasher
 
 
-class UserController(
-    BaseController[User, UserRepository, UserCreate, UserUpdate]
-):
+class UserController(BaseController[User, UserRepository, UserCreate, UserUpdate]):
     def create(self, create: UserCreate):
         found_user = self.repository.get_by_email(create.email)
 

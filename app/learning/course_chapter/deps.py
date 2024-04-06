@@ -12,8 +12,6 @@ def get_course_chapter_repository(session: Session = Depends(get_session)):
 
 
 def get_course_chapter_controller(
-    repository: CourseChapterRepository = Depends(
-        get_course_chapter_repository
-    ),
+    repository: CourseChapterRepository = Depends(get_course_chapter_repository),
 ):
     return CourseChapterController(CourseChapter, repository)

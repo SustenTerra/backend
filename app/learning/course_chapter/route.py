@@ -23,9 +23,7 @@ course_chapters = APIRouter(tags=["course_chapters"])
 def create_course_chapter(
     body: CourseChapterCreate,
     user: User = Depends(get_logged_teacher_user),
-    controller: CourseChapterController = Depends(
-        get_course_chapter_controller
-    ),
+    controller: CourseChapterController = Depends(get_course_chapter_controller),
 ):
     return controller.create(user.id, body)
 
@@ -40,8 +38,6 @@ def edit_course_chapter(
     course_chapter_id: int,
     body: CourseChapterUpdate,
     user: User = Depends(get_logged_teacher_user),
-    controller: CourseChapterController = Depends(
-        get_course_chapter_controller
-    ),
+    controller: CourseChapterController = Depends(get_course_chapter_controller),
 ):
     return controller.update(user.id, course_chapter_id, body)

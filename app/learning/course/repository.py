@@ -53,8 +53,7 @@ class CourseRepository(BaseRepository[Course]):
 
     def get_all_by_name_or_category_name(self, term: str):
         return self.query_for_list_view.filter(
-            (Course.name.ilike(f"%{term}%"))
-            | (CourseCategory.name.ilike(f"%{term}%"))
+            (Course.name.ilike(f"%{term}%")) | (CourseCategory.name.ilike(f"%{term}%"))
         ).all()
 
     def get_all_in_progress(self, user_id: int):

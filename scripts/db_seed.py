@@ -214,9 +214,7 @@ def create_user_content_statuses(session: Session):
 
     for user in users:
         for course in courses:
-            chapters = session.query(CourseChapter).filter_by(
-                course_id=course.id
-            )
+            chapters = session.query(CourseChapter).filter_by(course_id=course.id)
             for chapter in chapters:
                 contents = session.query(ChapterContent).filter_by(
                     course_chapter_id=chapter.id
@@ -239,10 +237,7 @@ def create_user_content_statuses(session: Session):
 
 def main():
     answer = input(
-        (
-            "This will clear all tables and seed "
-            "the database. Are you sure? (y/N) "
-        )
+        ("This will clear all tables and seed " "the database. Are you sure? (y/N) ")
     )
     if answer.lower() != "y":
         print("Aborting...")

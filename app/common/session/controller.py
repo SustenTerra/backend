@@ -36,9 +36,7 @@ class SessionController:
         if not Hasher.verify_password(password, found_user.password):
             raise UserPasswordDoNotMatchException()
 
-        access_token_expires = timedelta(
-            minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES
-        )
+        access_token_expires = timedelta(minutes=config.ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = self._create_access_token(
             data={"sub": str(found_user.id)},
             expires_delta=access_token_expires,
