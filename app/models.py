@@ -22,6 +22,18 @@ class BaseTable(Base):
     updated_at: Mapped[datetime] = mapped_column(default=datetime_now)
 
 
+class AddressBaseTable(BaseTable):
+    __abstract__ = True
+
+    street: Mapped[str] = mapped_column(nullable=False)
+    number: Mapped[str] = mapped_column(nullable=False)
+    neighborhood: Mapped[str] = mapped_column(nullable=False)
+    complement: Mapped[Optional[str]] = mapped_column(nullable=True)
+    city: Mapped[str] = mapped_column(nullable=False)
+    state: Mapped[str] = mapped_column(nullable=False)
+    cep: Mapped[str] = mapped_column(nullable=False)
+
+
 class User(BaseTable):
     __tablename__ = "users"
 
@@ -176,17 +188,10 @@ class UserContentStatus(BaseTable):
     chapter_content: Mapped["ChapterContent"] = relationship()
 
 
-class Address(BaseTable):
+class Address(AddressBaseTable):
     __tablename__ = "addresses"
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    street: Mapped[str] = mapped_column(nullable=False)
-    number: Mapped[str] = mapped_column(nullable=False)
-    neighborhood: Mapped[str] = mapped_column(nullable=False)
-    complement: Mapped[Optional[str]] = mapped_column(nullable=True)
-    city: Mapped[str] = mapped_column(nullable=False)
-    state: Mapped[str] = mapped_column(nullable=False)
-    cep: Mapped[str] = mapped_column(nullable=False)
 
     user: Mapped["User"] = relationship(back_populates="address")
 
@@ -206,13 +211,6 @@ class Order(BaseTable):
     address: Mapped["OrderAddress"] = relationship()
 
 
-class OrderAddress(BaseTable):
+class OrderAddress(AddressBaseTable):
     __tablename__ = "order_addresses"
     id: Mapped[int] = mapped_column(primary_key=True)
-    street: Mapped[str] = mapped_column(nullable=False)
-    number: Mapped[str] = mapped_column(nullable=False)
-    neighborhood: Mapped[str] = mapped_column(nullable=False)
-    complement: Mapped[Optional[str]] = mapped_column(nullable=True)
-    city: Mapped[str] = mapped_column(nullable=False)
-    state: Mapped[str] = mapped_column(nullable=False)
-    cep: Mapped[str] = mapped_column(nullable=False)
