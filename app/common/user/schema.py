@@ -54,9 +54,7 @@ class UserUpdate(BaseModel):
         default=None,
         pattern=r"[A-z0-9_.\-]+@[A-z0-9]+\.[A-z]+(\.[A-z]+)*",
     )
-    full_name: Optional[str] = Field(
-        description="Full name of the user", default=None
-    )
+    full_name: Optional[str] = Field(description="Full name of the user", default=None)
     phone: Optional[str] = Field(
         description="Phone number of the user",
         default=None,

@@ -30,10 +30,8 @@ class ChapterContentController(
         self.content_status_repository = content_status_repository
 
     def content_was_viewed(self, user_id: int, content_id: int) -> bool:
-        status = (
-            self.content_status_repository.get_by_user_and_content_and_status(
-                user_id, content_id, ContentStatusEnum.completed
-            )
+        status = self.content_status_repository.get_by_user_and_content_and_status(
+            user_id, content_id, ContentStatusEnum.completed
         )
 
         return status is not None

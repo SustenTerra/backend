@@ -72,9 +72,6 @@ class PostView(PostBase):
             return bucket_manager.get_presigned_url(self.image_key)
         except Exception as error:
             logger.error(
-                (
-                    "Error while getting presigned url "
-                    f"for post {self.id}: {error}"
-                )
+                ("Error while getting presigned url " f"for post {self.id}: {error}")
             )
             return None

@@ -24,9 +24,7 @@ class TestCourseChapterRepository:
     ):
         # Cria os Repositórios
         self.user_repository = UserRepository(User, db_session)
-        self.category_repository = CourseCategoryRepository(
-            CourseCategory, db_session
-        )
+        self.category_repository = CourseCategoryRepository(CourseCategory, db_session)
         self.course_repository = CourseRepository(Course, db_session)
         self.repository = CourseChapterRepository(CourseChapter, db_session)
 

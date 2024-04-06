@@ -22,9 +22,7 @@ chapter_contents = APIRouter(
 def get_content_by_id(
     chapter_content_id: int,
     user: User = Depends(get_logged_user),
-    controller: ChapterContentController = Depends(
-        get_chapter_content_controller
-    ),
+    controller: ChapterContentController = Depends(get_chapter_content_controller),
 ):
     return controller.get_by_id(chapter_content_id, user.id)
 
@@ -37,9 +35,7 @@ def get_content_by_id(
 def delete_content(
     chapter_content_id: int,
     user: User = Depends(get_logged_teacher_user),
-    controller: ChapterContentController = Depends(
-        get_chapter_content_controller
-    ),
+    controller: ChapterContentController = Depends(get_chapter_content_controller),
 ):
     controller.delete(chapter_content_id)
 

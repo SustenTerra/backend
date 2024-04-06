@@ -23,9 +23,7 @@ class Config(BaseModel):
     AWS_ACCESS_KEY_SECRET: str = os.getenv("AWS_ACCESS_KEY_SECRET", "secret")
     AWS_REGION: str = os.getenv("AWS_REGION", "us-east-1")
     AWS_BUCKET_NAME: str = os.getenv("AWS_BUCKET_NAME", "mybucket")
-    AWS_BUCKET_EXPIRATION: int = int(
-        os.getenv("AWS_BUCKET_EXPIRATION", 3600 * 24 * 7)
-    )
+    AWS_BUCKET_EXPIRATION: int = int(os.getenv("AWS_BUCKET_EXPIRATION", 3600 * 24 * 7))
 
     OPEN_AI_KEY: str = os.getenv("OPEN_AI_KEY", "key")
     MODEL_NAME: str = "gpt-3.5-turbo"

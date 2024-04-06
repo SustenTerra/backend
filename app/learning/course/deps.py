@@ -21,6 +21,4 @@ def get_course_controller(
     ),
     bucket_manager: BucketManager = Depends(get_bucket_manager),
 ):
-    return CourseController(
-        Course, repository, content_controller, bucket_manager
-    )
+    return CourseController(Course, repository, content_controller, bucket_manager)
