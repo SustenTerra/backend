@@ -64,3 +64,7 @@ class ChapterContentController(
         )
 
         return content
+
+    def delete(self, id: int) -> None:
+        self.content_status_repository.delete_by_content(id)
+        self.repository.delete(id)
