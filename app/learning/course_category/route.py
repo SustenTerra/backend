@@ -16,8 +16,6 @@ course_categories = APIRouter()
     response_model=List[CourseCategoryView],
 )
 def list_all_course_categories(
-    controller: CourseCategoryController = Depends(
-        get_course_category_controller
-    ),
+    controller: CourseCategoryController = Depends(get_course_category_controller),
 ):
     return controller.get_all()

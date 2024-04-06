@@ -5,6 +5,7 @@ Revises: 4aaf931930f7
 Create Date: 2024-04-02 11:35:57.457362
 
 """
+
 from typing import Sequence, Union
 
 import sqlalchemy as sa
@@ -18,9 +19,7 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    op.add_column(
-        "courses", sa.Column("image_key", sa.String(), nullable=True)
-    )
+    op.add_column("courses", sa.Column("image_key", sa.String(), nullable=True))
     op.drop_column("courses", "image_url")
 
     op.execute(
@@ -35,9 +34,7 @@ def upgrade() -> None:
 def downgrade() -> None:
     op.add_column(
         "courses",
-        sa.Column(
-            "image_url", sa.VARCHAR(), autoincrement=False, nullable=True
-        ),
+        sa.Column("image_url", sa.VARCHAR(), autoincrement=False, nullable=True),
     )
     op.drop_column("courses", "image_key")
 

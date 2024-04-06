@@ -47,9 +47,7 @@ class PostController(
 
         image_key = self.bucket_manager.upload_file(create.image)
 
-        body = PostCreate(
-            image_key=image_key, **create.model_dump(exclude={"image"})
-        )
+        body = PostCreate(image_key=image_key, **create.model_dump(exclude={"image"}))
 
         return super().create(body)
 
@@ -83,9 +81,7 @@ class PostController(
 
         return super().get_all()
 
-    def update(
-        self, id: int, update: PostUpdateWithImage, user_id: int
-    ) -> Post:
+    def update(self, id: int, update: PostUpdateWithImage, user_id: int) -> Post:
         self._check_if_user_is_allowed(id, user_id)
 
         if hasattr(update, "location") and update.location is not None:
@@ -95,9 +91,7 @@ class PostController(
         if update.image:
             image_key = self.bucket_manager.upload_file(update.image)
 
-        body = PostUpdate(
-            image_key=image_key, **update.model_dump(exclude={"image"})
-        )
+        body = PostUpdate(image_key=image_key, **update.model_dump(exclude={"image"}))
 
         return super().update(id, body)
 

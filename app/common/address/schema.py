@@ -64,9 +64,7 @@ class AddressView(AddressBase):
 
 
 class AddressUpdate(BaseModel):
-    street: Optional[str] = Field(
-        default=None, description="User's street name"
-    )
+    street: Optional[str] = Field(default=None, description="User's street name")
     number: Optional[str] = Field(
         default=None, description="Number of the place where the user lives"
     )
@@ -74,15 +72,9 @@ class AddressUpdate(BaseModel):
         default=None,
         description="Additional information about the user's address",
     )
-    neighborhood: Optional[str] = Field(
-        default=None, description="Neighborhood"
-    )
-    city: Optional[str] = Field(
-        default=None, description="City where the user lives"
-    )
-    state: Optional[str] = Field(
-        default=None, description="State where the user lives"
-    )
+    neighborhood: Optional[str] = Field(default=None, description="Neighborhood")
+    city: Optional[str] = Field(default=None, description="City where the user lives")
+    state: Optional[str] = Field(default=None, description="State where the user lives")
     cep: Optional[str] = Field(
         default=None,
         description="User's postal address",

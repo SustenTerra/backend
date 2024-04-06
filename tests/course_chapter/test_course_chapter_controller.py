@@ -24,16 +24,12 @@ class TestCourseChapterController:
     ):
         # Create Repositories
         self.user_repository = UserRepository(User, db_session)
-        self.category_repository = CourseCategoryRepository(
-            CourseCategory, db_session
-        )
+        self.category_repository = CourseCategoryRepository(CourseCategory, db_session)
         self.course_repository = CourseRepository(Course, db_session)
         self.repository = CourseChapterRepository(CourseChapter, db_session)
 
         # Create Controllers
-        self.controller = CourseChapterController(
-            CourseChapter, self.repository
-        )
+        self.controller = CourseChapterController(CourseChapter, self.repository)
 
         # Create User
         self.created_teacher1: User = make_user_teacher()

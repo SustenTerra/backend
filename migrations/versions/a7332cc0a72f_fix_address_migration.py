@@ -19,15 +19,11 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     op.alter_column("addresses", "created_at", nullable=True)
-    op.execute(
-        "UPDATE addresses SET created_at = NOW() WHERE created_at IS NULL"
-    )
+    op.execute("UPDATE addresses SET created_at = NOW() WHERE created_at IS NULL")
     op.alter_column("addresses", "created_at", nullable=False)
 
     op.alter_column("addresses", "updated_at", nullable=True)
-    op.execute(
-        "UPDATE addresses SET updated_at = NOW() WHERE updated_at IS NULL"
-    )
+    op.execute("UPDATE addresses SET updated_at = NOW() WHERE updated_at IS NULL")
     op.alter_column("addresses", "updated_at", nullable=False)
 
 

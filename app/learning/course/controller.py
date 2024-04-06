@@ -45,9 +45,7 @@ class CourseController(
             return self.repository.get_all_by_category_name(category_name)
 
         if search_term:
-            return self.repository.get_all_by_name_or_category_name(
-                search_term
-            )
+            return self.repository.get_all_by_name_or_category_name(search_term)
 
         return super().get_all()
 
@@ -63,22 +61,16 @@ class CourseController(
                 content.is_available = content.index == 0
 
                 previous_content = (
-                    self.content_controller.repository.get_previous_content(
-                        content.id
-                    )
+                    self.content_controller.repository.get_previous_content(content.id)
                 )
 
                 if previous_content:
-                    content.is_available = (
-                        self.content_controller.content_was_viewed(
-                            user_id, previous_content.id
-                        )
+                    content.is_available = self.content_controller.content_was_viewed(
+                        user_id, previous_content.id
                     )
 
-                content.was_viewed = (
-                    self.content_controller.content_was_viewed(
-                        user_id, content.id
-                    )
+                content.was_viewed = self.content_controller.content_was_viewed(
+                    user_id, content.id
                 )
 
         return course_view
