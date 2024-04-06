@@ -1,6 +1,9 @@
 from app.common.base.controller import BaseController
 from app.common.user.content_status import UserContentStatusRepository
-from app.learning.chapter_content.exception import CannotOpenContentException
+from app.learning.chapter_content.exception import (
+    CannotOpenContentException,
+    ContentNotFoundException,
+)
 from app.learning.chapter_content.repository import ChapterContentRepository
 from app.learning.chapter_content.schema import (
     ChapterContentCreate,
@@ -68,3 +71,12 @@ class ChapterContentController(
     def delete(self, id: int) -> None:
         self.content_status_repository.delete_by_content(id)
         self.repository.delete(id)
+
+    def update(
+        self, id, update: ChapterContentUpdate
+    ) -> ChapterContent | None:
+        found_content = self.repository.get_by_id(id)
+        if not found_content:
+            raise ContentNotFoundException()
+
+        return super().update(id, update)
