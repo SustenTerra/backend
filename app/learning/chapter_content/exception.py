@@ -12,6 +12,17 @@ class CannotOpenContentException(HTTPException):
         )
 
 
+class ContentAlreadyExistsException(HTTPException):
+    def __init__(self, chapter_content_id: int):
+        super().__init__(
+            status_code=400,
+            detail=(
+                f"Chapter content with id {chapter_content_id} "
+                "already exists"
+            ),
+        )
+
+
 class ContentNotFoundException(HTTPException):
     def __init__(self):
         super().__init__(

@@ -50,3 +50,10 @@ class ChapterContentRepository(BaseRepository[ChapterContent]):
             ),
             next_chapter_content_id=next_content.id if next_content else None,
         )
+
+    def get_all_chapters_contents_by_course_chapter_id(
+        self, course_chapter_id: int
+    ):
+        return self.default_query.filter(
+            ChapterContent.course_chapter_id == course_chapter_id
+        ).all()
