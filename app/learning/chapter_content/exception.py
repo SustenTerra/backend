@@ -10,3 +10,11 @@ class CannotOpenContentException(HTTPException):
                 "cannot be seen, because it is not available yet"
             ),
         )
+
+
+class ContentNotFoundException(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=404,
+            detail="Chapter content not found ",
+        )
