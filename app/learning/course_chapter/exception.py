@@ -15,3 +15,11 @@ class ChapterIdNotFoundException(HTTPException):
             status_code=404,
             detail="Course Chapter Id not Found",
         )
+
+
+class ChapterNotFoundException(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=404,
+            detail="Course Chapter not Found",
+        )
