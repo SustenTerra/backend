@@ -116,3 +116,7 @@ class CourseView(CourseWithImageUrl):
 
     course_chapters: List[CourseChapterView]
     course_category: CourseCategoryView
+
+
+class CoursePublishedUpdate(BaseModel):
+    published_at: datetime
