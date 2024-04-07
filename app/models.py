@@ -63,7 +63,7 @@ class Post(BaseTable):
     location: Mapped[str] = mapped_column(nullable=False)
     price: Mapped[Optional[int]] = mapped_column(nullable=True)
     views: Mapped[int] = mapped_column(server_default="0")
-    available_quantity: Mapped[int] = mapped_column(nullable=True)
+    available_quantity: Mapped[Optional[int]] = mapped_column(nullable=True)
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     user: Mapped["User"] = relationship(back_populates="posts")
