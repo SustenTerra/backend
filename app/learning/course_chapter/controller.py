@@ -39,7 +39,7 @@ class CourseChapterController(
         if author_id != course.author_id:
             raise UserDontMatchCourseOwnerException()
 
-        chapters = self.repository.get_all_courses_by_course_id(course.id)
+        chapters = self.repository.get_all_chapters_by_course_id(course.id)
 
         chapter_to_create = CourseChapterCreateWithIndex(
             **create.model_dump(), index=len(chapters)
