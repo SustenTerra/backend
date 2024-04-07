@@ -23,7 +23,8 @@ class PostBase(BaseModel):
     description: str
     post_type: str
     location: str
-    price: Optional[int]
+    price: Optional[int] = Field(default=None)
+    available_quantity: Optional[int] = Field(default=None)
     category_id: int
     user_id: int
 
@@ -43,6 +44,7 @@ class PostUpdateBase(BaseModel):
     location: Optional[str] = Field(default=None)
     price: Optional[int] = Field(default=None)
     views: Optional[int] = Field(default=None)
+    available_quantity: Optional[int] = Field(default=None)
     category_id: Optional[int] = Field(default=None)
 
 
@@ -60,6 +62,7 @@ class PostView(PostBase):
     updated_at: datetime
     image_key: str
     views: int
+    available_quantity: Optional[int] = Field(default=None)
     user: UserView
     category: PostCategoryView
 

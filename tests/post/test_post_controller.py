@@ -33,6 +33,7 @@ class TestPostController:
         self.common_title = "Test Post"
         self.common_description = "Test Description"
         self.common_price = 100
+        self.common_available_quantity = 10
         self.common_post_type = "sell"
         self.common_location = "SP"
         self.common_category_id = 1
@@ -52,6 +53,7 @@ class TestPostController:
             image=upload_file,
             description=self.common_description,
             price=self.common_price,
+            available_quantity=self.common_available_quantity,
             post_type=self.common_post_type,
             location=self.common_location,
             category_id=self.common_category_id,
@@ -64,6 +66,7 @@ class TestPostController:
         assert created_post.title == self.common_title
         assert created_post.description == post_data.description
         assert created_post.price == post_data.price
+        assert created_post.available_quantity == post_data.available_quantity
         assert created_post.post_type == post_data.post_type
         assert created_post.location == post_data.location
         assert created_post.category_id == post_data.category_id
