@@ -10,6 +10,7 @@ from app.marketplace.post.schema import (
     PostUpdate,
     PostUpdateWithImage,
 )
+from app.marketplace.post.utils import BR_STATES
 from app.models import Post
 from app.service.bucket_manager import BucketManager
 
@@ -22,9 +23,14 @@ class PostController(
         PostUpdate,
     ]
 ):
-    def __init__(self, model_class: Post, repository: PostRepository):
+    def __init__(
+        self,
+        model_class: Post,
+        repository: PostRepository,
+        bucket_manager: BucketManager,
+    ):
         super().__init__(model_class, repository)
-        self.bucket_manager = BucketManager()
+        self.bucket_manager = bucket_manager
 
     def _check_if_user_is_allowed(self, post_id, user_id) -> None:
         found_post = self.repository.get_by_id(post_id)
@@ -32,12 +38,16 @@ class PostController(
         if found_post and found_post.user_id != user_id:
             raise UserNotAllowed()
 
+    def __verify_location(self, location: str) -> None:
+        if location.upper() not in BR_STATES:
+            raise InvalidLocationException(location)
+
     def create(self, create: PostCreateWithImage) -> Post:
+        self.__verify_location(create.location)
+
         image_key = self.bucket_manager.upload_file(create.image)
 
-        body = PostCreate(
-            image_key=image_key, **create.model_dump(exclude={"image"})
-        )
+        body = PostCreate(image_key=image_key, **create.model_dump(exclude={"image"}))
 
         return super().create(body)
 
@@ -71,18 +81,17 @@ class PostController(
 
         return super().get_all()
 
-    def update(
-        self, id: int, update: PostUpdateWithImage, user_id: int
-    ) -> Post:
+    def update(self, id: int, update: PostUpdateWithImage, user_id: int) -> Post:
         self._check_if_user_is_allowed(id, user_id)
+
+        if hasattr(update, "location") and update.location is not None:
+            self.__verify_location(update.location)
 
         image_key = None
         if update.image:
             image_key = self.bucket_manager.upload_file(update.image)
 
-        body = PostUpdate(
-            image_key=image_key, **update.model_dump(exclude={"image"})
-        )
+        body = PostUpdate(image_key=image_key, **update.model_dump(exclude={"image"}))
 
         return super().update(id, body)
 

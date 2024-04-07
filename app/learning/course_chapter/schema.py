@@ -1,8 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel, Field
 
-from app.learning.course.schema import CourseView
-
 
 class CourseChapterBase(BaseModel):
     name: str = Field(
@@ -31,4 +29,4 @@ class CourseChapterView(CourseChapterBase):
 
 
 class CourseChapterUpdate(CourseChapterBase):
-    name: str
+    pass

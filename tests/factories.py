@@ -28,6 +28,22 @@ def make_user(faker):
 
 
 @pytest.fixture
+def make_user_teacher(faker):
+    def _make_user_teacher(**kwargs):
+        defaults = dict(
+            email=faker.email(),
+            full_name=faker.name(),
+            password=faker.password(),
+            phone="83940028922",
+            teacher_at=faker.date_time_between(start_date="-1y", end_date="now"),
+        )
+
+        return User(**{**defaults, **kwargs})
+
+    return _make_user_teacher
+
+
+@pytest.fixture
 def make_course_category(faker):
     def _make_course_category(**kwargs):
         defaults = dict(
@@ -41,13 +57,14 @@ def make_course_category(faker):
 
 @pytest.fixture
 def make_course(faker):
-    def _make_course(course_category: CourseCategory, **kwargs):
+    def _make_course(course_category: CourseCategory, author_id=None, **kwargs):
         defaults = dict(
             name=faker.name(),
-            image_url=faker.image_url(),
+            image_key=f"{faker.text()}.png",
             author_name=faker.name(),
             description=faker.text(),
             course_category_id=course_category.id,
+            author_id=author_id,
         )
 
         return Course(**{**defaults, **kwargs})
@@ -57,16 +74,15 @@ def make_course(faker):
 
 @pytest.fixture
 def make_course_published(faker):
-    def _make_course(course_category: CourseCategory, **kwargs):
+    def _make_course(course_category: CourseCategory, author_id=None, **kwargs):
         defaults = dict(
             name=faker.name(),
-            image_url=faker.image_url(),
+            image_key=f"{faker.text()}.png",
             author_name=faker.name(),
             description=faker.text(),
             course_category_id=course_category.id,
-            published_at=faker.date_time_between(
-                start_date="-1y", end_date="now"
-            ),
+            published_at=faker.date_time_between(start_date="-1y", end_date="now"),
+            author_id=author_id,
         )
 
         return Course(**{**defaults, **kwargs})
@@ -122,9 +138,7 @@ def make_user_content_status_not_started():
 
 @pytest.fixture
 def make_chapter_content(faker):
-    def _make_chapter_content(
-        course_chapter: CourseChapter, index: int, **kwargs
-    ):
+    def _make_chapter_content(course_chapter: CourseChapter, index: int, **kwargs):
         defaults = dict(
             name=faker.name(),
             index=index,

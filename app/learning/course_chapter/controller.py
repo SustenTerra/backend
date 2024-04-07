@@ -3,6 +3,7 @@ from app.common.base.controller import BaseController
 from app.learning.course.exception import CourseIdNotFoundException
 from app.learning.course.repository import CourseRepository
 from app.learning.course_chapter.exception import (
+    ChapterIdNotFoundException,
     UserDontMatchCourseOwnerException,
 )
 from app.learning.course_chapter.repository import CourseChapterRepository
@@ -44,3 +45,19 @@ class CourseChapterController(
             **create.model_dump(), index=len(chapters)
         )
         return super().create(chapter_to_create)
+
+    def update(
+        self, author_id: int, course_chapter_id: int, update: CourseChapterUpdate
+    ):
+        chapter = self.repository.get_by_id(course_chapter_id)
+
+        if not chapter:
+            raise ChapterIdNotFoundException
+
+        chapter_author_id = chapter.course.author_id
+
+        if author_id != chapter_author_id:
+            raise UserDontMatchCourseOwnerException()
+
+        chapter_to_update = CourseChapterUpdate(**update.model_dump())
+        return super().update(course_chapter_id, chapter_to_update)

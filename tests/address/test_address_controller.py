@@ -15,15 +15,19 @@ class TestAddressController:
         make_user_address,
         make_user,
     ):
+        # Create Repositories
         self.user_repository = UserRepository(User, db_session)
+        self.repository = AddressRepository(Address, db_session)
+        self.controller = AddressController(Address, self.repository)
+
+        # Create users
         self.created_user1: User = make_user()
         self.created_user2: User = make_user()
         self.user_repository.add(self.created_user1)
         self.user_repository.add(self.created_user2)
 
-        self.repository = AddressRepository(Address, db_session)
+        # Create Addresses
         self.user_address: Address = make_user_address(self.created_user2.id)
-        self.controller = AddressController(Address, self.repository)
         self.repository.add(self.user_address)
 
     def test_create_address(self, setup, faker):
@@ -50,9 +54,7 @@ class TestAddressController:
         assert address.user_id == self.created_user1.id
 
     def test_get_address(self, setup):
-        found_address = self.repository.get_address_by_user_id(
-            self.created_user2.id
-        )
+        found_address = self.repository.get_address_by_user_id(self.created_user2.id)
         assert found_address is not None
         assert found_address.street == self.user_address.street
         assert found_address.number == self.user_address.number

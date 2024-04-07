@@ -1,4 +1,3 @@
-from uu import Error
 from app.common.base.controller import BaseController
 from app.common.user.content_status import UserContentStatusRepository
 from app.learning.chapter_content.exception import (
@@ -50,14 +49,12 @@ class ChapterContentController(
         course = self.course_repository.get_by_id(author_id)
 
         if course is None:
-            return Error()  # TODO: ajeitar error
+            return UserDontMatchCourseOwnerException()  # TODO: ajeitar error
 
-        course_chapter = self.chapter_repository.get_by_id(
-            create.course_chapter_id
-        )
+        course_chapter = self.chapter_repository.get_by_id(create.course_chapter_id)
 
         if course_chapter is None:
-            return Error()  # TODO: ajeitar error
+            return UserDontMatchCourseOwnerException()  # TODO: ajeitar error
         # TODO: VERIFICAR SE O USER LOGADO É O MESMO DO AUTOR DO CURSO
         if author_id != course.author_id:
             return UserDontMatchCourseOwnerException()
@@ -76,10 +73,8 @@ class ChapterContentController(
         return self.repository.get_by_id(chapter_content.id)
 
     def content_was_viewed(self, user_id: int, content_id: int) -> bool:
-        status = (
-            self.content_status_repository.get_by_user_and_content_and_status(
-                user_id, content_id, ContentStatusEnum.completed
-            )
+        status = self.content_status_repository.get_by_user_and_content_and_status(
+            user_id, content_id, ContentStatusEnum.completed
         )
 
         return status is not None
@@ -113,3 +108,7 @@ class ChapterContentController(
         )
 
         return content
+
+    def delete(self, id: int) -> None:
+        self.content_status_repository.delete_by_content(id)
+        self.repository.delete(id)

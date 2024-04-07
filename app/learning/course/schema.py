@@ -1,9 +1,12 @@
 from datetime import datetime
 from typing import List, Optional
 
-from pydantic import BaseModel, Field
+from fastapi import UploadFile
+from fastapi.logger import logger
+from pydantic import BaseModel, Field, computed_field
 
 from app.learning.course_category.schema import CourseCategoryView
+from app.service.bucket_manager import BucketManager
 
 
 class CourseBase(BaseModel):
@@ -19,14 +22,6 @@ class CourseBase(BaseModel):
             "title": "author_name",
             "description": "Name of the course author",
             "examples": ["Jhon Doe"],
-        }
-    )
-
-    image_url: str = Field(
-        json_schema_extra={
-            "title": "image_url",
-            "description": "Url of the image",
-            "examples": ["pinterest.com"],
         }
     )
     description: str = Field(
@@ -46,11 +41,12 @@ class CourseBase(BaseModel):
 
 
 class CourseCreate(CourseBase):
-    pass
-
-
-class CourseCreateWithAuthorId(CourseBase):
+    image_key: str
     author_id: int
+
+
+class CourseCreateWithImage(CourseBase):
+    image: UploadFile
 
 
 class CourseUpdate(BaseModel):
@@ -59,10 +55,26 @@ class CourseUpdate(BaseModel):
     author_name: Optional[str] = Field(default=None)
 
 
-class CourseListView(BaseModel):
+class CourseWithImageUrl(BaseModel):
     id: int
+    image_key: str
+
+    @computed_field
+    @property
+    def image_url(self) -> Optional[str]:
+        bucket_manager = BucketManager()
+
+        try:
+            return bucket_manager.get_presigned_url(self.image_key)
+        except Exception as error:
+            logger.error(
+                ("Error while getting presigned url " f"for course {self.id}: {error}")
+            )
+            return None
+
+
+class CourseListView(CourseWithImageUrl):
     name: str
-    image_url: str
     author_name: str
     author_id: Optional[int] = Field(default=None)
     category_name: str
@@ -93,10 +105,8 @@ class CourseChapterView(BaseModel):
     updated_at: datetime
 
 
-class CourseView(BaseModel):
-    id: int
+class CourseView(CourseWithImageUrl):
     name: str
-    image_url: str
     author_name: str
     description: str
     created_at: datetime

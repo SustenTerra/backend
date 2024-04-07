@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 from random import choice, randint
 
 from faker import Faker
@@ -47,11 +48,11 @@ def clear_all_tables(session: Session):
     session.query(PostCategory).delete()
     session.query(UserContentStatus).delete()
     session.query(Address).delete()
-    session.query(User).delete()
     session.query(ChapterContent).delete()
     session.query(CourseChapter).delete()
     session.query(Course).delete()
     session.query(CourseCategory).delete()
+    session.query(User).delete()
 
     session.commit()
 
@@ -63,7 +64,14 @@ def create_users(session: Session):
         phone="123456789",
         password=Hasher.get_password_hash("12345678"),
     )
-    session.add(user)
+    teacher = User(
+        full_name="Teacher Silva",
+        email="teacher@email.com",
+        phone="123456789",
+        password=Hasher.get_password_hash("12345678"),
+        teacher_at=datetime.now(),
+    )
+    session.add_all([user, teacher])
 
     for _ in range(10):
         user = User(
@@ -144,16 +152,24 @@ def create_course_categories(session: Session):
 
 
 def create_courses(session: Session):
+    users = session.query(User).all()
+    categories = session.query(CourseCategory).all()
+
     for _ in range(10):
-        categories = session.query(CourseCategory).all()
         category = choice(categories)
+        author = choice(users)
+
+        author_id = None
+        if author.teacher_at:
+            author_id = author.id
 
         course = Course(
             name=faker.text(max_nb_chars=30),
-            image_url=faker.image_url(),
+            image_key="banner.png",
             description=faker.text(max_nb_chars=200),
-            author_name=faker.name(),
+            author_name=author.full_name,
             course_category_id=category.id,
+            author_id=author_id,
         )
 
         session.add(course)
@@ -198,9 +214,7 @@ def create_user_content_statuses(session: Session):
 
     for user in users:
         for course in courses:
-            chapters = session.query(CourseChapter).filter_by(
-                course_id=course.id
-            )
+            chapters = session.query(CourseChapter).filter_by(course_id=course.id)
             for chapter in chapters:
                 contents = session.query(ChapterContent).filter_by(
                     course_chapter_id=chapter.id
@@ -223,10 +237,7 @@ def create_user_content_statuses(session: Session):
 
 def main():
     answer = input(
-        (
-            "This will clear all tables and seed the database."
-            "Are you sure? (y/N)"
-        )
+        ("This will clear all tables and seed " "the database. Are you sure? (y/N) ")
     )
     if answer.lower() != "y":
         print("Aborting...")

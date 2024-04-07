@@ -21,25 +21,39 @@ class TestCourseRepository:
         make_course,
         make_course_category,
         make_course_published,
+        make_user,
+        make_user_teacher,
     ):
+        # Cria o Repositório do Curso
         self.repository = CourseRepository(Course, db_session)
-        category_repository = CourseCategoryRepository(
-            CourseCategory, db_session
-        )
 
+        # Cria o Repositório da Categoria do Curso
+        category_repository = CourseCategoryRepository(CourseCategory, db_session)
+
+        # Cria o usuário e o usuário professor
+        self.created_user = make_user()
+        self.created_teacher = make_user_teacher()
+        user_repository = UserRepository(User, db_session)
+        user_repository.add(self.created_user)
+        user_repository.add(self.created_teacher)
+
+        # Cria as Categorias dos cursos
         self.created_category_1 = make_course_category()
         self.created_category_2 = make_course_category()
         category_repository.add(self.created_category_1)
         category_repository.add(self.created_category_2)
 
-        self.created_course_1: Course = make_course_published(
-            self.created_category_1
-        )
+        # Cria os cursos
+        self.created_course_1: Course = make_course_published(self.created_category_1)
         self.created_course_2: Course = make_course_published(
-            self.created_category_2
+            self.created_category_2, self.created_teacher.id
+        )
+        self.created_course_3: Course = make_course(
+            self.created_category_1, self.created_teacher.id
         )
         self.repository.add(self.created_course_1)
         self.repository.add(self.created_course_2)
+        self.repository.add(self.created_course_3)
 
         self.session = db_session
 
@@ -51,8 +65,7 @@ class TestCourseRepository:
         assert found_course.name == self.created_course_1.name
         assert found_course.author_name == self.created_course_1.author_name
         assert (
-            found_course.course_category_id
-            == self.created_course_1.course_category_id
+            found_course.course_category_id == self.created_course_1.course_category_id
         )
 
     def test_gel_all(self, setup):
@@ -88,9 +101,7 @@ class TestCourseRepository:
         assert found_courses_2[0].name == self.created_course_2.name
 
     def test_get_all_by_name_or_category_name_nonexistent(self, setup):
-        found_courses = self.repository.get_all_by_name_or_category_name(
-            "painting"
-        )
+        found_courses = self.repository.get_all_by_name_or_category_name("painting")
 
         assert found_courses == []
 
@@ -111,7 +122,6 @@ class TestCourseRepository:
         make_course_chapter,
         make_chapter_content,
         make_user_content_status_in_progress,
-        make_user,
     ):
         created_course_chapter: CourseChapter = make_course_chapter(
             course=self.created_course_1, index=0
@@ -125,21 +135,15 @@ class TestCourseRepository:
         self.session.add(created_chapter_content)
         self.session.commit()
 
-        created_user: User = make_user()
-        user_repository = UserRepository(User, self.session)
-        user_repository.add(created_user)
-        found_user = user_repository.get_by_id(1)
-        assert found_user is not None
-
         create_user_content_status: UserContentStatus = (
             make_user_content_status_in_progress(
-                user=created_user, chapter_content=created_chapter_content
+                user=self.created_user, chapter_content=created_chapter_content
             )
         )
         self.session.add(create_user_content_status)
         self.session.commit()
 
-        found_courses = self.repository.get_all_in_progress(found_user.id)
+        found_courses = self.repository.get_all_in_progress(self.created_user.id)
 
         assert len(found_courses) == 1
         assert found_courses[0].name == self.created_course_1.name
@@ -154,9 +158,7 @@ class TestCourseRepository:
 
     def test_update(self, setup):
         new_description = "description test"
-        found_course = self.repository.update(
-            2, {"description": new_description}
-        )
+        found_course = self.repository.update(2, {"description": new_description})
 
         assert found_course is not None
         assert found_course.id == self.created_course_2.id
@@ -170,3 +172,8 @@ class TestCourseRepository:
         found_courses = self.repository.get_all()
 
         assert len(found_courses) == 1
+
+    def test_get_all_by_teacher_id(self, setup):
+        found_courses = self.repository.get_all_by_teacher_id(self.created_teacher.id)
+
+        assert len(found_courses) == 2
