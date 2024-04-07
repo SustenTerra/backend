@@ -48,6 +48,7 @@ class OrderController(BaseController[Order, OrderRepository, OrderCreate, OrderU
         )
         created_order = super().create(create)
 
+        # TODO: Calculate available quantity by joining with order table
         if post.available_quantity and post.available_quantity > 0:
             self.post_controller.update(
                 post.id,
