@@ -89,3 +89,17 @@ def list_all_teacher_courses(
     controller: CourseController = Depends(get_course_controller),
 ):
     return controller.get_courses_by_teacher_id(user.id)
+
+
+@courses.patch(
+    "/users/me/courses/{course_id}/published",
+    tags=["courses"],
+    description="Published course",
+    response_model=CourseView,
+)
+def published_course(
+    course_id: int,
+    user: User = Depends(get_logged_teacher_user),
+    controller: CourseController = Depends(get_course_controller),
+):
+    return controller.published_course(course_id)
