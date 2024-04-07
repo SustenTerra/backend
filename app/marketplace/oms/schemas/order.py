@@ -11,7 +11,7 @@ class OrderBase(BaseModel):
     user_id: int
     post_id: int
     order_address_id: int
-    value: int
+    total: int
 
 
 class OrderCreate(OrderBase):

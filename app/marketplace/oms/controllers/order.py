@@ -38,7 +38,7 @@ class OrderController(BaseController[Order, OrderRepository, OrderCreate, OrderU
 
         create = OrderCreate(
             user_id=user.id,
-            value=post.price,
+            total=post.price,
             post_id=post.id,
             order_address_id=order_address.id,
         )
