@@ -16,3 +16,11 @@ def create_order(
     user: User = Depends(get_logged_user),
 ):
     return controller.create(user, body)
+
+
+@oms_router.get("/users/me/orders")
+def get_orders_from_user(
+    controller: OrderController = Depends(get_order_controller),
+    user: User = Depends(get_logged_user),
+):
+    return controller.get_orders_from_user(user.id)

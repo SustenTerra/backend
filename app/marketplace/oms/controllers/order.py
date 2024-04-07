@@ -8,3 +8,6 @@ class OrderController(BaseController[Order, OrderRepository, OrderCreate, OrderU
     def create(self, user: User, body: OMSOrderCreate) -> Order:
         create = OrderCreate(**body.model_dump())
         return super().create(create)
+
+    def get_orders_from_user(self, user_id: int) -> list[Order]:
+        return self.repository.get_orders_from_user(user_id)
