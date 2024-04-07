@@ -11,7 +11,7 @@ def run_command(cmd):
         if len(output_lines) == 1:
             return output_lines[0]
         else:
-            raise Exception("Command output contains more than one line.")
+            raise Exception("There are more then one migration heads.")
     except subprocess.CalledProcessError as e:
         raise Exception(f"Error executing command: {e.stderr}")
 
