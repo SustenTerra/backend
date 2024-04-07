@@ -4,6 +4,7 @@ from app.learning.chapter_content.controller import ChapterContentController
 from app.learning.chapter_content.deps import get_chapter_content_controller
 from app.learning.chapter_content.schema import (
     ChapterContentCreate,
+    ChapterContentUpdate,
     ChapterContentView,
 )
 from app.models import User
@@ -51,3 +52,19 @@ def delete_content(
     controller: ChapterContentController = Depends(get_chapter_content_controller),
 ):
     controller.delete(chapter_content_id)
+
+
+@chapter_contents.patch(
+    "/chapter_contents/{chapter_content_id}",
+    description="Update one chapter_content by id",
+    response_model=ChapterContentView,
+)
+def update_content(
+    body: ChapterContentUpdate,
+    chapter_content_id: int,
+    user: User = Depends(get_logged_teacher_user),
+    controller: ChapterContentController = Depends(
+        get_chapter_content_controller
+    ),
+):
+    return controller.update(chapter_content_id, body)
