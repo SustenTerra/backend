@@ -1,6 +1,8 @@
 from typing import Optional
 
+from fastapi import HTTPException
 
-class NotAvailableForOrderException(Exception):
-    def __init__(self, message: Optional[str] = None):
-        self.message = message or "This product is not available for order."
+
+class NotAvailableForOrderException(HTTPException):
+    def __init__(self, detail: Optional[str] = None):
+        super().__init__(status_code=400, detail=detail or "Not available for order.")

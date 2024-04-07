@@ -1,4 +1,5 @@
 from typing import Optional
+
 from pydantic import BaseModel, Field
 
 
@@ -46,7 +47,7 @@ class AddressBase(BaseModel):
         json_schema_extra={
             "title": "Cep",
             "description": "User postal address",
-            "examples": ["58429-170"],
+            "examples": ["58429170"],
         },
     )
 

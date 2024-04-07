@@ -6,6 +6,7 @@ from app.marketplace.oms.schemas.order import OMSOrderCreate, OrderCreate, Order
 from app.marketplace.oms.schemas.order_address import OrderAddressCreate
 from app.marketplace.post.controller import PostController
 from app.marketplace.post.exception import NotFoundPostException
+from app.marketplace.post.schema import PostUpdateWithImage
 from app.models import Order, User
 
 
@@ -36,7 +37,7 @@ class OrderController(BaseController[Order, OrderRepository, OrderCreate, OrderU
             raise NotAvailableForOrderException("User has no address.")
 
         order_address = self.order_address_controller.create(
-            OrderAddressCreate(**user.address.model_dump())
+            OrderAddressCreate(**user.address.__dict__)
         )
 
         create = OrderCreate(
@@ -45,7 +46,16 @@ class OrderController(BaseController[Order, OrderRepository, OrderCreate, OrderU
             post_id=post.id,
             order_address_id=order_address.id,
         )
-        return super().create(create)
+        created_order = super().create(create)
+
+        if post.available_quantity and post.available_quantity > 0:
+            self.post_controller.update(
+                post.id,
+                PostUpdateWithImage(available_quantity=post.available_quantity - 1),
+                user.id,
+            )
+
+        return created_order
 
     def get_orders_from_user(self, user_id: int) -> list[Order]:
         return self.repository.get_orders_from_user(user_id)
