@@ -15,6 +15,7 @@ class ChapterContentCreate(ChapterContentBase):
 
 
 class ChapterContentCreateWithIndex(ChapterContentBase):
+    course_chapter_id: int
     index: int
 
 

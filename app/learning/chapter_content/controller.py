@@ -10,8 +10,10 @@ from app.learning.chapter_content.schema import (
     ChapterContentCreateWithIndex,
     ChapterContentUpdate,
 )
+from app.learning.course.exception import NoCourseRegisteredFoundException
 from app.learning.course.repository import CourseRepository
 from app.learning.course_chapter.exception import (
+    ChapterNotFoundException,
     UserDontMatchCourseOwnerException,
 )
 from app.learning.course_chapter.repository import CourseChapterRepository
@@ -46,31 +48,30 @@ class ChapterContentController(
         )
 
     def create(self, author_id: int, create: ChapterContentCreate):
-        # TODO:VERIFICAR SE O CAPITULO JÁ EXISTE
         course = self.course_repository.get_by_id(author_id)
 
         if course is None:
-            return UserDontMatchCourseOwnerException()  # TODO: ajeitar error
+            return NoCourseRegisteredFoundException()
 
         course_chapter = self.chapter_repository.get_by_id(create.course_chapter_id)
 
         if course_chapter is None:
-            return UserDontMatchCourseOwnerException()  # TODO: ajeitar error
-        # TODO: VERIFICAR SE O USER LOGADO É O MESMO DO AUTOR DO CURSO
+            return ChapterNotFoundException()
+
         if author_id != course.author_id:
             return UserDontMatchCourseOwnerException()
-        # TODO: LISTAR TODOS OS CONTEUDOS DO CAPITULO
+
         chapter_contents = (
             self.repository.get_all_chapters_contents_by_course_chapter_id(
                 course_chapter.id
             )
         )
-        # TODO: CRIAR CONTEUDO PARA O PROXIXMO INDICE DISPONIVEL
+
         content_to_create = ChapterContentCreateWithIndex(
             **create.model_dump(), index=len(chapter_contents)
         )
         chapter_content = super().create(content_to_create)  # type: ignore
-        # TODO: Retorna usando o get_by_id do repository de conteúdo
+
         return self.repository.get_by_id(chapter_content.id)
 
     def content_was_viewed(self, user_id: int, content_id: int) -> bool:
@@ -114,9 +115,7 @@ class ChapterContentController(
         self.content_status_repository.delete_by_content(id)
         self.repository.delete(id)
 
-    def update(
-        self, id, update: ChapterContentUpdate
-    ) -> ChapterContent | None:
+    def update(self, id, update: ChapterContentUpdate) -> ChapterContent | None:
         found_content = self.repository.get_by_id(id)
         if not found_content:
             raise ContentNotFoundException()
