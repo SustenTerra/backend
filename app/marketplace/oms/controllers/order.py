@@ -7,7 +7,7 @@ from app.marketplace.oms.schemas.order_address import OrderAddressCreate
 from app.marketplace.post.controller import PostController
 from app.marketplace.post.exception import NotFoundPostException
 from app.marketplace.post.schema import PostUpdateWithImage
-from app.models import Order, User
+from app.models import Order, Post, User
 
 
 class OrderController(BaseController[Order, OrderRepository, OrderCreate, OrderUpdate]):
@@ -21,6 +21,15 @@ class OrderController(BaseController[Order, OrderRepository, OrderCreate, OrderU
         self.post_controller = post_controller
         self.order_address_controller = order_address_controller
         super().__init__(model_class, repository)
+
+    def __post_order_creation_actions(self, order: Order, post: Post):
+        if post.available_quantity and post.available_quantity > 0:
+            # TODO: Calculate available quantity by joining with order table
+            self.post_controller.update(
+                post.id,
+                PostUpdateWithImage(available_quantity=post.available_quantity - 1),
+                order.user_id,
+            )
 
     def create(self, user: User, body: OMSOrderCreate) -> Order:
         post = self.post_controller.get_by_id(body.post_id)
@@ -46,15 +55,9 @@ class OrderController(BaseController[Order, OrderRepository, OrderCreate, OrderU
             post_id=post.id,
             order_address_id=order_address.id,
         )
-        created_order = super().create(create)
 
-        # TODO: Calculate available quantity by joining with order table
-        if post.available_quantity and post.available_quantity > 0:
-            self.post_controller.update(
-                post.id,
-                PostUpdateWithImage(available_quantity=post.available_quantity - 1),
-                user.id,
-            )
+        created_order = super().create(create)
+        self.__post_order_creation_actions(created_order, post)
 
         return created_order
 
