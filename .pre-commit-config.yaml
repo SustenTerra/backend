@@ -5,3 +5,11 @@ repos:
       - id: ruff
         args: [--fix]
       - id: ruff-format
+
+  - repo: local
+    hooks:
+      - id: alembic-migrations
+        name: alembic-migrations
+        entry: poetry run pytest tests/alembic/test_migrations.py
+        language: system
+        types: [python]
