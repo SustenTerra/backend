@@ -49,7 +49,7 @@ class User(BaseTable):
     posts: Mapped[List["Post"]] = relationship(back_populates="user")
     favorited_posts: Mapped[List["FavoritedPost"]] = relationship(back_populates="user")
 
-    address: Mapped["Address"] = relationship(back_populates="user")
+    address: Mapped[Optional["Address"]] = relationship(back_populates="user")
 
 
 class Post(BaseTable):

@@ -26,11 +26,14 @@ class OrderController(BaseController[Order, OrderRepository, OrderCreate, OrderU
         if not post:
             raise NotFoundPostException()
 
-        if not post.price or post.post_type != "product":
+        if not post.price or post.post_type != "ad":
             raise NotAvailableForOrderException()
 
         if post.available_quantity and post.available_quantity <= 0:
             raise NotAvailableForOrderException()
+
+        if not user.address:
+            raise NotAvailableForOrderException("User has no address.")
 
         order_address = self.order_address_controller.create(
             OrderAddressCreate(**user.address.model_dump())
