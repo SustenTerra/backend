@@ -14,6 +14,10 @@ class OrderCreate(OrderBase):
     pass
 
 
+class OMSOrderCreate(BaseModel):
+    post_id: int
+
+
 class OrderUpdate(BaseModel):
     pass
 
