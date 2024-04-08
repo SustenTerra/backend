@@ -1,5 +1,6 @@
 from app.common.base.controller import BaseController
 
+from app.learning.chapter_content.repository import ChapterContentRepository
 from app.learning.course.exception import CourseIdNotFoundException
 from app.learning.course.repository import CourseRepository
 from app.learning.course_chapter.exception import (
@@ -12,7 +13,7 @@ from app.learning.course_chapter.schema import (
     CourseChapterCreateWithIndex,
     CourseChapterUpdate,
 )
-from app.models import Course, CourseChapter
+from app.models import ChapterContent, Course, CourseChapter
 
 
 class CourseChapterController(
@@ -30,6 +31,9 @@ class CourseChapterController(
     ):
         super().__init__(model_class, repository)
         self.course_repository = CourseRepository(Course, repository.session)
+        self.course_chapter_content = ChapterContentRepository(
+            ChapterContent, repository.session
+        )
 
     def create(self, author_id: int, create: CourseChapterCreate):
         course = self.course_repository.get_by_id(create.course_id)
@@ -61,3 +65,6 @@ class CourseChapterController(
 
         chapter_to_update = CourseChapterUpdate(**update.model_dump())
         return super().update(course_chapter_id, chapter_to_update)
+
+    def delete(self, id: int) -> None:
+        self.repository.delete(id)
