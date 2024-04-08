@@ -30,8 +30,10 @@ class TestCourseChapterContentController:
         self.repository = ChapterContentRepository(ChapterContent, db_session)
 
         self.controller = ChapterContentController(
-            ChapterContent, self.repository, UserContentStatusRepository
-        )  # type: ignore
+            ChapterContent,
+            self.repository,
+            UserContentStatusRepository,  # type: ignore
+        )
 
         self.created_teacher1: User = make_user_teacher()
         self.user_repository.add(self.created_teacher1)
