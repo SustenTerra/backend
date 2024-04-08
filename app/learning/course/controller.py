@@ -107,7 +107,4 @@ class CourseController(
         if not course:
             raise CourseIdNotFoundException
 
-        if course.author_id != user_id:
-            raise NoCourseRegisteredFoundException
-
         self.repository.delete(course_id)
