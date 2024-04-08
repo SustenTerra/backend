@@ -115,5 +115,5 @@ class CourseView(CourseWithImageUrl):
     course_category: CourseCategoryView
 
 
-class CoursePublishedUpdate(BaseModel):
+class CoursePublishedUpdate(CourseUpdate):
     published_at: datetime
