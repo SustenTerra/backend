@@ -81,7 +81,7 @@ class CourseListView(CourseWithImageUrl):
     chapters_count: int
     created_at: datetime
     updated_at: datetime
-    published_at: datetime
+    published_at: Optional[datetime] = Field(default=None)
 
 
 class CourseChapterContentView(BaseModel):
@@ -112,6 +112,7 @@ class CourseView(CourseWithImageUrl):
     description: str
     created_at: datetime
     updated_at: datetime
-    
+    published_at: Optional[datetime] = Field(default=None)
+
     course_chapters: List[CourseChapterView]
     course_category: CourseCategoryView
