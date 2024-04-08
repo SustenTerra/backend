@@ -1,6 +1,6 @@
 from typing import Annotated, List, Optional
 
-from fastapi import APIRouter, Depends, File, Form, UploadFile
+from fastapi import APIRouter, Depends, File, Form, UploadFile, status
 
 from app.learning.course.controller import CourseController
 from app.learning.course.deps import get_course_controller
@@ -97,9 +97,20 @@ def list_all_teacher_courses(
     description="Published course",
     response_model=CourseView,
 )
-def publishe_course(
+def publish_course(
     course_id: int,
     user: User = Depends(get_logged_teacher_user),
     controller: CourseController = Depends(get_course_controller),
 ):
-    return controller.publishe_course(course_id)
+    return controller.publish_course(course_id)
+
+
+@courses.delete(
+    "/courses/{course_id}", tags=["courses"], status_code=status.HTTP_204_NO_CONTENT
+)
+def delete_course(
+    course_id: int,
+    user: User = Depends(get_logged_teacher_user),
+    controller: CourseController = Depends(get_course_controller),
+):
+    controller.delete_course(course_id, user.id)
