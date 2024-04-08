@@ -41,3 +41,17 @@ def edit_course_chapter(
     controller: CourseChapterController = Depends(get_course_chapter_controller),
 ):
     return controller.update(user.id, course_chapter_id, body)
+
+
+@course_chapters.delete(
+    "/course_chapter/{course_chapter_id}",
+    tags=["course_chapters"],
+    description="Delete course_chapter",
+    response_model=None,
+)
+def delete_chapter(
+    course_chapter_id: int,
+    user: User = Depends(get_logged_teacher_user),
+    controller: CourseChapterController = Depends(get_course_chapter_controller),
+):
+    return controller.delete(course_chapter_id)
