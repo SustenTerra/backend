@@ -34,6 +34,7 @@ class CourseRepository(BaseRepository[Course]):
                 Course.image_key,
                 Course.author_name,
                 Course.author_id,
+                Course.published_at,
                 CourseCategory.name.label("category_name"),
                 func.count(CourseChapter.id).label("chapters_count"),
                 Course.created_at,
