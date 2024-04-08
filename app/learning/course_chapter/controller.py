@@ -1,5 +1,7 @@
 from app.common.base.controller import BaseController
 
+from app.common.user.content_status import UserContentStatusRepository
+from app.learning.chapter_content.controller import ChapterContentController
 from app.learning.chapter_content.repository import ChapterContentRepository
 from app.learning.course.exception import CourseIdNotFoundException
 from app.learning.course.repository import CourseRepository
@@ -13,7 +15,7 @@ from app.learning.course_chapter.schema import (
     CourseChapterCreateWithIndex,
     CourseChapterUpdate,
 )
-from app.models import ChapterContent, Course, CourseChapter
+from app.models import ChapterContent, Course, CourseChapter, UserContentStatus
 
 
 class CourseChapterController(
@@ -31,8 +33,18 @@ class CourseChapterController(
     ):
         super().__init__(model_class, repository)
         self.course_repository = CourseRepository(Course, repository.session)
-        self.course_chapter_content = ChapterContentRepository(
+        self.course_chapter_content_repository = ChapterContentRepository(
             ChapterContent, repository.session
+        )
+
+        user_content_status_repository = UserContentStatusRepository(
+            UserContentStatus, repository.session
+        )
+
+        self.course_chapter_content_controller = ChapterContentController(
+            ChapterContent,
+            self.course_chapter_content_repository,
+            user_content_status_repository,
         )
 
     def create(self, author_id: int, create: CourseChapterCreate):
@@ -66,5 +78,10 @@ class CourseChapterController(
         chapter_to_update = CourseChapterUpdate(**update.model_dump())
         return super().update(course_chapter_id, chapter_to_update)
 
-    def delete(self, id: int) -> None:
+    def delete(self, id: int):
+        course_chapter_contents = self.course_chapter_content_repository.get_all_chapters_contents_by_course_chapter_id(
+            id
+        )
+        for chapter in course_chapter_contents:
+            self.course_chapter_content_controller.delete(chapter.id)
         self.repository.delete(id)
