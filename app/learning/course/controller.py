@@ -1,12 +1,14 @@
 from typing import Optional
 
 from app.common.base.controller import BaseController
+from app.common.utils import datetime_now
 from app.learning.chapter_content.controller import ChapterContentController
 from app.learning.course.exception import NoCourseRegisteredFoundException
 from app.learning.course.repository import CourseRepository
 from app.learning.course.schema import (
     CourseCreate,
     CourseCreateWithImage,
+    CoursePublishedUpdate,
     CourseUpdate,
     CourseView,
 )
@@ -85,3 +87,13 @@ class CourseController(
             raise NoCourseRegisteredFoundException
 
         return courses
+
+    def publishe_course(self, course_id: int) -> CoursePublishedUpdate:
+        course = self.repository.get_by_id(course_id)
+
+        if not course:
+            raise NoCourseRegisteredFoundException
+
+        course_update = CoursePublishedUpdate(published_at=datetime_now())
+        super().update(course_id, course_update)
+        return super().get_by_id(course_id)
