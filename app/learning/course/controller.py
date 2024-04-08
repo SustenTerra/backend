@@ -1,7 +1,7 @@
-from datetime import datetime
 from typing import Optional
 
 from app.common.base.controller import BaseController
+from app.common.utils import datetime_now
 from app.learning.chapter_content.controller import ChapterContentController
 from app.learning.course.exception import NoCourseRegisteredFoundException
 from app.learning.course.repository import CourseRepository
@@ -88,12 +88,12 @@ class CourseController(
 
         return courses
 
-    def published_course(self, course_id: int) -> CoursePublishedUpdate:
+    def publishe_course(self, course_id: int) -> CoursePublishedUpdate:
         course = self.repository.get_by_id(course_id)
 
         if not course:
             raise NoCourseRegisteredFoundException
 
-        course_update = CoursePublishedUpdate(published_at=datetime.now())
-        super().update(course_id, course_update)  # type: ignore
+        course_update = CoursePublishedUpdate(published_at=datetime_now())
+        super().update(course_id, course_update)
         return super().get_by_id(course_id)
