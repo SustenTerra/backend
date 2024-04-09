@@ -51,15 +51,15 @@ class ChapterContentController(
         course = self.course_repository.get_by_id(author_id)
 
         if course is None:
-            return NoCourseRegisteredFoundException()
+            raise NoCourseRegisteredFoundException()
 
         course_chapter = self.chapter_repository.get_by_id(create.course_chapter_id)
 
         if course_chapter is None:
-            return ChapterNotFoundException()
+            raise ChapterNotFoundException()
 
         if author_id != course.author_id:
-            return UserDontMatchCourseOwnerException()
+            raise UserDontMatchCourseOwnerException()
 
         chapter_contents = (
             self.repository.get_all_chapters_contents_by_course_chapter_id(
