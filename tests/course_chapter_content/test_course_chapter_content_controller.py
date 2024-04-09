@@ -8,7 +8,14 @@ from app.learning.course.repository import CourseRepository
 from app.learning.course_category.repository import CourseCategoryRepository
 from app.learning.course_chapter.repository import CourseChapterRepository
 from app.learning.chapter_content.schema import ChapterContentCreate
-from app.models import Course, CourseCategory, CourseChapter, User, ChapterContent
+from app.models import (
+    Course,
+    CourseCategory,
+    CourseChapter,
+    User,
+    ChapterContent,
+    UserContentStatus,
+)
 
 
 class TestCourseChapterContentController:
@@ -20,6 +27,7 @@ class TestCourseChapterContentController:
         make_course,
         make_course_category,
         make_course_chapter,
+        make_chapter_content_without_index,
     ):
         self.user_repository = UserRepository(User, db_session)
         self.category_repository = CourseCategoryRepository(CourseCategory, db_session)
@@ -32,18 +40,20 @@ class TestCourseChapterContentController:
         self.controller = ChapterContentController(
             ChapterContent,
             self.repository,
-            UserContentStatusRepository,  # type: ignore
+            UserContentStatusRepository(UserContentStatus, db_session),
         )
 
         self.created_teacher1: User = make_user_teacher()
-        self.user_repository.add(self.created_teacher1)
 
+        self.user_repository.add(self.created_teacher1)
         self.created_category_1 = make_course_category()
+
         self.category_repository.add(self.created_category_1)
 
         self.created_course: Course = make_course(
             self.created_category_1, self.created_teacher1.id
         )
+
         self.course_repository.add(self.created_course)
 
         self.created_chapter: CourseChapter = make_course_chapter(
@@ -51,10 +61,11 @@ class TestCourseChapterContentController:
         )
         self.course_chapter_repository.add(self.created_chapter)
 
-    def test_create_course_chapter_content(self, setup, faker):
-        assert self.created_course is not None
-        assert self.created_chapter is not None
+        self.created_chapter_content: ChapterContent = (
+            make_chapter_content_without_index(course_chapter=self.created_chapter)
+        )
 
+    def test_create_course_chapter_content(self, setup, faker):
         name = faker.text()
         description = faker.text()
         video_url = faker.text()
@@ -66,13 +77,12 @@ class TestCourseChapterContentController:
             video_url=video_url,
             course_chapter_id=course_chapter_id,
         )
-
-        created_chapter_content = self.controller.create(
-            self.created_teacher1.id,
-            body,
+        created__new_chapter_content = self.controller.create(
+            self.created_teacher1.id, body
         )
 
-        assert created_chapter_content is not None
-        assert created_chapter_content.name == body.name
-        assert created_chapter_content.description == body.description
-        assert created_chapter_content.video_url == body.video_url
+        assert created__new_chapter_content is not Exception
+        assert created__new_chapter_content is not None
+        assert created__new_chapter_content.name == body.name
+        assert created__new_chapter_content.description == body.description
+        assert created__new_chapter_content.video_url == body.video_url
