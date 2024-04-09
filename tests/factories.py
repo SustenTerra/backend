@@ -153,6 +153,21 @@ def make_chapter_content(faker):
 
 
 @pytest.fixture
+def make_chapter_content_without_index(faker):
+    def make_chapter_content_without_index(course_chapter: CourseChapter, **kwargs):
+        defaults = dict(
+            name=faker.name(),
+            description=faker.text(),
+            video_url=faker.image_url(),
+            course_chapter_id=course_chapter.id,
+        )
+
+        return ChapterContent(**{**defaults, **kwargs})
+
+    return make_chapter_content_without_index
+
+
+@pytest.fixture
 def make_user_address(faker):
     def _make_user_address(user_id: int, **kwargs):
         defaults = dict(
