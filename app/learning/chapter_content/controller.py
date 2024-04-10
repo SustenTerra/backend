@@ -10,7 +10,6 @@ from app.learning.chapter_content.schema import (
     ChapterContentCreateWithIndex,
     ChapterContentUpdate,
 )
-from app.learning.course.exception import NoCourseRegisteredFoundException
 from app.learning.course.repository import CourseRepository
 from app.learning.course_chapter.exception import (
     ChapterNotFoundException,
@@ -48,17 +47,12 @@ class ChapterContentController(
         )
 
     def create(self, author_id: int, create: ChapterContentCreate):
-        course = self.course_repository.get_by_id(author_id)
-
-        if course is None:
-            raise NoCourseRegisteredFoundException()
-
         course_chapter = self.chapter_repository.get_by_id(create.course_chapter_id)
 
         if course_chapter is None:
             raise ChapterNotFoundException()
 
-        if author_id != course.author_id:
+        if author_id != course_chapter.course.author_id:
             raise UserDontMatchCourseOwnerException()
 
         chapter_contents = (
