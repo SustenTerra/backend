@@ -20,9 +20,13 @@ class ChapterContentCreateWithIndex(ChapterContentBase):
 
 
 class ChapterContentUpdate(BaseModel):
-    name: Optional[str] = Field(default=None)
-    description: Optional[str] = Field(default=None)
-    video_url: Optional[str] = Field(default=None)
+    name: Optional[str] = Field(description="Name of the content", default=None)
+    description: Optional[str] = Field(
+        description="Description of the content", default=None
+    )
+    video_url: Optional[str] = Field(
+        description="URL of the content video", default=None
+    )
 
 
 class ChapterContentView(ChapterContentBase):
