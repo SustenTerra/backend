@@ -10,9 +10,6 @@ from app.learning.chapter_content.repository import ChapterContentRepository
 from app.learning.course.controller import CourseController
 from app.learning.course.repository import CourseRepository
 from app.learning.course.schema import CourseCreateWithImage
-from app.learning.course.exception import (
-    CourseIdNotFoundException,
-)
 from app.models import (
     ChapterContent,
     Course,
@@ -171,16 +168,10 @@ class TestCourseController:
         assert courses[0].id != self.created_course.id
         assert courses[0].id == other_course.id
 
-    def test_delete_existing_course(self, setup):
-        self.controller.delete_course(self.created_course.id, self.teacher.id)
+    def test_delete(self, setup):
+        self.controller.delete(self.created_course.id)
         deleted_course = self.controller.get_by_id(
             self.created_course.id, self.teacher.id
         )
 
         assert deleted_course is None
-
-    def test_delete_inexistent_course(self, setup):
-        course_id_inexistent = 999
-
-        with pytest.raises(CourseIdNotFoundException):
-            self.controller.delete_course(course_id_inexistent, self.teacher.id)
