@@ -176,7 +176,9 @@ class TestCourseController:
 
         assert deleted_course is None
 
-    def test_cannot_delete_course(self, setup, make_user_teacher, make_course):
+    def test_cannot_delete_course_from_other_teacher(
+        self, setup, make_user_teacher, make_course
+    ):
         other_teacher = make_user_teacher()
         self.session.add(other_teacher)
         self.session.commit()
