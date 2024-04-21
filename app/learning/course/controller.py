@@ -5,7 +5,6 @@ from app.common.utils import datetime_now
 from app.learning.chapter_content.controller import ChapterContentController
 from app.learning.course.exception import (
     NoCourseRegisteredFoundException,
-    CourseIdNotFoundException,
 )
 from app.learning.course.repository import CourseRepository
 from app.learning.course.schema import (
@@ -100,11 +99,3 @@ class CourseController(
         course_update = CoursePublishedUpdate(published_at=datetime_now())
         super().update(course_id, course_update)
         return super().get_by_id(course_id)
-
-    def delete_course(self, course_id: int, user_id: int) -> None:
-        course = self.repository.get_by_id(course_id)
-
-        if not course:
-            raise CourseIdNotFoundException
-
-        self.repository.delete(course_id)

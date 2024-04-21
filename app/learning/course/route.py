@@ -1,6 +1,6 @@
 from typing import Annotated, List, Optional
 
-from fastapi import APIRouter, Depends, File, Form, UploadFile, status
+from fastapi import APIRouter, Depends, File, Form, UploadFile
 
 from app.learning.course.controller import CourseController
 from app.learning.course.deps import get_course_controller
@@ -106,11 +106,14 @@ def publish_course(
 
 
 @courses.delete(
-    "/courses/{course_id}", tags=["courses"], status_code=status.HTTP_204_NO_CONTENT
+    "/courses/{course_id}",
+    tags=["courses"],
+    description="Delete a course by id",
+    response_model=None,
 )
 def delete_course(
     course_id: int,
     user: User = Depends(get_logged_teacher_user),
     controller: CourseController = Depends(get_course_controller),
 ):
-    controller.delete_course(course_id, user.id)
+    controller.delete(course_id)
