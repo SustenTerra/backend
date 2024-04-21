@@ -96,3 +96,10 @@ class TestUserController:
 
         found_user = self.repository.get_by_id(self.created_user.id)
         assert found_user is None
+
+    def test_get_by_id(self, setup):
+        found_user = self.controller.get_by_id(self.created_user.id)
+
+        assert found_user is not None
+        assert found_user.email == self.created_user.email
+        assert found_user.full_name == self.created_user.full_name

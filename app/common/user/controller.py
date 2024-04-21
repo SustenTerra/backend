@@ -1,6 +1,7 @@
 from app.common.base.controller import BaseController
 from app.common.user.exception import (
     UserAlreadyRegisteredException,
+    UserIdNotFoundException,
     UserPasswordDoNotMatchException,
 )
 from app.common.user.repository import UserRepository
@@ -40,3 +41,10 @@ class UserController(BaseController[User, UserRepository, UserCreate, UserUpdate
         update.new_password = Hasher.get_password_hash(update.new_password)
 
         return super().update(id, update, {"current_password"})  # type: ignore
+
+    def get_by_id(self, id: int) -> User:
+        found_user = self.repository.get_by_id(id)
+        if not found_user:
+            raise UserIdNotFoundException()
+
+        return found_user
