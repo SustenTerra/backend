@@ -105,7 +105,7 @@ class ChapterContentController(
 
         return content
 
-    def update(self, id, update: ChapterContentUpdate) -> ChapterContent | None:
+    def update(self, id: int, update: ChapterContentUpdate) -> ChapterContent | None:
         found_content = self.repository.get_by_id(id)
         if not found_content:
             raise ContentNotFoundException()
