@@ -116,4 +116,4 @@ def delete_course(
     user: User = Depends(get_logged_teacher_user),
     controller: CourseController = Depends(get_course_controller),
 ):
-    controller.delete(course_id)
+    controller.delete(course_id, user.id)

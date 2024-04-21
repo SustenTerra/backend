@@ -99,3 +99,13 @@ class CourseController(
         course_update = CoursePublishedUpdate(published_at=datetime_now())
         super().update(course_id, course_update)
         return super().get_by_id(course_id)
+
+    def delete(self, id: int, user_id: int) -> None:
+        course = super().get_by_id(id)
+        if course is None:
+            raise NoCourseRegisteredFoundException
+
+        if course.author_id and course.author_id != user_id:
+            raise NoCourseRegisteredFoundException
+
+        return super().delete(id)

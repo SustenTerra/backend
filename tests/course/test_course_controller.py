@@ -169,7 +169,7 @@ class TestCourseController:
         assert courses[0].id == other_course.id
 
     def test_delete(self, setup):
-        self.controller.delete(self.created_course.id)
+        self.controller.delete(self.created_course.id, self.teacher.id)
         deleted_course = self.controller.get_by_id(
             self.created_course.id, self.teacher.id
         )
