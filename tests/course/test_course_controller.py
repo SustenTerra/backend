@@ -175,3 +175,18 @@ class TestCourseController:
         )
 
         assert deleted_course is None
+
+    def test_cannot_delete_course(self, setup, make_user_teacher, make_course):
+        other_teacher = make_user_teacher()
+        self.session.add(other_teacher)
+        self.session.commit()
+
+        other_course = make_course(
+            author_id=other_teacher.id, course_category=self.created_course_category
+        )
+        self.repository.add(other_course)
+
+        with pytest.raises(Exception) as exc:
+            self.controller.delete(other_course.id, self.teacher.id)
+
+        assert "NoCourseRegisteredFoundException" in str(exc)
