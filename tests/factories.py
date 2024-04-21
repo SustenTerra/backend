@@ -1,3 +1,5 @@
+from typing import Optional
+
 import pytest
 
 from app.learning.chapter_content.schema import (
@@ -11,6 +13,8 @@ from app.models import (
     Course,
     CourseCategory,
     CourseChapter,
+    Post,
+    PostCategory,
     User,
     UserContentStatus,
 )
@@ -61,7 +65,9 @@ def make_course_category(faker):
 
 @pytest.fixture
 def make_course(faker):
-    def _make_course(course_category: CourseCategory, author_id=None, **kwargs):
+    def _make_course(
+        course_category: CourseCategory, author_id: Optional[int] = None, **kwargs
+    ):
         defaults = dict(
             name=faker.name(),
             image_key=f"{faker.text()}.png",
@@ -201,3 +207,34 @@ def make_user_address(faker):
         return Address(**{**defaults, **kwargs})
 
     return _make_user_address
+
+
+@pytest.fixture
+def make_post_category(faker):
+    def _make_post_category(**kwargs):
+        defaults = dict(
+            name=faker.name(),
+        )
+
+        return PostCategory(**{**defaults, **kwargs})
+
+    return _make_post_category
+
+
+@pytest.fixture
+def make_post(faker):
+    def _make_post(post_category: PostCategory, user: User, **kwargs):
+        defaults = dict(
+            title=faker.name(),
+            image_key=faker.word(),
+            description=faker.text(),
+            post_type="ad",
+            location="PB",
+            price=int(faker.random_number()),
+            category_id=post_category.id,
+            user_id=user.id,
+        )
+
+        return Post(**{**defaults, **kwargs})
+
+    return _make_post

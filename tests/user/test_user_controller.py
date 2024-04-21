@@ -1,9 +1,19 @@
 import pytest
+from sqlalchemy.orm import Session
 
 from app.common.user.controller import UserController
 from app.common.user.repository import UserRepository
 from app.common.user.schema import UserCreate, UserUpdate, UserUpdatePassword
-from app.models import User
+from app.models import (
+    Address,
+    ChapterContent,
+    Course,
+    CourseCategory,
+    CourseChapter,
+    Post,
+    PostCategory,
+    User,
+)
 from app.service.hashing import Hasher
 
 
@@ -103,3 +113,74 @@ class TestUserController:
         assert found_user is not None
         assert found_user.email == self.created_user.email
         assert found_user.full_name == self.created_user.full_name
+
+    def test_delete_cascade_relationships(
+        self,
+        setup,
+        db_session: Session,
+        make_user_address,
+        make_course_category,
+        make_course,
+        make_course_chapter,
+        make_chapter_content,
+        make_post_category,
+        make_post,
+    ):
+        address: Address = make_user_address(user_id=self.created_user.id)
+        db_session.add(address)
+        db_session.commit()
+
+        # Learning Module Entities
+        course_category: CourseCategory = make_course_category()
+        db_session.add(course_category)
+        db_session.commit()
+
+        course: Course = make_course(
+            course_category=course_category, author_id=self.created_user.id
+        )
+        db_session.add(course)
+        db_session.commit()
+
+        course_chapter: CourseChapter = make_course_chapter(course=course, index=0)
+        db_session.add(course_chapter)
+        db_session.commit()
+
+        chapter_content: ChapterContent = make_chapter_content(
+            course_chapter=course_chapter, index=0
+        )
+        db_session.add(chapter_content)
+        db_session.commit()
+
+        # Marketplace Module Entities
+        post_category: PostCategory = make_post_category()
+        db_session.add(post_category)
+        db_session.commit()
+
+        post: Post = make_post(user=self.created_user, post_category=post_category)
+        db_session.add(post)
+        db_session.commit()
+
+        def exists(entity, entity_id):
+            return (
+                db_session.query(entity).filter(entity.id == entity_id).first()
+                is not None
+            )
+
+        assert exists(Address, address.id)
+        assert exists(CourseCategory, course_category.id)
+        assert exists(Course, course.id)
+        assert exists(CourseChapter, course_chapter.id)
+        assert exists(ChapterContent, chapter_content.id)
+        assert exists(PostCategory, post_category.id)
+        assert exists(Post, post.id)
+
+        self.controller.delete(self.created_user.id)
+
+        assert not exists(Address, address.id)
+        assert exists(CourseCategory, course_category.id)
+        assert not exists(Course, course.id)
+        assert not exists(CourseChapter, course_chapter.id)
+        assert not exists(ChapterContent, chapter_content.id)
+        assert exists(PostCategory, post_category.id)
+        assert not exists(Post, post.id)
+        assert not exists(User, self.created_user.id)
