@@ -8,13 +8,13 @@ from app.marketplace.post.controller import PostController
 from app.marketplace.post.exception import InvalidLocationException
 from app.marketplace.post.repository import PostRepository
 from app.marketplace.post.schema import PostCreateWithImage
-from app.models import Post
+from app.models import Post, PostCategory
 from app.service.bucket_manager import BucketManager
 
 
 class TestPostController:
     @pytest.fixture
-    def setup(self, db_session, make_user):
+    def setup(self, db_session, make_user, make_post_category):
         bucket_manager_mock = MagicMock(spec=BucketManager)
         bucket_manager_mock.upload_file.return_value = "path/to/image.jpg"
 
@@ -30,12 +30,16 @@ class TestPostController:
         db_session.add(user)
         db_session.commit()
 
+        post_category: PostCategory = make_post_category()
+        db_session.add(post_category)
+        db_session.commit()
+
         self.common_title = "Test Post"
         self.common_description = "Test Description"
         self.common_price = 100
         self.common_post_type = "sell"
         self.common_location = "SP"
-        self.common_category_id = 1
+        self.common_category_id = post_category.id
 
         return post_controller, user, bucket_manager_mock
 

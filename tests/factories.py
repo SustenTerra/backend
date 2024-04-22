@@ -1,5 +1,11 @@
+from typing import Optional
+
 import pytest
 
+from app.learning.chapter_content.schema import (
+    ChapterContentCreate,
+    ChapterContentUpdate,
+)
 from app.models import (
     Address,
     ChapterContent,
@@ -7,6 +13,8 @@ from app.models import (
     Course,
     CourseCategory,
     CourseChapter,
+    Post,
+    PostCategory,
     User,
     UserContentStatus,
 )
@@ -57,7 +65,9 @@ def make_course_category(faker):
 
 @pytest.fixture
 def make_course(faker):
-    def _make_course(course_category: CourseCategory, author_id=None, **kwargs):
+    def _make_course(
+        course_category: CourseCategory, author_id: Optional[int] = None, **kwargs
+    ):
         defaults = dict(
             name=faker.name(),
             image_key=f"{faker.text()}.png",
@@ -154,7 +164,7 @@ def make_chapter_content(faker):
 
 @pytest.fixture
 def make_chapter_content_without_index(faker):
-    def make_chapter_content_without_index(course_chapter: CourseChapter, **kwargs):
+    def _make_chapter_content_without_index(course_chapter: CourseChapter, **kwargs):
         defaults = dict(
             name=faker.name(),
             description=faker.text(),
@@ -162,9 +172,23 @@ def make_chapter_content_without_index(faker):
             course_chapter_id=course_chapter.id,
         )
 
-        return ChapterContent(**{**defaults, **kwargs})
+        return ChapterContentCreate(**{**defaults, **kwargs})
 
-    return make_chapter_content_without_index
+    return _make_chapter_content_without_index
+
+
+@pytest.fixture
+def make_chapter_content_update(faker):
+    def _make_chapter_content_update(**kwargs):
+        defaults = dict(
+            name=faker.name(),
+            description=faker.text(),
+            video_url=faker.image_url(),
+        )
+
+        return ChapterContentUpdate(**{**defaults, **kwargs})
+
+    return _make_chapter_content_update
 
 
 @pytest.fixture
@@ -183,3 +207,34 @@ def make_user_address(faker):
         return Address(**{**defaults, **kwargs})
 
     return _make_user_address
+
+
+@pytest.fixture
+def make_post_category(faker):
+    def _make_post_category(**kwargs):
+        defaults = dict(
+            name=faker.name(),
+        )
+
+        return PostCategory(**{**defaults, **kwargs})
+
+    return _make_post_category
+
+
+@pytest.fixture
+def make_post(faker):
+    def _make_post(post_category: PostCategory, user: User, **kwargs):
+        defaults = dict(
+            title=faker.name(),
+            image_key=faker.word(),
+            description=faker.text(),
+            post_type="ad",
+            location="PB",
+            price=int(faker.random_number()),
+            category_id=post_category.id,
+            user_id=user.id,
+        )
+
+        return Post(**{**defaults, **kwargs})
+
+    return _make_post

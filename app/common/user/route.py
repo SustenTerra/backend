@@ -59,7 +59,12 @@ def update_user_password(
     return controller.update_password(user.id, body)
 
 
-@users.delete("/users/me", tags=["users"])
+@users.delete(
+    "/users/me",
+    tags=["users"],
+    description="Delete the logged in user",
+    response_model=None,
+)
 def delete_user(
     controller: UserController = Depends(get_user_controller),
     user: UserView = Depends(auth.get_logged_user),
