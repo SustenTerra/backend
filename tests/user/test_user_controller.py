@@ -166,21 +166,30 @@ class TestUserController:
                 is not None
             )
 
-        assert exists(Address, address.id)
-        assert exists(CourseCategory, course_category.id)
-        assert exists(Course, course.id)
-        assert exists(CourseChapter, course_chapter.id)
-        assert exists(ChapterContent, chapter_content.id)
-        assert exists(PostCategory, post_category.id)
-        assert exists(Post, post.id)
+        address_id = address.id
+        course_category_id = course_category.id
+        course_id = course.id
+        course_chapter_id = course_chapter.id
+        chapter_content_id = chapter_content.id
+        post_category_id = post_category.id
+        post_id = post.id
+
+        assert exists(Address, address_id)
+        assert exists(CourseCategory, course_category_id)
+        assert exists(Course, course_id)
+        assert exists(CourseChapter, course_chapter_id)
+        assert exists(ChapterContent, chapter_content_id)
+        assert exists(PostCategory, post_category_id)
+        assert exists(Post, post_id)
+        assert exists(User, self.created_user.id)
 
         self.controller.delete(self.created_user.id)
 
-        assert not exists(Address, address.id)
-        assert exists(CourseCategory, course_category.id)
-        assert not exists(Course, course.id)
-        assert not exists(CourseChapter, course_chapter.id)
-        assert not exists(ChapterContent, chapter_content.id)
-        assert exists(PostCategory, post_category.id)
-        assert not exists(Post, post.id)
+        assert not exists(Address, address_id)
+        assert exists(CourseCategory, course_category_id)
+        assert not exists(Course, course_id)
+        assert not exists(CourseChapter, course_chapter_id)
+        assert not exists(ChapterContent, chapter_content_id)
+        assert exists(PostCategory, post_category_id)
+        assert not exists(Post, post_id)
         assert not exists(User, self.created_user.id)
