@@ -105,10 +105,6 @@ class ChapterContentController(
 
         return content
 
-    def delete(self, id: int) -> None:
-        self.content_status_repository.delete_by_content(id)
-        self.repository.delete(id)
-
     def update(self, id: int, update: ChapterContentUpdate) -> ChapterContent | None:
         found_content = self.repository.get_by_id(id)
         if not found_content:
