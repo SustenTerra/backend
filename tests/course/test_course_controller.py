@@ -5,6 +5,7 @@ import pytest
 from fastapi import UploadFile
 
 from app.common.user.content_status import UserContentStatusRepository
+from app.common.utils import datetime_now
 from app.learning.chapter_content.controller import ChapterContentController
 from app.learning.chapter_content.repository import ChapterContentRepository
 from app.learning.course.controller import CourseController
@@ -192,3 +193,18 @@ class TestCourseController:
             self.controller.delete(other_course.id, self.teacher.id)
 
         assert "NoCourseRegisteredFoundException" in str(exc)
+
+    def test_unpublish_course(self, setup, make_course_published, make_user_teacher):
+        other_teacher = make_user_teacher()
+        self.session.add(other_teacher)
+        self.session.commit()
+
+        other_course = make_course_published(
+            author_id=other_teacher.id, course_category=self.created_course_category
+        )
+        self.repository.add(other_course)
+
+        self.controller.unpublish_course(other_course.id)
+
+        expected_date = datetime_now().min
+        assert other_course.published_at == expected_date
