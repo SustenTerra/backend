@@ -115,6 +115,16 @@ def make_course_chapter(faker):
 
 
 @pytest.fixture
+def make_course_chapter_with_id(faker):
+    def _make_course_chapter_with_id(course: Course, index: int, id: int, **kwargs):
+        defaults = dict(name=faker.name(), index=index, course_id=course.id, id=id)
+
+        return CourseChapter(**{**defaults, **kwargs})
+
+    return _make_course_chapter_with_id
+
+
+@pytest.fixture
 def make_user_content_status_in_progress():
     def _make_user_content_status_in_progress(
         user: User, chapter_content: ChapterContent, **kwargs

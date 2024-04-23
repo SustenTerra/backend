@@ -78,11 +78,9 @@ class CourseChapterController(
         chapter_to_update = CourseChapterUpdate(**update.model_dump())
         return super().update(course_chapter_id, chapter_to_update)
 
-    """def delete(self, id: int):
-        #Alterar quando tiver o cascade
-        course_chapter_contents = self.course_chapter_content_repository.get_all_chapters_contents_by_course_chapter_id(
-            id
-        )
-        for chapter in course_chapter_contents:
-            self.chapter_content_controller.delete(chapter.id)
-        self.repository.delete(id)"""
+    def delete(self, id: int):
+        course_chapter = super().get_by_id(id)
+
+        if course_chapter is None:
+            raise ChapterIdNotFoundException
+        return super().delete(id)
