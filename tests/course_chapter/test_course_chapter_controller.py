@@ -21,6 +21,7 @@ class TestCourseChapterController:
         make_course,
         make_course_category,
         make_course_chapter,
+        make_course_chapter_with_id,
     ):
         # Create Repositories
         self.user_repository = UserRepository(User, db_session)
@@ -52,6 +53,7 @@ class TestCourseChapterController:
             course=self.created_course, index=0
         )
         self.repository.add(self.created_chapter)
+        self.session = db_session
 
     def test_create_course_chapter(self, setup, faker):
         # Data to be used as arguments to create a chapter
@@ -95,3 +97,19 @@ class TestCourseChapterController:
 
         assert updated_course_chapter is not None
         assert updated_course_chapter.name == update.name
+
+    def test_delete_course_chapter(
+        self, setup, make_course, make_course_chapter_with_id
+    ):
+        other_course = make_course(self.created_category_1, self.created_teacher1.id)
+        self.repository.add(other_course)
+
+        new_course_chapter = make_course_chapter_with_id(
+            course=other_course, index=0, id=3
+        )
+        self.repository.add(new_course_chapter)
+
+        self.controller.delete(new_course_chapter.id)
+
+        deleted_chapter = self.controller.get_by_id(new_course_chapter.id)
+        assert deleted_chapter is None
