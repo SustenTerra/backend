@@ -28,3 +28,7 @@ class Config(BaseModel):
     OPEN_AI_KEY: str = os.getenv("OPEN_AI_KEY", "key")
     MODEL_NAME: str = "gpt-3.5-turbo"
     MODEL_TEMPERATURE: float = 0.5
+
+    STRIPE_API_KEY: str = os.getenv("STRIPE_API_KEY", "")
+    STRIPE_ENDPOINT_SECRET: str = os.getenv("STRIPE_ENDPOINT_SECRET", "")
+    WEBSITE_URL: str = os.getenv("WEBSITE_URL", "https://sustenterra.netlify.app")

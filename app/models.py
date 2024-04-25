@@ -22,6 +22,18 @@ class BaseTable(Base):
     updated_at: Mapped[datetime] = mapped_column(default=datetime_now)
 
 
+class AddressBaseTable(BaseTable):
+    __abstract__ = True
+
+    street: Mapped[str] = mapped_column(nullable=False)
+    number: Mapped[str] = mapped_column(nullable=False)
+    neighborhood: Mapped[str] = mapped_column(nullable=False)
+    complement: Mapped[Optional[str]] = mapped_column(nullable=True)
+    city: Mapped[str] = mapped_column(nullable=False)
+    state: Mapped[str] = mapped_column(nullable=False)
+    cep: Mapped[str] = mapped_column(nullable=False)
+
+
 class User(BaseTable):
     __tablename__ = "users"
 
@@ -64,7 +76,11 @@ class Post(BaseTable):
     post_type: Mapped[str] = mapped_column(nullable=False)
     location: Mapped[str] = mapped_column(nullable=False)
     price: Mapped[Optional[int]] = mapped_column(nullable=True)
-    views: Mapped[int] = mapped_column(default=0)
+    views: Mapped[int] = mapped_column(default="0")
+    available_quantity: Mapped[Optional[int]] = mapped_column(nullable=True)
+
+    stripe_product_id: Mapped[Optional[str]] = mapped_column(nullable=True)
+    stripe_price_id: Mapped[Optional[str]] = mapped_column(nullable=True)
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
     user: Mapped["User"] = relationship(back_populates="posts")
@@ -207,16 +223,26 @@ class UserContentStatus(BaseTable):
     chapter_content: Mapped["ChapterContent"] = relationship()
 
 
-class Address(BaseTable):
+class Address(AddressBaseTable):
     __tablename__ = "addresses"
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
-    street: Mapped[str] = mapped_column(nullable=False)
-    number: Mapped[str] = mapped_column(nullable=False)
-    neighborhood: Mapped[str] = mapped_column(nullable=False)
-    complement: Mapped[str] = mapped_column(nullable=False)
-    city: Mapped[str] = mapped_column(nullable=False)
-    state: Mapped[str] = mapped_column(nullable=False)
-    cep: Mapped[str] = mapped_column(nullable=False)
-
     user: Mapped["User"] = relationship(back_populates="address")
+
+
+class Order(BaseTable):
+    __tablename__ = "orders"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    post_id: Mapped[int] = mapped_column(ForeignKey("posts.id"))
+    order_address_id: Mapped[int] = mapped_column(ForeignKey("order_addresses.id"))
+    total: Mapped[int] = mapped_column(nullable=False)
+
+    user: Mapped["User"] = relationship()
+    post: Mapped["Post"] = relationship()
+    address: Mapped["OrderAddress"] = relationship()
+
+
+class OrderAddress(AddressBaseTable):
+    __tablename__ = "order_addresses"
+    id: Mapped[int] = mapped_column(primary_key=True)
