@@ -90,20 +90,26 @@ class CourseController(
 
         return courses
 
-    def publish_course(self, course_id: int) -> CoursePublishedUpdate:
+    def publish_course(self, course_id: int, user_id: int) -> CoursePublishedUpdate:
         course = self.repository.get_by_id(course_id)
 
         if not course:
+            raise NoCourseRegisteredFoundException
+
+        if course.author_id and course.author_id != user_id:
             raise NoCourseRegisteredFoundException
 
         course_update = CoursePublishedUpdate(published_at=datetime_now())
         super().update(course_id, course_update)
         return super().get_by_id(course_id)
 
-    def unpublish_course(self, course_id: int) -> CoursePublishedUpdate:
+    def unpublish_course(self, course_id: int, user_id: int) -> CoursePublishedUpdate:
         course = self.repository.get_by_id(course_id)
 
         if not course:
+            raise NoCourseRegisteredFoundException
+
+        if course.author_id and course.author_id != user_id:
             raise NoCourseRegisteredFoundException
 
         super().update(course_id, CourseUpdate(published_at=None), exclude_none=False)

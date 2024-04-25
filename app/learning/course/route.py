@@ -102,7 +102,7 @@ def publish_course(
     user: User = Depends(get_logged_teacher_user),
     controller: CourseController = Depends(get_course_controller),
 ):
-    return controller.publish_course(course_id)
+    return controller.publish_course(course_id, user.id)
 
 
 @courses.patch(
@@ -116,7 +116,7 @@ def unpublish_course(
     user: User = Depends(get_logged_teacher_user),
     controller: CourseController = Depends(get_course_controller),
 ):
-    return controller.unpublish_course(course_id)
+    return controller.unpublish_course(course_id, user.id)
 
 
 @courses.delete(
