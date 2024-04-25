@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.deps import get_session, get_stripe_client
 from app.marketplace.oms.controllers.order import OrderController
 from app.marketplace.oms.controllers.order_address import OrderAddressController
+from app.marketplace.oms.controllers.stripe_webhook import StripeWebhookController
 from app.marketplace.oms.repositories.order import OrderRepository
 from app.marketplace.oms.repositories.order_address import OrderAddressRepository
 from app.marketplace.post.controller import PostController
@@ -43,3 +44,9 @@ def get_order_controller(
         order_address_controller,
         stripe_client,
     )
+
+
+def get_stripe_webhook_controller(
+    order_controller: OrderController = Depends(get_order_controller),
+):
+    return StripeWebhookController(order_controller)
