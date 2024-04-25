@@ -78,6 +78,7 @@ class StripeClient:
                     url=f"{self.config.WEBSITE_URL}/profile/my-orders"
                 ),
             ),
+            metadata={"post_id": str(post.id), "user_id": str(post.user.id)},
         )
 
         return self.client.payment_links.create(create_params)
