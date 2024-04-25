@@ -105,6 +105,20 @@ def publish_course(
     return controller.publish_course(course_id)
 
 
+@courses.patch(
+    "/users/me/courses/{course_id}/unpublished",
+    tags=["courses"],
+    description="UnPublish course",
+    response_model=CourseView,
+)
+def unpublish_course(
+    course_id: int,
+    user: User = Depends(get_logged_teacher_user),
+    controller: CourseController = Depends(get_course_controller),
+):
+    return controller.unpublish_course(course_id)
+
+
 @courses.delete(
     "/courses/{course_id}",
     tags=["courses"],

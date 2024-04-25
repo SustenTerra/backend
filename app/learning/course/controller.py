@@ -100,6 +100,15 @@ class CourseController(
         super().update(course_id, course_update)
         return super().get_by_id(course_id)
 
+    def unpublish_course(self, course_id: int) -> CoursePublishedUpdate:
+        course = self.repository.get_by_id(course_id)
+
+        if not course:
+            raise NoCourseRegisteredFoundException
+
+        super().update(course_id, CourseUpdate(published_at=None), exclude_none=False)
+        return super().get_by_id(course_id)
+
     def delete(self, id: int, user_id: int) -> None:
         course = super().get_by_id(id)
         if course is None:

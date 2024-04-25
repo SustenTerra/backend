@@ -192,3 +192,20 @@ class TestCourseController:
             self.controller.delete(other_course.id, self.teacher.id)
 
         assert "NoCourseRegisteredFoundException" in str(exc)
+
+    def test_unpublish_course(self, setup, make_course_published, make_user_teacher):
+        other_teacher = make_user_teacher()
+        self.session.add(other_teacher)
+        self.session.commit()
+
+        other_course = make_course_published(
+            author_id=other_teacher.id, course_category=self.created_course_category
+        )
+        self.repository.add(other_course)
+
+        self.controller.unpublish_course(other_course.id)
+
+        found_course = self.controller.get_by_id(other_course.id, other_teacher.id)
+        assert found_course is not None
+        assert found_course.published_at is None
+        assert found_course.name == other_course.name
