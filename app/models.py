@@ -78,6 +78,7 @@ class Post(BaseTable):
     price: Mapped[Optional[int]] = mapped_column(nullable=True)
     views: Mapped[int] = mapped_column(server_default="0")
     available_quantity: Mapped[Optional[int]] = mapped_column(nullable=True)
+    stripe_product_id: Mapped[Optional[str]] = mapped_column(nullable=True)
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
     user: Mapped["User"] = relationship(back_populates="posts")
