@@ -3,11 +3,12 @@ from unittest.mock import MagicMock
 import pytest
 from sqlalchemy.orm import Session
 
+from app.common.user.controller import UserController
+from app.common.user.repository import UserRepository
 from app.marketplace.oms.controllers.order import OrderController
 from app.marketplace.oms.controllers.order_address import OrderAddressController
 from app.marketplace.oms.repositories.order import OrderRepository
 from app.marketplace.oms.repositories.order_address import OrderAddressRepository
-from app.marketplace.oms.schemas.order import OMSOrderCreate
 from app.marketplace.post.controller import PostController
 from app.marketplace.post.repository import PostRepository
 from app.marketplace.post.schema import PostUpdateWithImage
@@ -30,6 +31,9 @@ class TestOrderController:
         bucket_manager_mock.upload_file.return_value = "path/to/image.jpg"
         stripe_mock = make_stripe_client_mock()
 
+        self.user_repository = UserRepository(User, db_session)
+        self.user_controller = UserController(User, self.user_repository)
+
         self.post_repository = PostRepository(Post, db_session)
         self.post_controller = PostController(
             Post, self.post_repository, bucket_manager_mock, stripe_mock
@@ -45,6 +49,7 @@ class TestOrderController:
             Order,
             self.order_repository,
             self.post_controller,
+            self.user_controller,
             self.order_address_controller,
             stripe_mock,
         )
@@ -80,9 +85,7 @@ class TestOrderController:
     def test_create_order(self, setup):
         assert self.post.available_quantity == 10
 
-        order = self.order_controller.create(
-            self.buyer, OMSOrderCreate(post_id=self.post.id)
-        )
+        order = self.order_controller.create(self.buyer.id, self.post.id)
         assert order.id is not None
 
         self.db_session.refresh(self.post)
