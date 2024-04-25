@@ -23,4 +23,19 @@ class StripeWebhookController:
 
         if event.type == "checkout.session.completed":
             checkout_session = CheckoutSession(**event.data.object)
-            print(checkout_session)
+
+            if not checkout_session.metadata:
+                # TODO: send email to admin
+                return
+
+            if (
+                not checkout_session.metadata.post_id
+                or not checkout_session.metadata.user_id
+            ):
+                # TODO: send email to admin
+                return
+
+            self.order_controller.create(
+                user_id=int(checkout_session.metadata.user_id),
+                post_id=int(checkout_session.metadata.post_id),
+            )

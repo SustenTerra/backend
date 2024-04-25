@@ -1,6 +1,8 @@
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
+from app.common.user.controller import UserController
+from app.common.user.deps import get_user_controller
 from app.deps import get_session, get_stripe_client
 from app.marketplace.oms.controllers.order import OrderController
 from app.marketplace.oms.controllers.order_address import OrderAddressController
@@ -32,6 +34,7 @@ def get_order_repository(session: Session = Depends(get_session)):
 def get_order_controller(
     order_repository: OrderRepository = Depends(get_order_repository),
     post_controller: PostController = Depends(get_post_controller),
+    user_controller: UserController = Depends(get_user_controller),
     order_address_controller: OrderAddressController = Depends(
         get_order_address_controller
     ),
@@ -41,6 +44,7 @@ def get_order_controller(
         Order,
         order_repository,
         post_controller,
+        user_controller,
         order_address_controller,
         stripe_client,
     )

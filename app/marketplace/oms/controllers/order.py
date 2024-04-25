@@ -1,4 +1,6 @@
 from app.common.base.controller import BaseController
+from app.common.user.controller import UserController
+from app.common.user.exception import UserIdNotFoundException
 from app.marketplace.oms.controllers.order_address import OrderAddressController
 from app.marketplace.oms.exceptions.order import (
     CouldNotCreatePaymentLinkException,
@@ -6,7 +8,6 @@ from app.marketplace.oms.exceptions.order import (
 )
 from app.marketplace.oms.repositories.order import OrderRepository
 from app.marketplace.oms.schemas.order import (
-    OMSOrderCreate,
     OrderCreate,
     OrderUpdate,
     PaymentLink,
@@ -25,10 +26,12 @@ class OrderController(BaseController[Order, OrderRepository, OrderCreate, OrderU
         model_class: Order,
         repository: OrderRepository,
         post_controller: PostController,
+        user_controller: UserController,
         order_address_controller: OrderAddressController,
         stripe_client: StripeClient,
     ):
         super().__init__(model_class, repository)
+        self.user_controller = user_controller
         self.post_controller = post_controller
         self.order_address_controller = order_address_controller
         self.stripe_client = stripe_client
@@ -45,8 +48,13 @@ class OrderController(BaseController[Order, OrderRepository, OrderCreate, OrderU
 
         # TODO: Send email to user
 
-    def create(self, user: User, body: OMSOrderCreate) -> Order:
-        post = self.post_controller.get_by_id(body.post_id)
+    def create(self, user_id: int, post_id: int) -> Order:
+        user = self.user_controller.get_by_id(user_id)
+        if not user:
+            # TODO: send email to admin
+            raise UserIdNotFoundException()
+
+        post = self.post_controller.get_by_id(post_id)
         if not post:
             # TODO: send email to admin
             raise NotFoundPostException()
