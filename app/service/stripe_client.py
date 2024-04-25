@@ -3,7 +3,7 @@ from typing import Optional
 import stripe
 
 from app.config import Config
-from app.marketplace.post.schema import PostCreate, PostUpdate
+from app.marketplace.post.schema import PostUpdate
 from app.models import Post
 
 
@@ -12,18 +12,17 @@ class StripeClient:
         self.config = Config()
         self.client = stripe.StripeClient(api_key=self.config.STRIPE_API_KEY)
 
-    def create_product(self, post: PostCreate) -> Optional[stripe.Product]:
-        if post.price is None:
-            return None
-
+    def create_product(
+        self, name: str, description: str, price: int
+    ) -> Optional[stripe.Product]:
         price_params = stripe.ProductService.CreateParamsDefaultPriceData(
-            currency="brl", unit_amount=post.price
+            currency="brl", unit_amount=price
         )
 
         params = stripe.ProductService.CreateParams(
-            name=post.title,
+            name=name,
             default_price_data=price_params,
-            description=post.description,
+            description=description,
         )
 
         return self.client.products.create(params=params)
