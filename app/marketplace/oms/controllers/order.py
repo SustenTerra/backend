@@ -6,7 +6,7 @@ from app.marketplace.oms.schemas.order import OMSOrderCreate, OrderCreate, Order
 from app.marketplace.oms.schemas.order_address import OrderAddressCreate
 from app.marketplace.post.controller import PostController
 from app.marketplace.post.exception import NotFoundPostException
-from app.marketplace.post.schema import PostUpdateWithImage
+from app.marketplace.post.schema import PostUpdate
 from app.models import Order, Post, User
 
 
@@ -23,12 +23,13 @@ class OrderController(BaseController[Order, OrderRepository, OrderCreate, OrderU
         super().__init__(model_class, repository)
 
     def _post_order_creation_actions(self, order: Order, post: Post):
-        if post.available_quantity and post.available_quantity > 0:
+        if post.available_quantity is not None and post.available_quantity > 0:
             # TODO: Calculate available quantity by joining with order table
-            self.post_controller.update(
+            self.post_controller.repository.update(
                 post.id,
-                PostUpdateWithImage(available_quantity=post.available_quantity - 1),
-                order.user_id,
+                PostUpdate(available_quantity=post.available_quantity - 1).model_dump(
+                    exclude_none=True, exclude_unset=True
+                ),
             )
 
         # TODO: Send email to user
@@ -41,7 +42,7 @@ class OrderController(BaseController[Order, OrderRepository, OrderCreate, OrderU
         if not post.price or post.post_type != "ad":
             raise NotAvailableForOrderException()
 
-        if post.available_quantity and post.available_quantity <= 0:
+        if post.available_quantity is not None and post.available_quantity <= 0:
             raise NotAvailableForOrderException()
 
         if not user.address:
