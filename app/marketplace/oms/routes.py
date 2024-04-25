@@ -26,3 +26,11 @@ def get_orders_from_user(
     user: User = Depends(get_logged_user),
 ):
     return controller.get_orders_from_user(user.id)
+
+
+@oms_router.get("/seller/me/orders", response_model=List[OrderView])
+def get_orders_for_seller(
+    controller: OrderController = Depends(get_order_controller),
+    user: User = Depends(get_logged_user),
+):
+    return controller.get_orders_for_seller(user.id)

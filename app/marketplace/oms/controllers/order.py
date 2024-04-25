@@ -65,3 +65,6 @@ class OrderController(BaseController[Order, OrderRepository, OrderCreate, OrderU
 
     def get_orders_from_user(self, user_id: int) -> list[Order]:
         return self.repository.get_orders_from_user(user_id)
+
+    def get_orders_for_seller(self, user_id: int) -> list[Order]:
+        return self.repository.get_orders_for_seller(user_id)
