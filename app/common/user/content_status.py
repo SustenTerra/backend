@@ -27,7 +27,3 @@ class UserContentStatusRepository(BaseRepository[UserContentStatus]):
             )
             .first()
         )
-
-    def delete_by_content(self, content_id: int) -> None:
-        self.default_query.filter_by(chapter_content_id=content_id).delete()
-        self.session.commit()

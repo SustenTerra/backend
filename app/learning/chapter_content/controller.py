@@ -10,7 +10,6 @@ from app.learning.chapter_content.schema import (
     ChapterContentCreateWithIndex,
     ChapterContentUpdate,
 )
-from app.learning.course.exception import NoCourseRegisteredFoundException
 from app.learning.course.repository import CourseRepository
 from app.learning.course_chapter.exception import (
     ChapterNotFoundException,
@@ -106,11 +105,7 @@ class ChapterContentController(
 
         return content
 
-    def delete(self, id: int) -> None:
-        self.content_status_repository.delete_by_content(id)
-        self.repository.delete(id)
-
-    def update(self, id, update: ChapterContentUpdate) -> ChapterContent | None:
+    def update(self, id: int, update: ChapterContentUpdate) -> ChapterContent | None:
         found_content = self.repository.get_by_id(id)
         if not found_content:
             raise ContentNotFoundException()

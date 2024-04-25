@@ -1,7 +1,7 @@
 """Create tables for initial OMS
 
 Revision ID: 297b8a0f491b
-Revises: a7332cc0a72f
+Revises: 1a59dda5b59b
 Create Date: 2024-04-04 09:13:21.555064
 
 """
@@ -13,7 +13,7 @@ from alembic import op
 
 # revision identifiers, used by Alembic.
 revision: str = "297b8a0f491b"
-down_revision: Union[str, None] = "a7332cc0a72f"
+down_revision: Union[str, None] = "1a59dda5b59b"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

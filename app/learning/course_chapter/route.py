@@ -46,7 +46,7 @@ def edit_course_chapter(
 @course_chapters.delete(
     "/course_chapter/{course_chapter_id}",
     tags=["course_chapters"],
-    description="Delete course_chapter",
+    description="Delete a course chapter by id",
     response_model=None,
 )
 def delete_chapter(

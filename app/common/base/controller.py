@@ -32,12 +32,14 @@ class BaseController(Generic[ModelClass, ModelRepository, CreateSchema, UpdateSc
         id: int,
         schema: UpdateSchema,
         set_to_exclude: Optional[set[str]] = None,
+        exclude_none: bool = True,
+        exclude_unset: bool = True,
     ) -> Optional[ModelClass]:
         return self.repository.update(
             id,
             schema.model_dump(
-                exclude_none=True,
-                exclude_unset=True,
+                exclude_none=exclude_none,
+                exclude_unset=exclude_unset,
                 exclude=set_to_exclude,
                 by_alias=True,
             ),

@@ -53,6 +53,7 @@ class CourseUpdate(BaseModel):
     name: Optional[str] = Field(default=None)
     description: Optional[str] = Field(default=None)
     author_name: Optional[str] = Field(default=None)
+    published_at: Optional[datetime] = Field(default=None)
 
 
 class CourseWithImageUrl(BaseModel):

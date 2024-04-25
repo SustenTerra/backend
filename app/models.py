@@ -44,12 +44,26 @@ class User(BaseTable):
     phone: Mapped[str] = mapped_column(nullable=False)
     full_name: Mapped[str] = mapped_column(nullable=False)
 
-    courses: Mapped[List["Course"]] = relationship()
-
-    posts: Mapped[List["Post"]] = relationship(back_populates="user")
-    favorited_posts: Mapped[List["FavoritedPost"]] = relationship(back_populates="user")
-
-    address: Mapped[Optional["Address"]] = relationship(back_populates="user")
+    courses: Mapped[List["Course"]] = relationship(
+        back_populates="user",
+        cascade="all, delete",
+        passive_deletes=True,
+    )
+    posts: Mapped[List["Post"]] = relationship(
+        back_populates="user",
+        cascade="all, delete",
+        passive_deletes=True,
+    )
+    favorited_posts: Mapped[List["FavoritedPost"]] = relationship(
+        back_populates="user",
+        cascade="all, delete",
+        passive_deletes=True,
+    )
+    address: Mapped["Address"] = relationship(
+        back_populates="user",
+        cascade="all, delete",
+        passive_deletes=True,
+    )
 
 
 class Post(BaseTable):
@@ -65,21 +79,28 @@ class Post(BaseTable):
     views: Mapped[int] = mapped_column(server_default="0")
     available_quantity: Mapped[Optional[int]] = mapped_column(nullable=True)
 
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
     user: Mapped["User"] = relationship(back_populates="posts")
-    category_id: Mapped[int] = mapped_column(ForeignKey("post_categories.id"))
+    category_id: Mapped[int] = mapped_column(
+        ForeignKey("post_categories.id", ondelete="CASCADE")
+    )
     category: Mapped["PostCategory"] = relationship(back_populates="posts")
+    favorited_posts: Mapped["FavoritedPost"] = relationship(
+        back_populates="post",
+        cascade="all, delete",
+        passive_deletes=True,
+    )
 
 
 class FavoritedPost(BaseTable):
     __tablename__ = "favorited_posts"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    post_id: Mapped[int] = mapped_column(ForeignKey("posts.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    post_id: Mapped[int] = mapped_column(ForeignKey("posts.id", ondelete="CASCADE"))
 
     user: Mapped["User"] = relationship(back_populates="favorited_posts")
-    post: Mapped["Post"] = relationship()
+    post: Mapped["Post"] = relationship(back_populates="favorited_posts")
 
 
 class PostCategory(BaseTable):
@@ -88,7 +109,11 @@ class PostCategory(BaseTable):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False, unique=True)
 
-    posts: Mapped[List["Post"]] = relationship(back_populates="category")
+    posts: Mapped[List["Post"]] = relationship(
+        back_populates="category",
+        cascade="all, delete",
+        passive_deletes=True,
+    )
 
 
 class Course(BaseTable):
@@ -98,7 +123,8 @@ class Course(BaseTable):
     name: Mapped[str] = mapped_column(nullable=False)
     author_name: Mapped[str] = mapped_column(nullable=False)
     author_id: Mapped[Optional[int]] = mapped_column(
-        ForeignKey("users.id"), nullable=True
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=True,
     )
     image_key: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str] = mapped_column(nullable=False)
@@ -108,12 +134,17 @@ class Course(BaseTable):
         back_populates="course",
         lazy="joined",
         order_by="CourseChapter.index",
+        cascade="all, delete",
+        passive_deletes=True,
     )
-    course_category_id: Mapped[int] = mapped_column(ForeignKey("course_categories.id"))
+    course_category_id: Mapped[int] = mapped_column(
+        ForeignKey("course_categories.id", ondelete="CASCADE")
+    )
     course_category: Mapped["CourseCategory"] = relationship(
         back_populates="courses",
         lazy="joined",
     )
+    user: Mapped["User"] = relationship(back_populates="courses")
 
 
 class CourseCategory(BaseTable):
@@ -122,7 +153,11 @@ class CourseCategory(BaseTable):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False, unique=True)
 
-    courses: Mapped[List["Course"]] = relationship(back_populates="course_category")
+    courses: Mapped[List["Course"]] = relationship(
+        back_populates="course_category",
+        cascade="all, delete",
+        passive_deletes=True,
+    )
 
 
 class CourseChapter(BaseTable):
@@ -132,13 +167,15 @@ class CourseChapter(BaseTable):
     name: Mapped[str] = mapped_column(nullable=False)
     index: Mapped[int] = mapped_column(nullable=False)
 
-    course_id: Mapped[int] = mapped_column(ForeignKey("courses.id"))
+    course_id: Mapped[int] = mapped_column(ForeignKey("courses.id", ondelete="CASCADE"))
     course: Mapped["Course"] = relationship(back_populates="course_chapters")
 
     chapter_contents: Mapped[List["ChapterContent"]] = relationship(
         back_populates="course_chapter",
         lazy="joined",
         order_by="ChapterContent.index",
+        cascade="all, delete",
+        passive_deletes=True,
     )
 
 
@@ -151,7 +188,9 @@ class ChapterContent(BaseTable):
     description: Mapped[str] = mapped_column(nullable=False)
     video_url: Mapped[Optional[str]] = mapped_column(nullable=True)
 
-    course_chapter_id: Mapped[int] = mapped_column(ForeignKey("course_chapters.id"))
+    course_chapter_id: Mapped[int] = mapped_column(
+        ForeignKey("course_chapters.id", ondelete="CASCADE")
+    )
     course_chapter: Mapped["CourseChapter"] = relationship(
         back_populates="chapter_contents"
     )
@@ -167,8 +206,10 @@ class UserContentStatus(BaseTable):
     __tablename__ = "user_content_status"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    chapter_content_id: Mapped[int] = mapped_column(ForeignKey("chapter_contents.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    chapter_content_id: Mapped[int] = mapped_column(
+        ForeignKey("chapter_contents.id", ondelete="CASCADE")
+    )
     status: Mapped[ContentStatusEnum] = mapped_column(
         Enum(ContentStatusEnum),
         nullable=False,
@@ -182,8 +223,7 @@ class UserContentStatus(BaseTable):
 class Address(AddressBaseTable):
     __tablename__ = "addresses"
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
     user: Mapped["User"] = relationship(back_populates="address")
 
 

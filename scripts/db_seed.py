@@ -85,6 +85,25 @@ def create_users(session: Session):
     session.commit()
 
 
+def create_addresses(session: Session):
+    users = session.query(User).all()
+
+    for user in users:
+        address = Address(
+            user_id=user.id,  # Supondo que existem 10 usuários no banco de dados
+            street=faker.street_address(),
+            number=faker.building_number(),
+            neighborhood=faker.word(),
+            complement=faker.word(),
+            city=faker.city(),
+            state=faker.state_abbr(),
+            cep=faker.postcode(),
+        )
+
+        session.add(address)
+    session.commit()
+
+
 def create_post_categories(session: Session):
     for _ in range(10):
         post_category = PostCategory(
@@ -251,6 +270,9 @@ def main():
 
     print("Creating users...")
     create_users(session)
+
+    print("Creating addresses...")
+    create_addresses(session)
 
     print("Creating post categories...")
     create_post_categories(session)
