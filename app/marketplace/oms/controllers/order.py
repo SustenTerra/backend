@@ -22,7 +22,7 @@ class OrderController(BaseController[Order, OrderRepository, OrderCreate, OrderU
         self.order_address_controller = order_address_controller
         super().__init__(model_class, repository)
 
-    def __post_order_creation_actions(self, order: Order, post: Post):
+    def _post_order_creation_actions(self, order: Order, post: Post):
         if post.available_quantity and post.available_quantity > 0:
             # TODO: Calculate available quantity by joining with order table
             self.post_controller.update(
@@ -30,6 +30,8 @@ class OrderController(BaseController[Order, OrderRepository, OrderCreate, OrderU
                 PostUpdateWithImage(available_quantity=post.available_quantity - 1),
                 order.user_id,
             )
+
+        # TODO: Send email to user
 
     def create(self, user: User, body: OMSOrderCreate) -> Order:
         post = self.post_controller.get_by_id(body.post_id)
@@ -57,7 +59,7 @@ class OrderController(BaseController[Order, OrderRepository, OrderCreate, OrderU
         )
 
         created_order = super().create(create)
-        self.__post_order_creation_actions(created_order, post)
+        self._post_order_creation_actions(created_order, post)
 
         return created_order
 
