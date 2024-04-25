@@ -12,3 +12,10 @@ class InvalidLocationException(HTTPException):
 class NotFoundPostException(HTTPException):
     def __init__(self):
         super().__init__(status_code=404, detail="Post not found")
+
+
+class MinimumPriceRequiredException(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=400, detail="Price must be greater than 50 BRL cents"
+        )

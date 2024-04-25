@@ -2,7 +2,10 @@ from typing import NamedTuple, Optional, Union
 
 from app.common.base.controller import BaseController
 from app.common.user.exception import UserNotAllowed
-from app.marketplace.post.exception import InvalidLocationException
+from app.marketplace.post.exception import (
+    InvalidLocationException,
+    MinimumPriceRequiredException,
+)
 from app.marketplace.post.repository import PostRepository
 from app.marketplace.post.schema import (
     PostCreate,
@@ -94,9 +97,13 @@ class PostController(
     def create(self, create: PostCreateWithImage) -> Post:
         self.__verify_location(create.location)
 
+        if create.price is not None and create.price < 50:
+            raise MinimumPriceRequiredException()
+
         image_key = self.bucket_manager.upload_file(create.image)
 
         body = PostCreate(image_key=image_key, **create.model_dump(exclude={"image"}))
+
         stripe_ids = self._upsert_product_on_stripe(body)
         if stripe_ids:
             body.stripe_product_id = stripe_ids.product_id
@@ -139,6 +146,9 @@ class PostController(
 
         if hasattr(update, "location") and update.location is not None:
             self.__verify_location(update.location)
+
+        if update.price is not None and update.price < 50:
+            raise MinimumPriceRequiredException()
 
         image_key = None
         if update.image:
