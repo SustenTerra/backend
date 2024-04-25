@@ -27,9 +27,9 @@ def create_post(
     description: Annotated[str, Form()],
     price: Annotated[Optional[int], Form()],
     post_type: Annotated[str, Form()],
-    available_quantity: Annotated[int, Form()],
     location: Annotated[str, Form()],
     category_id: Annotated[int, Form()],
+    available_quantity: Optional[int] = Form(default=None),
     controller: PostController = Depends(get_post_controller),
     user: UserView = Depends(auth.get_logged_user),
 ):
