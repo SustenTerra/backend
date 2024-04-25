@@ -13,6 +13,7 @@ from app.marketplace.post.schema import (
 from app.marketplace.post.utils import BR_STATES
 from app.models import Post
 from app.service.bucket_manager import BucketManager
+from app.service.stripe_client import StripeClient
 
 
 class PostController(
@@ -28,9 +29,11 @@ class PostController(
         model_class: Post,
         repository: PostRepository,
         bucket_manager: BucketManager,
+        stripe_client: StripeClient,
     ):
         super().__init__(model_class, repository)
         self.bucket_manager = bucket_manager
+        self.stripe_client = stripe_client
 
     def _check_if_user_is_allowed(self, post_id, user_id) -> None:
         found_post = self.repository.get_by_id(post_id)
@@ -42,12 +45,29 @@ class PostController(
         if location.upper() not in BR_STATES:
             raise InvalidLocationException(location)
 
+    def _create_product_on_stripe(self, body: PostCreate) -> PostCreate:
+        stripe_product = self.stripe_client.create_product(body)
+
+        if stripe_product:
+            body.stripe_product_id = stripe_product.id
+
+            if isinstance(stripe_product.default_price, str):
+                body.stripe_price_id = stripe_product.default_price
+            elif (
+                hasattr(stripe_product.default_price, "id")
+                and stripe_product.default_price
+            ):
+                body.stripe_price_id = stripe_product.default_price.id
+
+        return body
+
     def create(self, create: PostCreateWithImage) -> Post:
         self.__verify_location(create.location)
 
         image_key = self.bucket_manager.upload_file(create.image)
 
         body = PostCreate(image_key=image_key, **create.model_dump(exclude={"image"}))
+        body = self._create_product_on_stripe(body)
 
         return super().create(body)
 
@@ -81,6 +101,26 @@ class PostController(
 
         return super().get_all()
 
+    def _update_product_on_stripe(
+        self, update_body: PostUpdate, post: Post
+    ) -> PostUpdate:
+        if not post.stripe_product_id:
+            return update_body
+
+        stripe_product = self.stripe_client.update_product(update_body, post)
+        if stripe_product:
+            update_body.stripe_product_id = stripe_product.id
+
+            if isinstance(stripe_product.default_price, str):
+                update_body.stripe_price_id = stripe_product.default_price
+            elif (
+                hasattr(stripe_product.default_price, "id")
+                and stripe_product.default_price
+            ):
+                update_body.stripe_price_id = stripe_product.default_price.id
+
+        return update_body
+
     def update(self, id: int, update: PostUpdateWithImage, user_id: int) -> Post:
         self._check_if_user_is_allowed(id, user_id)
 
@@ -92,6 +132,7 @@ class PostController(
             image_key = self.bucket_manager.upload_file(update.image)
 
         body = PostUpdate(image_key=image_key, **update.model_dump(exclude={"image"}))
+        body = self._update_product_on_stripe(body, self.repository.get_by_id(id))
 
         return super().update(id, body)
 

@@ -5,6 +5,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 from app.models import Base
 from tests.factories import *  # noqa: F401, F403
+from tests.mocks import *  # noqa: F401, F403
 
 
 @event.listens_for(Engine, "connect")

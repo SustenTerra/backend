@@ -31,6 +31,8 @@ class PostBase(BaseModel):
 
 class PostCreate(PostBase):
     image_key: str
+    stripe_product_id: Optional[str] = Field(default=None)
+    stripe_price_id: Optional[str] = Field(default=None)
 
 
 class PostCreateWithImage(PostBase):
@@ -50,6 +52,8 @@ class PostUpdateBase(BaseModel):
 
 class PostUpdate(PostUpdateBase):
     image_key: Optional[str] = Field(default=None)
+    stripe_product_id: Optional[str] = Field(default=None)
+    stripe_price_id: Optional[str] = Field(default=None)
 
 
 class PostUpdateWithImage(PostUpdateBase):

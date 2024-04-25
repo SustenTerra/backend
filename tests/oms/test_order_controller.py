@@ -24,13 +24,14 @@ class TestOrderController:
         make_post_category,
         make_post,
         make_user_address,
+        make_stripe_client_mock,
     ):
         bucket_manager_mock = MagicMock(spec=BucketManager)
         bucket_manager_mock.upload_file.return_value = "path/to/image.jpg"
 
         self.post_repository = PostRepository(Post, db_session)
         self.post_controller = PostController(
-            Post, self.post_repository, bucket_manager_mock
+            Post, self.post_repository, bucket_manager_mock, make_stripe_client_mock()
         )
 
         self.order_address_repository = OrderAddressRepository(OrderAddress, db_session)

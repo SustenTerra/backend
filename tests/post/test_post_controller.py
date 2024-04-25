@@ -1,5 +1,5 @@
 from io import BytesIO
-from unittest.mock import MagicMock
+from unittest.mock import Mock
 
 import pytest
 from fastapi import UploadFile
@@ -14,12 +14,16 @@ from app.service.bucket_manager import BucketManager
 
 class TestPostController:
     @pytest.fixture
-    def setup(self, db_session, make_user, make_post_category):
-        bucket_manager_mock = MagicMock(spec=BucketManager)
+    def setup(self, db_session, make_user, make_post_category, make_stripe_client_mock):
+        bucket_manager_mock = Mock(spec=BucketManager)
         bucket_manager_mock.upload_file.return_value = "path/to/image.jpg"
 
+        stripe_mock = make_stripe_client_mock()
+
         post_repository = PostRepository(Post, db_session)
-        post_controller = PostController(Post, post_repository, bucket_manager_mock)
+        post_controller = PostController(
+            Post, post_repository, bucket_manager_mock, stripe_mock
+        )
 
         user_password = "teste12345"
         user = make_user(
