@@ -8,6 +8,8 @@ from app.models import Post
 
 
 class StripeClient:
+    DEFAULT_CURRENCY = "brl"
+
     def __init__(self) -> None:
         self.config = Config()
         self.client = stripe.StripeClient(api_key=self.config.STRIPE_API_KEY)
@@ -29,7 +31,7 @@ class StripeClient:
 
     def create_price(self, price_value: int, stripe_product_id: str) -> stripe.Price:
         price_params = stripe.PriceService.CreateParams(
-            currency="brl",
+            currency=self.DEFAULT_CURRENCY,
             unit_amount=price_value,
             product=stripe_product_id,
         )
