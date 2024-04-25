@@ -106,8 +106,7 @@ class CourseController(
         if not course:
             raise NoCourseRegisteredFoundException
 
-        course_update = CoursePublishedUpdate(published_at=datetime_now().min)
-        super().update(course_id, course_update)
+        super().update(course_id, CourseUpdate(published_at=None), exclude_none=False)
         return super().get_by_id(course_id)
 
     def delete(self, id: int, user_id: int) -> None:

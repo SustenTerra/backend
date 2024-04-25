@@ -5,7 +5,6 @@ import pytest
 from fastapi import UploadFile
 
 from app.common.user.content_status import UserContentStatusRepository
-from app.common.utils import datetime_now
 from app.learning.chapter_content.controller import ChapterContentController
 from app.learning.chapter_content.repository import ChapterContentRepository
 from app.learning.course.controller import CourseController
@@ -206,5 +205,7 @@ class TestCourseController:
 
         self.controller.unpublish_course(other_course.id)
 
-        expected_date = datetime_now().min
-        assert other_course.published_at == expected_date
+        found_course = self.controller.get_by_id(other_course.id, other_teacher.id)
+        assert found_course is not None
+        assert found_course.published_at is None
+        assert found_course.name == other_course.name
