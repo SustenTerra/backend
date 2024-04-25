@@ -34,3 +34,7 @@ class OrderView(OrderBase):
     user: UserView
     post: PostView
     address: OrderAddressView
+
+
+class PaymentLink(BaseModel):
+    url: str

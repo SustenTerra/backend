@@ -30,3 +30,4 @@ class Config(BaseModel):
     MODEL_TEMPERATURE: float = 0.5
 
     STRIPE_API_KEY: str = os.getenv("STRIPE_API_KEY", "")
+    WEBSITE_URL: str = os.getenv("WEBSITE_URL", "https://sustenterra.netlify.app")

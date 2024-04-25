@@ -18,6 +18,11 @@ def make_stripe_client_mock():
         stripe_client_mock.create_product.return_value = mocked_product
         stripe_client_mock.update_product.return_value = mocked_product
 
+        mocked_payment_link = Mock(spec=stripe.PaymentLink)
+        mocked_payment_link.url = "https://stripe.com/link"
+
+        stripe_client_mock.create_payment_link.return_value = mocked_payment_link
+
         return stripe_client_mock
 
     return _make_stripe_client_mock

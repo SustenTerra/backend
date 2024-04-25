@@ -61,3 +61,23 @@ class StripeClient:
 
         update_params = stripe.ProductService.UpdateParams(**values_to_update)
         return self.client.products.update(post.stripe_product_id, update_params)
+
+    def create_payment_link(self, post: Post) -> Optional[stripe.PaymentLink]:
+        if post.stripe_product_id is None or post.stripe_price_id is None:
+            return
+
+        create_params = stripe.PaymentLinkService.CreateParams(
+            line_items=[
+                stripe.PaymentLinkService.CreateParamsLineItem(
+                    price=post.stripe_price_id, quantity=1
+                )
+            ],
+            after_completion=stripe.PaymentLinkService.CreateParamsAfterCompletion(
+                type="redirect",
+                redirect=stripe.PaymentLinkService.CreateParamsAfterCompletionRedirect(
+                    url=f"{self.config.WEBSITE_URL}/profile/my-orders"
+                ),
+            ),
+        )
+
+        return self.client.payment_links.create(create_params)

@@ -1,13 +1,22 @@
 from app.common.base.controller import BaseController
 from app.marketplace.oms.controllers.order_address import OrderAddressController
-from app.marketplace.oms.exceptions.order import NotAvailableForOrderException
+from app.marketplace.oms.exceptions.order import (
+    CouldNotCreatePaymentLinkException,
+    NotAvailableForOrderException,
+)
 from app.marketplace.oms.repositories.order import OrderRepository
-from app.marketplace.oms.schemas.order import OMSOrderCreate, OrderCreate, OrderUpdate
+from app.marketplace.oms.schemas.order import (
+    OMSOrderCreate,
+    OrderCreate,
+    OrderUpdate,
+    PaymentLink,
+)
 from app.marketplace.oms.schemas.order_address import OrderAddressCreate
 from app.marketplace.post.controller import PostController
 from app.marketplace.post.exception import NotFoundPostException
 from app.marketplace.post.schema import PostUpdate
 from app.models import Order, Post, User
+from app.service.stripe_client import StripeClient
 
 
 class OrderController(BaseController[Order, OrderRepository, OrderCreate, OrderUpdate]):
@@ -17,10 +26,12 @@ class OrderController(BaseController[Order, OrderRepository, OrderCreate, OrderU
         repository: OrderRepository,
         post_controller: PostController,
         order_address_controller: OrderAddressController,
+        stripe_client: StripeClient,
     ):
+        super().__init__(model_class, repository)
         self.post_controller = post_controller
         self.order_address_controller = order_address_controller
-        super().__init__(model_class, repository)
+        self.stripe_client = stripe_client
 
     def _post_order_creation_actions(self, order: Order, post: Post):
         if post.available_quantity is not None and post.available_quantity > 0:
@@ -37,6 +48,28 @@ class OrderController(BaseController[Order, OrderRepository, OrderCreate, OrderU
     def create(self, user: User, body: OMSOrderCreate) -> Order:
         post = self.post_controller.get_by_id(body.post_id)
         if not post:
+            # TODO: send email to admin
+            raise NotFoundPostException()
+
+        order_address = self.order_address_controller.create(
+            OrderAddressCreate(**user.address.__dict__)
+        )
+
+        create = OrderCreate(
+            user_id=user.id,
+            total=post.price or 0,
+            post_id=post.id,
+            order_address_id=order_address.id,
+        )
+
+        created_order = super().create(create)
+        self._post_order_creation_actions(created_order, post)
+
+        return created_order
+
+    def create_payment_link(self, user: User, post_id: int) -> PaymentLink:
+        post = self.post_controller.get_by_id(post_id)
+        if not post:
             raise NotFoundPostException()
 
         if not post.price or post.post_type != "ad":
@@ -48,21 +81,13 @@ class OrderController(BaseController[Order, OrderRepository, OrderCreate, OrderU
         if not user.address:
             raise NotAvailableForOrderException("User has no address.")
 
-        order_address = self.order_address_controller.create(
-            OrderAddressCreate(**user.address.__dict__)
+        payment_link = self.stripe_client.create_payment_link(post)
+        if payment_link is None:
+            raise CouldNotCreatePaymentLinkException()
+
+        return PaymentLink(
+            url=payment_link.url,
         )
-
-        create = OrderCreate(
-            user_id=user.id,
-            total=post.price,
-            post_id=post.id,
-            order_address_id=order_address.id,
-        )
-
-        created_order = super().create(create)
-        self._post_order_creation_actions(created_order, post)
-
-        return created_order
 
     def get_orders_from_user(self, user_id: int) -> list[Order]:
         return self.repository.get_orders_from_user(user_id)

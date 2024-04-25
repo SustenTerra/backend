@@ -28,10 +28,11 @@ class TestOrderController:
     ):
         bucket_manager_mock = MagicMock(spec=BucketManager)
         bucket_manager_mock.upload_file.return_value = "path/to/image.jpg"
+        stripe_mock = make_stripe_client_mock()
 
         self.post_repository = PostRepository(Post, db_session)
         self.post_controller = PostController(
-            Post, self.post_repository, bucket_manager_mock, make_stripe_client_mock()
+            Post, self.post_repository, bucket_manager_mock, stripe_mock
         )
 
         self.order_address_repository = OrderAddressRepository(OrderAddress, db_session)
@@ -45,6 +46,7 @@ class TestOrderController:
             self.order_repository,
             self.post_controller,
             self.order_address_controller,
+            stripe_mock,
         )
 
         self.seller: User = make_user()
@@ -92,9 +94,7 @@ class TestOrderController:
         )
 
         with pytest.raises(Exception) as exc_info:
-            self.order_controller.create(
-                self.buyer, OMSOrderCreate(post_id=self.post.id)
-            )
+            self.order_controller.create_payment_link(self.buyer, self.post.id)
         assert "Not available for order" in str(exc_info.value)
 
     def test_without_price_to_place(self, setup):
@@ -103,14 +103,12 @@ class TestOrderController:
         self.db_session.commit()
 
         with pytest.raises(Exception) as exc_info:
-            self.order_controller.create(
-                self.buyer, OMSOrderCreate(post_id=self.post.id)
-            )
+            self.order_controller.create_payment_link(self.buyer, self.post.id)
         assert "Not available for order" in str(exc_info.value)
 
     def test_not_found_post(self, setup):
         with pytest.raises(Exception) as exc_info:
-            self.order_controller.create(self.buyer, OMSOrderCreate(post_id=999))
+            self.order_controller.create_payment_link(self.buyer, 999)
         assert "Post not found" in str(exc_info.value)
 
     def test_post_type_not_ad(self, setup):
@@ -119,9 +117,7 @@ class TestOrderController:
         self.db_session.commit()
 
         with pytest.raises(Exception) as exc_info:
-            self.order_controller.create(
-                self.buyer, OMSOrderCreate(post_id=self.post.id)
-            )
+            self.order_controller.create_payment_link(self.buyer, self.post.id)
         assert "Not available for order" in str(exc_info.value)
 
     def test_user_without_address(self, setup):
@@ -129,7 +125,5 @@ class TestOrderController:
         self.db_session.commit()
 
         with pytest.raises(Exception) as exc_info:
-            self.order_controller.create(
-                self.buyer, OMSOrderCreate(post_id=self.post.id)
-            )
+            self.order_controller.create_payment_link(self.buyer, self.post.id)
         assert "User has no address" in str(exc_info.value)
