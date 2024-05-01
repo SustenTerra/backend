@@ -73,10 +73,7 @@ class StripeClient:
                 )
             ],
             after_completion=stripe.PaymentLinkService.CreateParamsAfterCompletion(
-                type="redirect",
-                redirect=stripe.PaymentLinkService.CreateParamsAfterCompletionRedirect(
-                    url=f"{self.config.WEBSITE_URL}/profile/my-orders"
-                ),
+                type="hosted_confirmation",
             ),
             metadata={"post_id": str(post.id), "user_id": str(post.user.id)},
         )
