@@ -89,7 +89,7 @@ class OrderController(BaseController[Order, OrderRepository, OrderCreate, OrderU
         if not user.address:
             raise NotAvailableForOrderException("User has no address.")
 
-        payment_link = self.stripe_client.create_payment_link(post)
+        payment_link = self.stripe_client.create_payment_link(post, user.id)
         if payment_link is None:
             raise CouldNotCreatePaymentLinkException()
 

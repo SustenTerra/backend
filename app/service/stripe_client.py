@@ -62,7 +62,9 @@ class StripeClient:
         update_params = stripe.ProductService.UpdateParams(**values_to_update)
         return self.client.products.update(post.stripe_product_id, update_params)
 
-    def create_payment_link(self, post: Post) -> Optional[stripe.PaymentLink]:
+    def create_payment_link(
+        self, post: Post, buyer_id: int
+    ) -> Optional[stripe.PaymentLink]:
         if post.stripe_product_id is None or post.stripe_price_id is None:
             return
 
@@ -75,7 +77,7 @@ class StripeClient:
             after_completion=stripe.PaymentLinkService.CreateParamsAfterCompletion(
                 type="hosted_confirmation",
             ),
-            metadata={"post_id": str(post.id), "user_id": str(post.user.id)},
+            metadata={"post_id": str(post.id), "user_id": str(buyer_id)},
         )
 
         return self.client.payment_links.create(create_params)
