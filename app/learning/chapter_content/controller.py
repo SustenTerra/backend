@@ -92,9 +92,13 @@ class ChapterContentController(
         if content is None:
             return None
 
+        is_author = content.chapter.course.author_id == user_id
+
         previous_content = self.repository.get_previous_content(content.id)
-        if previous_content and not self.content_was_viewed(
-            user_id, previous_content.id
+        if (
+            not is_author
+            and previous_content
+            and not self.content_was_viewed(user_id, previous_content.id)
         ):
             raise CannotOpenContentException(content.id)
 
