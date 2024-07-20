@@ -9,6 +9,7 @@ from app.learning.chapter_content.schema import (
     ChapterContentCreate,
     ChapterContentCreateWithIndex,
     ChapterContentUpdate,
+    ChapterContentView,
 )
 from app.learning.course.repository import CourseRepository
 from app.learning.course_chapter.exception import (
@@ -88,13 +89,21 @@ class ChapterContentController(
         )
 
     def get_by_id(self, id: int, user_id: int) -> ChapterContent | None:
-        content = super().get_by_id(id)
+        content: ChapterContentView = super().get_by_id(id)
         if content is None:
             return None
 
+        course_chapter = self.chapter_repository.get_by_id(content.course_chapter_id)
+        if course_chapter is None:
+            raise ChapterNotFoundException()
+
+        is_author = course_chapter.course.author_id == user_id
+
         previous_content = self.repository.get_previous_content(content.id)
-        if previous_content and not self.content_was_viewed(
-            user_id, previous_content.id
+        if (
+            not is_author
+            and previous_content
+            and not self.content_was_viewed(user_id, previous_content.id)
         ):
             raise CannotOpenContentException(content.id)
 

@@ -3,9 +3,7 @@ from typing import Optional
 from app.common.base.controller import BaseController
 from app.common.utils import datetime_now
 from app.learning.chapter_content.controller import ChapterContentController
-from app.learning.course.exception import (
-    NoCourseRegisteredFoundException,
-)
+from app.learning.course.exception import NoCourseRegisteredFoundException
 from app.learning.course.repository import CourseRepository
 from app.learning.course.schema import (
     CourseCreate,
@@ -57,6 +55,7 @@ class CourseController(
         course = super().get_by_id(id)
         if course is None:
             return None
+        is_author = course.author_id == user_id
 
         course_view = CourseView.model_validate(course, from_attributes=True)
 
@@ -69,8 +68,11 @@ class CourseController(
                 )
 
                 if previous_content:
-                    content.is_available = self.content_controller.content_was_viewed(
-                        user_id, previous_content.id
+                    content.is_available = (
+                        is_author
+                        or self.content_controller.content_was_viewed(
+                            user_id, previous_content.id
+                        )
                     )
 
                 content.was_viewed = self.content_controller.content_was_viewed(

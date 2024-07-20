@@ -39,6 +39,7 @@ class ChapterContentView(ChapterContentBase):
     id: int
     chapter_index: int
     chapter_name: str
+    course_chapter_id: int
     previous_chapter_content_id: Optional[int] = Field(default=None)
     next_chapter_content_id: Optional[int] = Field(default=None)
     created_at: datetime
